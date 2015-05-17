@@ -1,0 +1,226 @@
+{
+  "mitLibrary": [
+    {
+      "play": {
+        "text": "All's Well That Ends Well",
+        "href": "http://shakespeare.mit.edu/allswell/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "As You Like It",
+        "href": "http://shakespeare.mit.edu/asyoulikeit/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "The Comedy of Errors",
+        "href": "http://shakespeare.mit.edu/comedy_errors/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Cymbeline",
+        "href": "http://shakespeare.mit.edu/cymbeline/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Love's Labours Lost",
+        "href": "http://shakespeare.mit.edu/lll/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Measure for Measure",
+        "href": "http://shakespeare.mit.edu/measure/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "The Merry Wives of Windsor",
+        "href": "http://shakespeare.mit.edu/merry_wives/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "The Merchant of Venice",
+        "href": "http://shakespeare.mit.edu/merchant/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "A Midsummer Night's Dream",
+        "href": "http://shakespeare.mit.edu/midsummer/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Much Ado About Nothing",
+        "href": "http://shakespeare.mit.edu/much_ado/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Pericles, Prince of Tyre",
+        "href": "http://shakespeare.mit.edu/pericles/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Taming of the Shrew",
+        "href": "http://shakespeare.mit.edu/taming_shrew/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "The Tempest",
+        "href": "http://shakespeare.mit.edu/tempest/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Troilus and Cressida",
+        "href": "http://shakespeare.mit.edu/troilus_cressida/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Twelfth Night",
+        "href": "http://shakespeare.mit.edu/twelfth_night/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Two Gentlemen of Verona",
+        "href": "http://shakespeare.mit.edu/two_gentlemen/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Winter's Tale",
+        "href": "http://shakespeare.mit.edu/winters_tale/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry IV, part 1",
+        "href": "http://shakespeare.mit.edu/1henryiv/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry IV, part 2",
+        "href": "http://shakespeare.mit.edu/2henryiv/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry V",
+        "href": "http://shakespeare.mit.edu/henryv/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry VI, part 1",
+        "href": "http://shakespeare.mit.edu/1henryvi/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry VI, part 2",
+        "href": "http://shakespeare.mit.edu/2henryvi/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry VI, part 3",
+        "href": "http://shakespeare.mit.edu/3henryvi/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Henry VIII",
+        "href": "http://shakespeare.mit.edu/henryviii/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "King John",
+        "href": "http://shakespeare.mit.edu/john/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Richard II",
+        "href": "http://shakespeare.mit.edu/richardii/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Richard III",
+        "href": "http://shakespeare.mit.edu/richardiii/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Antony and Cleopatra",
+        "href": "http://shakespeare.mit.edu/cleopatra/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Coriolanus",
+        "href": "http://shakespeare.mit.edu/coriolanus/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Hamlet",
+        "href": "http://shakespeare.mit.edu/hamlet/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Julius Caesar",
+        "href": "http://shakespeare.mit.edu/julius_caesar/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "King Lear",
+        "href": "http://shakespeare.mit.edu/lear/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Macbeth",
+        "href": "http://shakespeare.mit.edu/macbeth/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Othello",
+        "href": "http://shakespeare.mit.edu/othello/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Romeo and Juliet",
+        "href": "http://shakespeare.mit.edu/romeo_juliet/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Timon of Athens",
+        "href": "http://shakespeare.mit.edu/timon/full.html"
+      }
+    },
+    {
+      "play": {
+        "text": "Titus Andronicus",
+        "href": "http://shakespeare.mit.edu/titus/full.html"
+      }
+    }
+  ]
+}

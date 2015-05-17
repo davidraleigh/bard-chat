@@ -1,0 +1,5 @@
+/bard-scrape/node_modules/*
+/bard-scrape/public/*
+/bard-scrape/routes/*
+/bard-scrape/views/*
+/bard-scrape/bin/*

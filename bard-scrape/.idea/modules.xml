@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/bard-parser.iml" filepath="$PROJECT_DIR$/bard-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/bard-scrape.iml" filepath="$PROJECT_DIR$/.idea/bard-scrape.iml" />
     </modules>
   </component>
 </project>
