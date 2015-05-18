@@ -3,3 +3,5 @@
 /bard-scrape/routes/*
 /bard-scrape/views/*
 /bard-scrape/bin/*
+/bard-scrape/.idea/workspace.xml 
+/bard-scrape/.idea/tasks.xml
