@@ -123,6 +123,8 @@ var PlayDetails = function(title) {
     // hash map of act number keys and scene object arrays
     // this.acts = {1: [sceneObj1, sceneObj2], 2: [sceneObj1]};
     this.acts = {};
+    this.characterSet = [];
+    this.characterMap = {};
 };
 
 PlayDetails.prototype.addScene = function(actNumber, scene) {
@@ -130,6 +132,13 @@ PlayDetails.prototype.addScene = function(actNumber, scene) {
         this.acts[actNumber] = [];
     this.acts[actNumber].push(scene);
 };
+
+PlayDetails.prototype.addCharacter = function(name) {
+  if (name in this.characterMap)
+    return;
+  this.characterMap[name] = true;
+  this.characterSet.push(name);
+}
 
 var BardParse = function () {
     this.plays = {};
@@ -208,7 +217,9 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                     }
                 } else if (jObj.is('a[name^="speech"]')) {
                     // grab player name
-                    dialog = new Dialog(jObj.text());
+                    var name = jObj.text();
+                    playDetails.addCharacter(name);
+                    dialog = new Dialog(name);
                 } else if (jObj.is('blockquote') && dialog !== null) {
                     // grab lines
                     var lines = jObj.children("a");

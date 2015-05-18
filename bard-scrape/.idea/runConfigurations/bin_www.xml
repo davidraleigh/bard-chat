@@ -4,6 +4,8 @@
       <env name="DEBUG" value="bard-scrape" />
     </envs>
     <browser url="http://localhost:3000/" />
+    <RunnerSettings RunnerId="debuggableProgram" />
+    <ConfigurationWrapper RunnerId="debuggableProgram" />
     <method />
   </configuration>
 </component>
