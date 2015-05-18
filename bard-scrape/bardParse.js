@@ -87,8 +87,11 @@ BardParse.prototype.parseFromMIT = function() {
     });
 };
 
-BardParse.prototype.parseFromMIThtml = function(body) {
-    console.log(body);
+BardParse.prototype.parseFromMIThtml = function(body, callback) {
+    // get first ACT object
+    var actRegex = '^([Aa][Cc][Tt])\\s';
+    var sceneRegex = '^([Ss][Cc][Ee][Nn][Ee])\\s';
+
     jsdom.env(
         body,
         ["http://code.jquery.com/jquery.js"],
@@ -98,33 +101,47 @@ BardParse.prototype.parseFromMIThtml = function(body) {
                 return;
             }
 
-            // grab first speaker
-            var speaker = window.$( "a[name|='speech1']" ).first();
-            // grab first blockquote
-            var blockquote = speaker.next("blockquote");
+            // create play object
+            var jObj = window.$("td[class='play']").first();
+            console.log('creating play', jObj.text());
+            var playDetails = new PlayDetails(jObj.text());
 
-            var testCount = 0;
-            while (speaker !== null && testCount < 10) {
-                // print name
-                console.log(speaker.text());
-                // grab jquery lines
-                var lines = blockquote.children("a");
-                // lines.forEach(function(element, index, array) {
-                //   console.log(element.text());
-                // });
-                // print lines
-                lines.each(function( index ) {
-                    console.log( index + ": " + window.$( this ).text() );
-                });
-                // grab next speaker
-                speaker = blockquote.next("a");
-                // grab next blockquote
-                blockquote = speaker.next("blockquote");
+            jObj = window.$("h3").first();
 
-                testCount++;
+            var actNum = null;
+            var sceneNum = null;
+            var scene = null;
+            while(jObj.length > 0) {
+                if (jObj.is('h3')) {
+                    var hText = jObj.text();
+                    if (hText.match(actRegex)) {
+
+                    } else if (hText.match(sceneRegex)) {
+
+                    } else {
+                        console.log('Error with h3!!');
+                    }
+                    // grab act number
+                    console.log(jObj.text());
+                    // grab scene number
+                    if (scene !== null) {
+                        // store old scene in playDetails
+                    }
+                } else if (jObj.is('a[name^="speech"]')) {
+                    // grab player name
+                    console.log(jObj.text());
+                } else if (jObj.is('blockquote')) {
+                    // grab lines
+                    var lines = jObj.children("a");
+                    // print lines
+                    lines.each(function( index ) {
+                        console.log( index + ": " + window.$( this ).text() );
+                    });
+                } else {
+                    console.log('stage direction? ', jObj.text());
+                }
+                jObj = jObj.next();
             }
-            //console.log("there have been", window.$("a").length, "nodejs releases!");
-            //console.log("contents of a.the-link:", window.$("a.the-link").text());
         }
     );
 };
@@ -133,7 +150,6 @@ BardParse.prototype.parseFromMIThtmlFile = function(filename) {
     var parseBound = this.parseFromMIThtml.bind(this);
     fs.readFile(filename, 'utf8', function (error, body) {
         if (!error) {
-            console.log(body);
             parseBound(body);
         }
     });
