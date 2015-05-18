@@ -15,13 +15,70 @@ var request = require('request');
 var jsdom = require("jsdom");
 var toArabic = require('roman-numerals').toArabic;
 
-var dialogue = function() {
-    var character = "";
-    var lines = [];
-    var sentences = [];
+var Dialog = function(speaker) {
+    this.character = speaker;
+    this.lines = [];
+    this.sentences = [];
     var prev = null;
     var next = null;
 };
+
+Dialog.prototype.addLine = function(line) {
+    this.lines.push(line);
+};
+
+Dialog.prototype.getCharacter = function() {
+    return this.character;
+}
+
+Dialog.prototype.getLines = function() {
+    return this.lines;
+};
+
+Dialog.prototype.linesToSentences = function() {
+    var currentSentence = "";
+    var currentLine = null;
+    for (var i = 0; i < this.lines.length; i++) {
+        // get the current line
+        currentLine = this.lines[i];
+        // split the line by regex for sentence endings
+        var result = currentLine.match( /[^\.!\?]+[\.!\?]+/g );
+        // if there are no splits then the whole line is part of another sentence
+        if (result === null) {
+            if (currentSentence.trim().length > 0)
+                // if there is a current sentence add this sentence to it
+                currentSentence = currentSentence + " " + currentLine[0].toLowerCase() + currentLine.slice(1);
+            else
+                // if there isn't a current sentence, start it from this line
+                currentSentence = currentLine.slice(0);
+            continue;
+        }
+
+        // if there is a previous sentence
+        if (currentSentence.trim().length > 0) {
+            this.sentences.push(currentSentence + " " + result[0][0].toLowerCase() + result[0].slice(1));
+        } else {
+            this.sentences.push(result[0]);
+        }
+
+        for (var j = 1; j < result.length - 1; j++) {
+            this.sentences.push(result[j]);
+        }
+        if (result.length > 1) {
+            currentSentence = result[result.length - 1];
+        } else {
+            currentSentence = "";
+        }
+    }
+    if (currentSentence.trim().length > 0) {
+        this.sentences.push(currentSentence);
+    }
+};
+
+Dialog.prototype.getSentences = function() {
+  return this.sentences.slice();
+}
+
 
 var Scene = function(sceneNumber, location) {
     this.dialogs = [];
@@ -31,9 +88,24 @@ var Scene = function(sceneNumber, location) {
     this.location = location;
 };
 
+Scene.prototype.toString = function() {
+    var result = "";
+    for (var i = 0; i < this.dialogs.length; i++) {
+        result += this.dialogs[i].getCharacter() + '\\n';
+        var lines = this.dialogs[i].getLines();
+        for (var j = 0; j < lines.length; j++) {
+            result += lines[j] + '\\n';
+        }
+    }
+    return result;
+}
+
 Scene.prototype.addDialogue = function(dialog) {
+    dialog.linesToSentences();
+
     if (this.firstDialog === null) {
         this.firstDialog = dialog;
+        this.lastDialog = dialog;
     } else {
         dialog.prev = this.lastDialog;
         this.lastDialog.next = dialog;
@@ -52,7 +124,7 @@ var PlayDetails = function(title) {
 
 PlayDetails.prototype.addScene = function(actNumber, scene) {
     if (this.acts[actNumber]  === undefined)
-        this.acts = [];
+        this.acts[actNumber] = [];
     this.acts[actNumber].push(scene);
 };
 
@@ -105,45 +177,46 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
             // create play object
             var jObj = window.$("td[class='play']").first();
             console.log('creating play', jObj.text());
-            var playDetails = new PlayDetails(jObj.text());
+            var playDetails = new PlayDetails(jObj.text().trim());
 
             jObj = window.$("h3").first();
 
             var actNum = null;
-            var sceneNum = null;
             var scene = null;
+            var dialog = null;
             while(jObj.length > 0) {
                 if (jObj.is('h3')) {
                     var hText = jObj.text();
+                    // save scene if necessary
+                    if ((hText.match(actRegex) || hText.match(sceneRegex)) && scene !== null)
+                        playDetails.addScene(actNum, scene);
+
                     if (hText.match(actRegex)) {
                         var romanNumeral = hText.slice(hText.toLowerCase().indexOf('act ') + 4);
-                        console.log(romanNumeral);
                         actNum = toArabic(romanNumeral);
+                        // null out scene object
+                        scene = null;
                     } else if (hText.match(sceneRegex)) {
                         var romanNumeral = hText.slice(hText.toLowerCase().indexOf('scene ') + 6, hText.indexOf('.'));
-                        console.log(romanNumeral);
-                        sceneNum = toArabic(romanNumeral);
+                        var sceneNum = toArabic(romanNumeral);
+                        scene = new Scene(sceneNum, hText.slice(hText.indexOf('.') + 1).trim());
                     } else {
                         console.log('Error with h3!!');
                     }
-                    // grab act number
-                    console.log(hText);
-                    // grab scene number
-                    if (scene !== null) {
-                        // store old scene in playDetails
-                    }
                 } else if (jObj.is('a[name^="speech"]')) {
                     // grab player name
-                    console.log(jObj.text());
-                } else if (jObj.is('blockquote')) {
+                    dialog = new Dialog(jObj.text());
+                } else if (jObj.is('blockquote') && dialog !== null) {
                     // grab lines
                     var lines = jObj.children("a");
-                    // print lines
                     lines.each(function( index ) {
-                        console.log( index + ": " + window.$( this ).text() );
+                        dialog.addLine(window.$( this ).text());
                     });
-                } else {
-                    console.log('stage direction? ', jObj.text());
+
+                    scene.addDialogue(dialog);
+                    dialog = null;
+                } else if (jObj.is('blockquote')) {
+                    console.log('stage direction: ', jObj.text());
                 }
                 jObj = jObj.next();
             }
@@ -221,6 +294,7 @@ var requestHandler = function(request, response) {
 
 
 if ( typeof module !== "undefined" ) {
-    exports.BardParse = BardParse;
-    exports.requestHandler = requestHandler;
+  exports.BardParse = BardParse;
+  exports.Dialog = Dialog;
+  exports.requestHandler = requestHandler;
 }
