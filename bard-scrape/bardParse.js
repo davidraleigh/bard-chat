@@ -54,6 +54,7 @@ Dialog.prototype.linesToSentences = function() {
             continue;
         }
 
+        result = currentLine.match( /[^\.!\?]+([\.!\?]|$)+/g );
         // if there is a previous sentence
         if (currentSentence.trim().length > 0) {
             this.sentences.push(currentSentence + " " + result[0][0].toLowerCase() + result[0].slice(1));
@@ -62,10 +63,10 @@ Dialog.prototype.linesToSentences = function() {
         }
 
         for (var j = 1; j < result.length - 1; j++) {
-            this.sentences.push(result[j]);
+            this.sentences.push(result[j].trim());
         }
         if (result.length > 1) {
-            currentSentence = result[result.length - 1];
+            currentSentence = result[result.length - 1].trim();
         } else {
             currentSentence = "";
         }
