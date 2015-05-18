@@ -13,6 +13,7 @@
 var fs = require("fs");
 var request = require('request');
 var jsdom = require("jsdom");
+var toArabic = require('roman-numerals').toArabic;
 
 var dialogue = function() {
     var character = "";
@@ -115,14 +116,18 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                 if (jObj.is('h3')) {
                     var hText = jObj.text();
                     if (hText.match(actRegex)) {
-
+                        var romanNumeral = hText.slice(hText.toLowerCase().indexOf('act ') + 4);
+                        console.log(romanNumeral);
+                        actNum = toArabic(romanNumeral);
                     } else if (hText.match(sceneRegex)) {
-
+                        var romanNumeral = hText.slice(hText.toLowerCase().indexOf('scene ') + 6, hText.indexOf('.'));
+                        console.log(romanNumeral);
+                        sceneNum = toArabic(romanNumeral);
                     } else {
                         console.log('Error with h3!!');
                     }
                     // grab act number
-                    console.log(jObj.text());
+                    console.log(hText);
                     // grab scene number
                     if (scene !== null) {
                         // store old scene in playDetails
