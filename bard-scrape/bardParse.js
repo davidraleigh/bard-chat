@@ -47,6 +47,7 @@ Dialog.prototype.linesToSentences = function() {
         if (result === null) {
             if (currentSentence.trim().length > 0)
                 // if there is a current sentence add this sentence to it
+                // TODO keep proper nouns and I capitalized
                 currentSentence = currentSentence + " " + currentLine[0].toLowerCase() + currentLine.slice(1);
             else
                 // if there isn't a current sentence, start it from this line
@@ -57,6 +58,7 @@ Dialog.prototype.linesToSentences = function() {
         result = currentLine.match( /[^\.!\?]+([\.!\?]|$)+/g );
         // if there is a previous sentence
         if (currentSentence.trim().length > 0) {
+            // TODO keep proper nouns and I capitalized
             this.sentences.push(currentSentence + " " + result[0][0].toLowerCase() + result[0].slice(1));
         } else {
             this.sentences.push(result[0]);
