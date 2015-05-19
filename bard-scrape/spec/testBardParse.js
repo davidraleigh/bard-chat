@@ -107,4 +107,88 @@ describe('bardParse()', function () {
     assert.equal("Words2 words2 words2 Words2 Words2.", sentences[1]);
   });
   // Add more assertions here
+
+  it ('regex test', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+  });
+
+  it ('regex test', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not Bland. Andrew Is Also not Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
+
+
+  it ('regex test lots of words', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not Bland! Andrew Is Also not Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
+
+  it ('regex test with double spaces and lots of ??!!', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not Bland!!? Andrew Is.   Also not Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Stupid");
+  });
+
+  it ('regex test with period and newline', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not Bland!!? Andrew Is.\nAlso not Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Stupid");
+  });
+
+
+  it ('regex test with new line', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not Bland! Andrew Is\nAlso not Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
+
+  it ('regex test with I', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not I Bland! Andrew Is\nAlso not Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
+
+  it ('regex test with double spaces and lots of ??!!', function () {
+    var bardParse = new module.BardParse();
+    var text = "An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
 });

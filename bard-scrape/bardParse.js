@@ -144,6 +144,38 @@ var BardParse = function () {
     this.plays = {};
 };
 
+BardParse.prototype.parseProperNouns = function(text) {
+  var re = /[\n\t ][A-Z][a-z]+/g;
+  var match = null;
+  var properNounMap = {};
+  // collect all words that start with a capital letter
+  while ((match = re.exec(text)) != null) {
+    var properNoun = text.slice(match.index + 1, match.index + match[0].length);
+    properNounMap[match.index + match[0].length] = properNoun;
+  }
+
+  // remove any words that start with a capital letter but are preceded by a . ? or !
+  re = /[\?\.!][\n\t ]+[A-Z][a-z]+/g;
+  while((match = re.exec(text)) != null) {
+    var key = match.index + match[0].length + "";
+    if (key in properNounMap) {
+      delete properNounMap[key];
+    }
+  }
+
+  function sortNumber(a,b) {
+    return parseInt(a) - parseInt(b);
+  }
+
+  var results = [];
+  var vals = Object.keys(properNounMap).sort(sortNumber);
+  vals.forEach(function(key) {
+    results.push(properNounMap[key]);
+  });
+
+  return results;
+}
+
 BardParse.prototype.parseFromMIT = function() {
 
     var parseBound = this.parseFromMIThtml.bind(this);
@@ -171,6 +203,10 @@ BardParse.prototype.parseFromMIT = function() {
         });
     });
 };
+
+var properNamesFromHTML = function (body, playDetails) {
+  var properNounRegex = '([A-Za-z]( )+[A-Z][a-z]+)+';
+}
 
 BardParse.prototype.parseFromMIThtml = function(body, callback) {
     // get first ACT object
