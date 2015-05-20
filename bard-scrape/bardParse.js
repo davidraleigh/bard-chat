@@ -145,7 +145,25 @@ var BardParse = function () {
 };
 
 BardParse.prototype.parseProperNouns = function(text) {
-  var re = /[\n\t ][A-Z][a-z]+/g;
+  text = text.trim();
+  //var re = /[\n\t ][A-Z][a-z]+/g;
+  var reCapitalized = "[A-Z][a-z]+";
+  var reSeparator = "( (de|of) )";
+  var titles = ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess'];
+  var reTitles = titles.reduce(function(previousValue, currentValue, index) {
+    if (index === 1)
+      return '(' + previousValue + ' )|(' + currentValue + ' )';
+    return previousValue + '|(' + currentValue + ' )';
+  });
+  //var re =     /[\n\t ](((Lord )|(Count )|(Countess )|(Captain )[A-Z][a-z]+)|([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g
+  //               (((Lord )|(Count )|(Countess )|(Captain )[A-Z][a-z]+)|([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))
+  var rePronoun = "(((" + reTitles + ')' + reCapitalized + ")|("  + reCapitalized + reSeparator + reCapitalized + ")|(" + reCapitalized + "))";
+  var reSpace = "[\\n\\t ]";
+
+  //var re =     /[\n\t ]    ((    [A-Z][a-z]+     ( de )        [A-Z][a-z]+      )|(    [A-Z][a-z]+      ))/g;
+  var reCapture = reSpace + rePronoun;
+  var re = new RegExp(reCapture, "g");
+
   var match = null;
   var properNounMap = {};
   // collect all words that start with a capital letter
@@ -155,7 +173,12 @@ BardParse.prototype.parseProperNouns = function(text) {
   }
 
   // remove any words that start with a capital letter but are preceded by a . ? or !
-  re = /[\?\.!][\n\t ]+[A-Z][a-z]+/g;
+  //re = /[\?\.!\]][\n\t ]+[A-Z][a-z]+/g;
+  var reEnd = "[\\?\\.!\\]]";
+  //re = /[\?\.!\]][\n\t ]+(([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g;
+  var reExclude = reEnd + reSpace + "+" + rePronoun;
+  re = new RegExp(reExclude, 'g');
+
   while((match = re.exec(text)) != null) {
     var key = match.index + match[0].length + "";
     if (key in properNounMap) {
@@ -246,6 +269,7 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                         scene = null;
                     } else if (hText.match(sceneRegex)) {
                         var romanNumeral = hText.slice(hText.toLowerCase().indexOf('scene ') + 6, hText.indexOf('.'));
+                        console.log(hText);
                         var sceneNum = toArabic(romanNumeral);
                         scene = new Scene(sceneNum, hText.slice(hText.indexOf('.') + 1).trim());
                     } else {
@@ -260,6 +284,10 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                     // grab lines
                     var lines = jObj.children("a");
                     lines.each(function( index ) {
+                        var line = window.$(this).text();
+                        var proper = BardParse.prototype.parseProperNouns(line);
+
+                        proper.forEach(function(element) { console.log( ":", element);});
                         dialog.addLine(window.$( this ).text());
                     });
 

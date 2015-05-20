@@ -191,4 +191,62 @@ describe('bardParse()', function () {
     assert.equal(results[3], "Also");
     assert.equal(results[4], "Stupid");
   });
+
+  //[To HELENA]  The best wishes that can be forged in
+  it ('regex test with a bracket', function () {
+    var bardParse = new module.BardParse();
+    var text = "[To HELENA]  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
+
+  it ('regex test with a tab', function () {
+    var bardParse = new module.BardParse();
+    var text = "  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Animal");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Stupid");
+  });
+
+  // Gerard de Vabon
+
+  it ('regex test with a Gerard de Vabon', function () {
+    var bardParse = new module.BardParse();
+    var text = "  An Gerard de Vabon is not Bland!!? Andrew    Is\tAlso    not     Paul de Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Gerard de Vabon");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Paul de Stupid");
+  });
+
+  it ('regex test with a Paul of Stupid', function () {
+    var bardParse = new module.BardParse();
+    var text = "  An Gerard de Vabon is not Bland!!? Andrew    Is\tAlso    not     Paul of Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Gerard de Vabon");
+    assert.equal(results[1], "Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Paul of Stupid");
+  });
+
+  it ('regex test with a Paul of Stupid', function () {
+    var bardParse = new module.BardParse();
+    var text = "  An Captain Vabon is not King Bland!!? Andrew    Is\tAlso    not     Paul of Stupid.";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results[0], "Captain Vabon");
+    assert.equal(results[1], "King Bland");
+    assert.equal(results[2], "Is");
+    assert.equal(results[3], "Also");
+    assert.equal(results[4], "Paul of Stupid");
+  });
 });
