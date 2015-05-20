@@ -249,4 +249,11 @@ describe('bardParse()', function () {
     assert.equal(results[3], "Also");
     assert.equal(results[4], "Paul of Stupid");
   });
+
+  it ('regex ." sentence completion', function() {
+    var bardParse = new module.BardParse();
+    var text = "Crying, 'That's good that's gone.' Our rash faults";
+    var results = bardParse.parseProperNouns(text);
+    assert.equal(results.length, 0);
+  });
 });

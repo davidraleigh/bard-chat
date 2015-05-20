@@ -174,7 +174,7 @@ BardParse.prototype.parseProperNouns = function(text) {
 
   // remove any words that start with a capital letter but are preceded by a . ? or !
   //re = /[\?\.!\]][\n\t ]+[A-Z][a-z]+/g;
-  var reEnd = "[\\?\\.!\\]]";
+  var reEnd = "[\\?\\.!\\](.')]";
   //re = /[\?\.!\]][\n\t ]+(([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g;
   var reExclude = reEnd + reSpace + "+" + rePronoun;
   re = new RegExp(reExclude, 'g');
@@ -287,7 +287,7 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                         var line = window.$(this).text();
                         var proper = BardParse.prototype.parseProperNouns(line);
 
-                        proper.forEach(function(element) { console.log( ":", element);});
+                        proper.forEach(function(element) { console.log( element, "\t:", line);});
                         dialog.addLine(window.$( this ).text());
                     });
 
