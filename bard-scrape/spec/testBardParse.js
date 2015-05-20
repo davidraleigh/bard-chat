@@ -2,15 +2,10 @@ var path = require('path');
 var assert = require('assert');
 
 var module = require(path.join(__dirname, '..', './bardParse.js'));
+var ParseUtils = require(path.join(__dirname, '..', './parseUtils.js')).ParseUtils;
 
 describe('bardParse()', function () {
   'use strict';
-
-  it('exists', function () {
-
-    //expect(module.BardParse).to.be.a('function');
-
-  });
 
   it('does something', function () {
     var bardParse = new module.BardParse();
@@ -42,7 +37,7 @@ describe('bardParse()', function () {
     lines.push("Words words");
     lines.push("TWords words");
     lines.push("Ords words.");
-    var sentences = module.ParseUtils.linesToSentences(lines, ["TWords"]);
+    var sentences = ParseUtils.linesToSentences(lines, ["TWords"]);
     assert.equal(sentences[0], "Words words TWords words ords words.");
   });
 
@@ -50,7 +45,7 @@ describe('bardParse()', function () {
     var lines = [];
     lines.push("Words words");
     lines.push("TWords words.");
-    var sentences = module.ParseUtils.linesToSentences(lines, ["TWords"]);
+    var sentences = ParseUtils.linesToSentences(lines, ["TWords"]);
     assert.equal(sentences[0], "Words words TWords words.");
   });
 
@@ -150,7 +145,6 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words.", sentences[0]);
     assert.equal("Words2!", sentences[1]);
     assert.equal("Words3, tWords words.", sentences[2]);
@@ -170,7 +164,6 @@ describe('bardParse()', function () {
     dialog.addLine(line5);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words.", sentences[0]);
     assert.equal("Words2!", sentences[1]);
     assert.equal("Words3, tWords words3 tWords3?", sentences[2]);
@@ -192,7 +185,6 @@ describe('bardParse()', function () {
     dialog.addLine(line5);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words Words Words words Words Words words Words Words words.", sentences[0]);
     assert.equal("Words2 words2 words2 Words2 Words2.", sentences[1]);
   });
