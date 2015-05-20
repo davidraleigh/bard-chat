@@ -40,9 +40,11 @@ Dialog.prototype.linesToSentences = function() {
     var currentLine = null;
     for (var i = 0; i < this.lines.length; i++) {
         // get the current line
-        currentLine = this.lines[i];
+        currentLine = this.lines[i].trim();
         // split the line by regex for sentence endings
-        var result = currentLine.match( /[^\.!\?]+[\.!\?]+/g );
+        //			 [^\.!\?]+[\.!\?']+(?=[ \n])
+        // this will not return any results if there is no separating character (.?! etc)
+        var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g );//[^\.!\?]+[\.!\?]+
         // if there are no splits then the whole line is part of another sentence
         if (result === null) {
             if (currentSentence.trim().length > 0)
@@ -55,7 +57,8 @@ Dialog.prototype.linesToSentences = function() {
             continue;
         }
 
-        result = currentLine.match( /[^\.!\?]+([\.!\?]|$)+/g );
+      // this WILL return a results even if there are no separating characters (.?! etc)
+        result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|$)/g );//[^\.!\?]+([\.!\?]|$)+
         // if there is a previous sentence
         if (currentSentence.trim().length > 0) {
             // TODO keep proper nouns and I capitalized
@@ -174,7 +177,7 @@ BardParse.prototype.parseProperNouns = function(text) {
 
   // remove any words that start with a capital letter but are preceded by a . ? or !
   //re = /[\?\.!\]][\n\t ]+[A-Z][a-z]+/g;
-  var reEnd = "[\\?\\.!\\](.')]";
+  var reEnd = "((.')|[\\?\\.!\\]])";
   //re = /[\?\.!\]][\n\t ]+(([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g;
   var reExclude = reEnd + reSpace + "+" + rePronoun;
   re = new RegExp(reExclude, 'g');

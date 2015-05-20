@@ -39,6 +39,86 @@ describe('bardParse()', function () {
     assert.equal("Words words tWords words.", sentences[0]);
   });
 
+  it('test two sentence two lines with quotes, period and apostrophe', function () {
+    var dialog = new module.Dialog();
+    var line1 = "Words words, 'Wah smack.' Our";
+    var line2 = "TWords word's.";
+    dialog.addLine(line1);
+    dialog.addLine(line2);
+    dialog.linesToSentences();
+    var sentences = dialog.getSentences();
+    console.log(sentences);
+    assert.equal("Words words, 'Wah smack.'", sentences[0]);
+    assert.equal("Our tWords word's.", sentences[1]);
+  });
+
+  it('test two sentence two lines with quotes, exclamation and apostrophe', function () {
+    var dialog = new module.Dialog();
+    var line1 = "Words words, 'Wah smack!' Our";
+    var line2 = "TWords word's.";
+    dialog.addLine(line1);
+    dialog.addLine(line2);
+    dialog.linesToSentences();
+    var sentences = dialog.getSentences();
+    console.log(sentences);
+    assert.equal("Words words, 'Wah smack!'", sentences[0]);
+    assert.equal("Our tWords word's.", sentences[1]);
+  });
+
+  it('test two sentence two lines with quotes, question mark and apostrophe', function () {
+    var dialog = new module.Dialog();
+    var line1 = "Words words, 'Wah smack?' Our";
+    var line2 = "TWords word's.";
+    dialog.addLine(line1);
+    dialog.addLine(line2);
+    dialog.linesToSentences();
+    var sentences = dialog.getSentences();
+    console.log(sentences);
+    assert.equal("Words words, 'Wah smack?'", sentences[0]);
+    assert.equal("Our tWords word's.", sentences[1]);
+  });
+
+
+  it('test two sentence two lines with quotes, question marks, exclamations and apostrophe', function () {
+    var dialog = new module.Dialog();
+    var line1 = "Words words, 'Wah smack!?!?' Our";
+    var line2 = "TWords word's.";
+    dialog.addLine(line1);
+    dialog.addLine(line2);
+    dialog.linesToSentences();
+    var sentences = dialog.getSentences();
+    console.log(sentences);
+    assert.equal("Words words, 'Wah smack!?!?'", sentences[0]);
+    assert.equal("Our tWords word's.", sentences[1]);
+  });
+
+  it('test messy sentence for apostrophes', function() {
+    var lines = [];
+    lines.push("He Cannot Gerard de Vabon want the Count Banal Lord Camel Captain Best. asdfasdf. Appl! Snape");
+    lines.push("says,");
+    lines.push("'If there was only a life.' Our");
+    lines.push("Banana kindom. Animal's");
+    lines.push("Monkey monkey");
+    lines.push("Pwehew.");
+    lines.push("  Bard");
+    lines.push("says, 'Banana banana banana.' Apple Apple.");
+    var dialog = new module.Dialog();
+    lines.forEach(function(element) {
+      dialog.addLine(element);
+    });
+    dialog.linesToSentences();
+    var sentences = dialog.getSentences();
+    assert.equal(sentences[0], "He Cannot Gerard de Vabon want the Count Banal Lord Camel Captain Best.");
+    assert.equal(sentences[1], 'asdfasdf.');
+    assert.equal(sentences[2], 'Appl!');
+    assert.equal(sentences[3], "Snape says, 'If there was only a life.'");
+    assert.equal(sentences[4], "Our banana kindom.");
+    assert.equal(sentences[5], "Animal's monkey monkey pwehew.");
+    assert.equal(sentences[6], "Bard says, 'Banana banana banana.'");
+    assert.equal(sentences[7], "Apple Apple.");
+  });
+
+
   it('test two sentences two lines', function () {
     var dialog = new module.Dialog();
     var line1 = "Words. Words";
