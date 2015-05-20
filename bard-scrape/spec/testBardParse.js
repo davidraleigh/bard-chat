@@ -23,7 +23,6 @@ describe('bardParse()', function () {
     dialog.addLine(line1);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal(line1, sentences[0]);
   });
 
@@ -35,8 +34,26 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words words tWords words.", sentences[0]);
+  });
+
+  it('test one sentence three lines with proper noun', function () {
+    var parseUtils = new module.ParseUtils();
+    var lines = [];
+    lines.push("Words words");
+    lines.push("TWords words");
+    lines.push("Ords words.");
+    var sentences = parseUtils.linesToSentences(lines, ["TWords"]);
+    assert.equal(sentences[0], "Words words TWords words ords words.");
+  });
+
+  it('test one sentence two lines with proper noun', function () {
+    var parseUtils = new module.ParseUtils();
+    var lines = [];
+    lines.push("Words words");
+    lines.push("TWords words.");
+    var sentences = parseUtils.linesToSentences(lines, ["TWords"]);
+    assert.equal(sentences[0], "Words words TWords words.");
   });
 
   it('test two sentence two lines with quotes, period and apostrophe', function () {
@@ -47,7 +64,6 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words words, 'Wah smack.'", sentences[0]);
     assert.equal("Our tWords word's.", sentences[1]);
   });
@@ -60,7 +76,6 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words words, 'Wah smack!'", sentences[0]);
     assert.equal("Our tWords word's.", sentences[1]);
   });
@@ -73,7 +88,6 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words words, 'Wah smack?'", sentences[0]);
     assert.equal("Our tWords word's.", sentences[1]);
   });
@@ -87,7 +101,6 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words words, 'Wah smack!?!?'", sentences[0]);
     assert.equal("Our tWords word's.", sentences[1]);
   });
@@ -127,7 +140,6 @@ describe('bardParse()', function () {
     dialog.addLine(line2);
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
-    console.log(sentences);
     assert.equal("Words tWords words.", sentences[1]);
     assert.equal("Words.", sentences[0]);
   });

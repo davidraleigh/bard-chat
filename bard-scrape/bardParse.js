@@ -15,12 +15,86 @@ var request = require('request');
 var jsdom = require("jsdom");
 var toArabic = require('roman-numerals').toArabic;
 
+var ParseUtils = function() {
+
+};
+
+ParseUtils.prototype.linesToSentences = function(lines, properNouns) {
+  // if this hasn't been defined let it be an empty array
+  properNouns = properNouns || [];
+  // return array
+  var sentences = [];
+
+  var currentSentence = "";
+  var currentLine = null;
+  for (var i = 0; i < lines.length; i++) {
+    // get the current line
+    currentLine = lines[i].trim();
+    if (currentLine.length === 0)
+      continue;
+
+    // split the line by regex for sentence endings
+    // this will not return any results if there is no separating character (.?! etc)
+    var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g );
+
+    // if there are no splits then the whole line is part of another sentence
+    if (result === null) {
+      if (currentSentence.trim().length > 0) {
+        // if there is a current sentence add this sentence to it
+
+        // grab the first word of the line and check for Proper noun table
+        var firstWord = currentLine.split(' ')[0];
+        var firstLetter = firstWord[0];
+        if (properNouns.indexOf(firstWord) === -1)
+          firstLetter = firstLetter.toLowerCase();
+
+        currentSentence = currentSentence + " " + firstLetter + currentLine.slice(1);
+      } else {
+        // if there isn't a current sentence, start it from this line
+        currentSentence = currentLine.slice(0);
+      }
+      continue;
+    }
+
+    // this WILL return a results even if there are no separating characters (.?! etc)
+    result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|$)/g );//[^\.!\?]+([\.!\?]|$)+
+    // if there is a previous sentence
+    if (currentSentence.trim().length > 0) {
+      // grab the first word of the line and check for Proper noun table
+      var firstWord = result[0].split(' ')[0];
+      var firstLetter = firstWord[0];
+      if (properNouns.indexOf(firstWord) === -1)
+        firstLetter = firstLetter.toLowerCase();
+
+      sentences.push(currentSentence + " " + firstLetter + result[0].slice(1));
+    } else {
+      sentences.push(result[0]);
+    }
+
+    for (var j = 1; j < result.length - 1; j++) {
+      sentences.push(result[j].trim());
+    }
+    if (result.length > 1) {
+      currentSentence = result[result.length - 1].trim();
+    } else {
+      currentSentence = "";
+    }
+  }
+  if (currentSentence.trim().length > 0) {
+    sentences.push(currentSentence);
+  }
+
+  return sentences;
+}
+
+
 var Dialog = function(speaker) {
-    this.character = speaker;
-    this.lines = [];
-    this.sentences = [];
-    var prev = null;
-    var next = null;
+  this.parseUtils = new ParseUtils();
+  this.character = speaker;
+  this.lines = [];
+  this.sentences = [];
+  var prev = null;
+  var next = null;
 };
 
 Dialog.prototype.addLine = function(line) {
@@ -36,49 +110,50 @@ Dialog.prototype.getLines = function() {
 };
 
 Dialog.prototype.linesToSentences = function() {
-    var currentSentence = "";
-    var currentLine = null;
-    for (var i = 0; i < this.lines.length; i++) {
-        // get the current line
-        currentLine = this.lines[i].trim();
-        // split the line by regex for sentence endings
-        //			 [^\.!\?]+[\.!\?']+(?=[ \n])
-        // this will not return any results if there is no separating character (.?! etc)
-        var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g );//[^\.!\?]+[\.!\?]+
-        // if there are no splits then the whole line is part of another sentence
-        if (result === null) {
-            if (currentSentence.trim().length > 0)
-                // if there is a current sentence add this sentence to it
-                // TODO keep proper nouns and I capitalized
-                currentSentence = currentSentence + " " + currentLine[0].toLowerCase() + currentLine.slice(1);
-            else
-                // if there isn't a current sentence, start it from this line
-                currentSentence = currentLine.slice(0);
-            continue;
-        }
-
-      // this WILL return a results even if there are no separating characters (.?! etc)
-        result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|$)/g );//[^\.!\?]+([\.!\?]|$)+
-        // if there is a previous sentence
-        if (currentSentence.trim().length > 0) {
-            // TODO keep proper nouns and I capitalized
-            this.sentences.push(currentSentence + " " + result[0][0].toLowerCase() + result[0].slice(1));
-        } else {
-            this.sentences.push(result[0]);
-        }
-
-        for (var j = 1; j < result.length - 1; j++) {
-            this.sentences.push(result[j].trim());
-        }
-        if (result.length > 1) {
-            currentSentence = result[result.length - 1].trim();
-        } else {
-            currentSentence = "";
-        }
-    }
-    if (currentSentence.trim().length > 0) {
-        this.sentences.push(currentSentence);
-    }
+  this.sentences = this.parseUtils.linesToSentences(this.lines);
+    //var currentSentence = "";
+    //var currentLine = null;
+    //for (var i = 0; i < this.lines.length; i++) {
+    //    // get the current line
+    //    currentLine = this.lines[i].trim();
+    //    // split the line by regex for sentence endings
+    //    //			 [^\.!\?]+[\.!\?']+(?=[ \n])
+    //    // this will not return any results if there is no separating character (.?! etc)
+    //    var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g );//[^\.!\?]+[\.!\?]+
+    //    // if there are no splits then the whole line is part of another sentence
+    //    if (result === null) {
+    //        if (currentSentence.trim().length > 0)
+    //            // if there is a current sentence add this sentence to it
+    //            // TODO keep proper nouns and I capitalized
+    //            currentSentence = currentSentence + " " + currentLine[0].toLowerCase() + currentLine.slice(1);
+    //        else
+    //            // if there isn't a current sentence, start it from this line
+    //            currentSentence = currentLine.slice(0);
+    //        continue;
+    //    }
+    //
+    //  // this WILL return a results even if there are no separating characters (.?! etc)
+    //    result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|$)/g );//[^\.!\?]+([\.!\?]|$)+
+    //    // if there is a previous sentence
+    //    if (currentSentence.trim().length > 0) {
+    //        // TODO keep proper nouns and I capitalized
+    //        this.sentences.push(currentSentence + " " + result[0][0].toLowerCase() + result[0].slice(1));
+    //    } else {
+    //        this.sentences.push(result[0]);
+    //    }
+    //
+    //    for (var j = 1; j < result.length - 1; j++) {
+    //        this.sentences.push(result[j].trim());
+    //    }
+    //    if (result.length > 1) {
+    //        currentSentence = result[result.length - 1].trim();
+    //    } else {
+    //        currentSentence = "";
+    //    }
+    //}
+    //if (currentSentence.trim().length > 0) {
+    //    this.sentences.push(currentSentence);
+    //}
 };
 
 Dialog.prototype.getSentences = function() {
@@ -377,5 +452,6 @@ var requestHandler = function(request, response) {
 if ( typeof module !== "undefined" ) {
   exports.BardParse = BardParse;
   exports.Dialog = Dialog;
+  exports.ParseUtils = ParseUtils;
   exports.requestHandler = requestHandler;
 }
