@@ -68,8 +68,8 @@ Scene.prototype.addDialogue = function(dialog) {
 };
 
 
-var PlayDetails = function(title) {
-  this.title = title;
+var PlayDetails = function() {
+  this.title = "";
   // hash map of act number keys and scene object arrays
   // this.acts = {1: [sceneObj1, sceneObj2], 2: [sceneObj1]};
   this.acts = {};
@@ -77,8 +77,15 @@ var PlayDetails = function(title) {
   this.characterMap = {};
   this.locationSet = [];
   this.locationMap = {};
-
 };
+
+PlayDetails.prototype.setTitle = function(title) {
+  this.title = title;
+}
+
+PlayDetails.prototype.getTitle = function() {
+  return this.title;
+}
 
 PlayDetails.prototype.addScene = function(actNumber, scene) {
   if (this.acts[actNumber]  === undefined)
@@ -93,12 +100,25 @@ PlayDetails.prototype.addCharacter = function(name) {
   this.characterSet.push(name);
 };
 
+function sortByWordCount(a, b) {
+  return b.split(' ').length - a.split(' ').length;
+};
+
+PlayDetails.prototype.getCharacters = function() {
+  // return names by order of most complex. complex being the name with the most words
+  return this.characterSet.sort(sortByWordCount);
+};
+
 PlayDetails.prototype.addLocation = function(location) {
   if (location in this.locationMap)
     return;
   this.locationMap[location] = true;
   this.locationSet.push(location);
 };
+
+PlayDetails.prototype.getLocations = function() {
+  return this.locationSet.sort(sortByWordCount);
+}
 
 if ( typeof module !== "undefined" ) {
   exports.PlayDetails = PlayDetails;

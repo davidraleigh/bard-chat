@@ -71,12 +71,13 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
   return sentences;
 };
 
-ParseUtils.extractProperNouns = function(text) {
+ParseUtils.extractProperNouns = function(text, titles) {
   text = text.trim();
   //var re = /[\n\t ][A-Z][a-z]+/g;
   var reCapitalized = "[A-Z][a-z]+";
   var reSeparator = "( (de|of) )";
-  var titles = ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
+  var titles = titles || ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
+
   var reTitles = titles.reduce(function(previousValue, currentValue, index) {
     if (index === 1)
       return '(' + previousValue + ' )|(' + currentValue + ' )';

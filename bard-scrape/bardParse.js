@@ -24,15 +24,14 @@ var Scene = require('./playComponents.js').Scene;
 
 
 var BardParse = function () {
-  this.plays = {};
+  this.plays = [];
 };
 
-BardParse.prototype.parseProperNouns = function(text) {
+BardParse.parseProperNouns = function(text) {
   return ParseUtils.extractProperNouns(text);
 }
 
-BardParse.prototype.parseFromMIT = function() {
-    var parseBound = this.parseFromMIThtml.bind(this);
+BardParse.parseFromJSON = function() {
     fs.readFile('mitPlays.json','utf8', function (err, data) {
         // error check
         if (err) {
@@ -49,8 +48,10 @@ BardParse.prototype.parseFromMIT = function() {
 
                 console.log("completed request to :", element.play.href);
                 if (!error && response.statusCode == 200) {
-                    console.log(body);
-                    parseBound(body);
+                    //console.log(body);
+                    var playDetails = new PlayDetails();
+
+                    BardParse.parseFromHTML(body);
                     console.log("parsed :", element.play.href);
                 }
             });
@@ -58,7 +59,47 @@ BardParse.prototype.parseFromMIT = function() {
     });
 };
 
-BardParse.prototype.parseFromMIThtml = function(body, callback) {
+
+
+BardParse.parseLocations = function(body, playDetails, callback) {
+  // get first ACT object
+  var sceneRegex = '^([Ss][Cc][Ee][Nn][Ee])\\s';
+
+  jsdom.env(
+    body,
+    ["http://code.jquery.com/jquery.js"],
+    function (errors, window) {
+      if (errors) {
+        console.log(errors);
+        return;
+      }
+
+      jObj = window.$("h3").first();
+
+      while(jObj.length > 0) {
+        if (jObj.is('h3')) {
+          var hText = jObj.text();
+
+          if (hText.match(sceneRegex)) {
+            console.log(hText);
+            var periodIndex = hText.indexOf('.') + 1;
+            var place = hText.slice(periodIndex , hText.indexOf('.', periodIndex)).trim();
+            playDetails.addLocation(place);
+          } else {
+            console.log('Error with h3!!');
+          }
+        }
+        jObj = jObj.next();
+      }
+
+      callback();
+    }
+  );
+};
+
+
+
+BardParse.parseFromHTML = function(body, callback) {
     // get first ACT object
     var actRegex = '^([Aa][Cc][Tt])\\s';
     var sceneRegex = '^([Ss][Cc][Ee][Nn][Ee])\\s';
@@ -82,9 +123,11 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
             var actNum = null;
             var scene = null;
             var dialog = null;
+
             while(jObj.length > 0) {
                 if (jObj.is('h3')) {
                     var hText = jObj.text();
+
                     // save scene if necessary
                     if ((hText.match(actRegex) || hText.match(sceneRegex)) && scene !== null)
                         playDetails.addScene(actNum, scene);
@@ -97,6 +140,8 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                     } else if (hText.match(sceneRegex)) {
                         var romanNumeral = hText.slice(hText.toLowerCase().indexOf('scene ') + 6, hText.indexOf('.'));
                         console.log(hText);
+                        var periodIndex = hText.indexOf('.') + 1;
+                        console.log(hText.slice(periodIndex , hText.indexOf('.', periodIndex)).trim());
                         var sceneNum = toArabic(romanNumeral);
                         scene = new Scene(sceneNum, hText.slice(hText.indexOf('.') + 1).trim());
                     } else {
@@ -106,16 +151,18 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
                     // grab player name
                     var name = jObj.text();
                     playDetails.addCharacter(name);
+
+
                     dialog = new Dialog(name);
                 } else if (jObj.is('blockquote') && dialog !== null) {
                     // grab lines
                     var lines = jObj.children("a");
                     lines.each(function( index ) {
                         var line = window.$(this).text();
-                        var proper = BardParse.prototype.parseProperNouns(line);
+                        var proper = BardParse.parseProperNouns(line);
 
                         proper.forEach(function(element) { console.log( element, "\t:", line);});
-                        dialog.addLine(window.$( this ).text());
+                        dialog.addLine(window.$(this).text());
                     });
 
                     scene.addDialogue(dialog);
@@ -129,13 +176,12 @@ BardParse.prototype.parseFromMIThtml = function(body, callback) {
     );
 };
 
-BardParse.prototype.parseFromMIThtmlFile = function(filename) {
-    var parseBound = this.parseFromMIThtml.bind(this);
-    fs.readFile(filename, 'utf8', function (error, body) {
-        if (!error) {
-            parseBound(body);
-        }
-    });
+BardParse.parseFromHTMLFile = function(filename) {
+  fs.readFile(filename, 'utf8', function (error, body) {
+    if (!error) {
+      BardParse.parseFromHTML(body);
+    }
+  });
 };
 
 var requestHandler = function(request, response) {
