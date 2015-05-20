@@ -38,21 +38,19 @@ describe('bardParse()', function () {
   });
 
   it('test one sentence three lines with proper noun', function () {
-    var parseUtils = new module.ParseUtils();
     var lines = [];
     lines.push("Words words");
     lines.push("TWords words");
     lines.push("Ords words.");
-    var sentences = parseUtils.linesToSentences(lines, ["TWords"]);
+    var sentences = module.ParseUtils.linesToSentences(lines, ["TWords"]);
     assert.equal(sentences[0], "Words words TWords words ords words.");
   });
 
   it('test one sentence two lines with proper noun', function () {
-    var parseUtils = new module.ParseUtils();
     var lines = [];
     lines.push("Words words");
     lines.push("TWords words.");
-    var sentences = parseUtils.linesToSentences(lines, ["TWords"]);
+    var sentences = module.ParseUtils.linesToSentences(lines, ["TWords"]);
     assert.equal(sentences[0], "Words words TWords words.");
   });
 

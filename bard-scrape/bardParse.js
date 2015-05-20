@@ -19,7 +19,7 @@ var ParseUtils = function() {
 
 };
 
-ParseUtils.prototype.linesToSentences = function(lines, properNouns) {
+ParseUtils.linesToSentences = function(lines, properNouns) {
   // if this hasn't been defined let it be an empty array
   properNouns = properNouns || [];
   // return array
@@ -85,149 +85,14 @@ ParseUtils.prototype.linesToSentences = function(lines, properNouns) {
   }
 
   return sentences;
-}
-
-
-var Dialog = function(speaker) {
-  this.parseUtils = new ParseUtils();
-  this.character = speaker;
-  this.lines = [];
-  this.sentences = [];
-  var prev = null;
-  var next = null;
 };
 
-Dialog.prototype.addLine = function(line) {
-    this.lines.push(line);
-};
-
-Dialog.prototype.getCharacter = function() {
-    return this.character;
-}
-
-Dialog.prototype.getLines = function() {
-    return this.lines;
-};
-
-Dialog.prototype.linesToSentences = function() {
-  this.sentences = this.parseUtils.linesToSentences(this.lines);
-    //var currentSentence = "";
-    //var currentLine = null;
-    //for (var i = 0; i < this.lines.length; i++) {
-    //    // get the current line
-    //    currentLine = this.lines[i].trim();
-    //    // split the line by regex for sentence endings
-    //    //			 [^\.!\?]+[\.!\?']+(?=[ \n])
-    //    // this will not return any results if there is no separating character (.?! etc)
-    //    var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g );//[^\.!\?]+[\.!\?]+
-    //    // if there are no splits then the whole line is part of another sentence
-    //    if (result === null) {
-    //        if (currentSentence.trim().length > 0)
-    //            // if there is a current sentence add this sentence to it
-    //            // TODO keep proper nouns and I capitalized
-    //            currentSentence = currentSentence + " " + currentLine[0].toLowerCase() + currentLine.slice(1);
-    //        else
-    //            // if there isn't a current sentence, start it from this line
-    //            currentSentence = currentLine.slice(0);
-    //        continue;
-    //    }
-    //
-    //  // this WILL return a results even if there are no separating characters (.?! etc)
-    //    result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|$)/g );//[^\.!\?]+([\.!\?]|$)+
-    //    // if there is a previous sentence
-    //    if (currentSentence.trim().length > 0) {
-    //        // TODO keep proper nouns and I capitalized
-    //        this.sentences.push(currentSentence + " " + result[0][0].toLowerCase() + result[0].slice(1));
-    //    } else {
-    //        this.sentences.push(result[0]);
-    //    }
-    //
-    //    for (var j = 1; j < result.length - 1; j++) {
-    //        this.sentences.push(result[j].trim());
-    //    }
-    //    if (result.length > 1) {
-    //        currentSentence = result[result.length - 1].trim();
-    //    } else {
-    //        currentSentence = "";
-    //    }
-    //}
-    //if (currentSentence.trim().length > 0) {
-    //    this.sentences.push(currentSentence);
-    //}
-};
-
-Dialog.prototype.getSentences = function() {
-  return this.sentences.slice();
-}
-
-
-var Scene = function(sceneNumber, location) {
-    this.dialogs = [];
-    this.firstDialog = null;
-    this.lastDialog = null;
-    this.sceneNumber = sceneNumber;
-    this.location = location;
-};
-
-Scene.prototype.toString = function() {
-    var result = "";
-    for (var i = 0; i < this.dialogs.length; i++) {
-        result += this.dialogs[i].getCharacter() + '\\n';
-        var lines = this.dialogs[i].getLines();
-        for (var j = 0; j < lines.length; j++) {
-            result += lines[j] + '\\n';
-        }
-    }
-    return result;
-}
-
-Scene.prototype.addDialogue = function(dialog) {
-    dialog.linesToSentences();
-
-    if (this.firstDialog === null) {
-        this.firstDialog = dialog;
-        this.lastDialog = dialog;
-    } else {
-        dialog.prev = this.lastDialog;
-        this.lastDialog.next = dialog;
-        this.lastDialog = dialog;
-    }
-    this.dialogs.push(dialog);
-};
-
-// play.act.scene
-var PlayDetails = function(title) {
-    this.title = title;
-    // hash map of act number keys and scene object arrays
-    // this.acts = {1: [sceneObj1, sceneObj2], 2: [sceneObj1]};
-    this.acts = {};
-    this.characterSet = [];
-    this.characterMap = {};
-};
-
-PlayDetails.prototype.addScene = function(actNumber, scene) {
-    if (this.acts[actNumber]  === undefined)
-        this.acts[actNumber] = [];
-    this.acts[actNumber].push(scene);
-};
-
-PlayDetails.prototype.addCharacter = function(name) {
-  if (name in this.characterMap)
-    return;
-  this.characterMap[name] = true;
-  this.characterSet.push(name);
-}
-
-var BardParse = function () {
-    this.plays = {};
-};
-
-BardParse.prototype.parseProperNouns = function(text) {
+ParseUtils.extractProperNouns = function(text) {
   text = text.trim();
   //var re = /[\n\t ][A-Z][a-z]+/g;
   var reCapitalized = "[A-Z][a-z]+";
   var reSeparator = "( (de|of) )";
-  var titles = ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess'];
+  var titles = ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
   var reTitles = titles.reduce(function(previousValue, currentValue, index) {
     if (index === 1)
       return '(' + previousValue + ' )|(' + currentValue + ' )';
@@ -275,6 +140,153 @@ BardParse.prototype.parseProperNouns = function(text) {
   });
 
   return results;
+};
+
+var Dialog = function(speaker) {
+  this.character = speaker;
+  this.lines = [];
+  this.sentences = [];
+  var prev = null;
+  var next = null;
+};
+
+Dialog.prototype.addLine = function(line) {
+    this.lines.push(line);
+};
+
+Dialog.prototype.getCharacter = function() {
+    return this.character;
+}
+
+Dialog.prototype.getLines = function() {
+    return this.lines;
+};
+
+Dialog.prototype.linesToSentences = function() {
+  this.sentences = ParseUtils.linesToSentences(this.lines);
+};
+
+Dialog.prototype.getSentences = function() {
+  return this.sentences.slice();
+};
+
+
+var Scene = function(sceneNumber, location) {
+    this.dialogs = [];
+    this.firstDialog = null;
+    this.lastDialog = null;
+    this.sceneNumber = sceneNumber;
+    this.location = location;
+};
+
+Scene.prototype.toString = function() {
+    var result = "";
+    for (var i = 0; i < this.dialogs.length; i++) {
+        result += this.dialogs[i].getCharacter() + '\\n';
+        var lines = this.dialogs[i].getLines();
+        for (var j = 0; j < lines.length; j++) {
+            result += lines[j] + '\\n';
+        }
+    }
+    return result;
+}
+
+Scene.prototype.addDialogue = function(dialog) {
+    dialog.linesToSentences();
+
+    if (this.firstDialog === null) {
+        this.firstDialog = dialog;
+        this.lastDialog = dialog;
+    } else {
+        dialog.prev = this.lastDialog;
+        this.lastDialog.next = dialog;
+        this.lastDialog = dialog;
+    }
+    this.dialogs.push(dialog);
+};
+
+// play.act.scene
+var PlayDetails = function(title) {
+  this.title = title;
+  // hash map of act number keys and scene object arrays
+  // this.acts = {1: [sceneObj1, sceneObj2], 2: [sceneObj1]};
+  this.acts = {};
+  this.characterSet = [];
+  this.locationSet = [];
+  this.characterMap = {};
+};
+
+PlayDetails.prototype.addScene = function(actNumber, scene) {
+    if (this.acts[actNumber]  === undefined)
+        this.acts[actNumber] = [];
+    this.acts[actNumber].push(scene);
+};
+
+PlayDetails.prototype.addCharacter = function(name) {
+  if (name in this.characterMap)
+    return;
+  this.characterMap[name] = true;
+  this.characterSet.push(name);
+};
+
+var BardParse = function () {
+  this.plays = {};
+};
+
+BardParse.prototype.parseProperNouns = function(text) {
+  return ParseUtils.extractProperNouns(text);
+  //text = text.trim();
+  ////var re = /[\n\t ][A-Z][a-z]+/g;
+  //var reCapitalized = "[A-Z][a-z]+";
+  //var reSeparator = "( (de|of) )";
+  //var titles = ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess'];
+  //var reTitles = titles.reduce(function(previousValue, currentValue, index) {
+  //  if (index === 1)
+  //    return '(' + previousValue + ' )|(' + currentValue + ' )';
+  //  return previousValue + '|(' + currentValue + ' )';
+  //});
+  ////var re =     /[\n\t ](((Lord )|(Count )|(Countess )|(Captain )[A-Z][a-z]+)|([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g
+  ////               (((Lord )|(Count )|(Countess )|(Captain )[A-Z][a-z]+)|([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))
+  //var rePronoun = "(((" + reTitles + ')' + reCapitalized + ")|("  + reCapitalized + reSeparator + reCapitalized + ")|(" + reCapitalized + "))";
+  //var reSpace = "[\\n\\t ]";
+  //
+  ////var re =     /[\n\t ]    ((    [A-Z][a-z]+     ( de )        [A-Z][a-z]+      )|(    [A-Z][a-z]+      ))/g;
+  //var reCapture = reSpace + rePronoun;
+  //var re = new RegExp(reCapture, "g");
+  //
+  //var match = null;
+  //var properNounMap = {};
+  //// collect all words that start with a capital letter
+  //while ((match = re.exec(text)) != null) {
+  //  var properNoun = text.slice(match.index + 1, match.index + match[0].length);
+  //  properNounMap[match.index + match[0].length] = properNoun;
+  //}
+  //
+  //// remove any words that start with a capital letter but are preceded by a . ? or !
+  ////re = /[\?\.!\]][\n\t ]+[A-Z][a-z]+/g;
+  //var reEnd = "((.')|[\\?\\.!\\]])";
+  ////re = /[\?\.!\]][\n\t ]+(([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g;
+  //var reExclude = reEnd + reSpace + "+" + rePronoun;
+  //re = new RegExp(reExclude, 'g');
+  //
+  //while((match = re.exec(text)) != null) {
+  //  var key = match.index + match[0].length + "";
+  //  if (key in properNounMap) {
+  //    delete properNounMap[key];
+  //  }
+  //}
+  //
+  //function sortNumber(a,b) {
+  //  return parseInt(a) - parseInt(b);
+  //}
+  //
+  //var results = [];
+  //var vals = Object.keys(properNounMap).sort(sortNumber);
+  //vals.forEach(function(key) {
+  //  results.push(properNounMap[key]);
+  //});
+  //
+  //return results;
 }
 
 BardParse.prototype.parseFromMIT = function() {
