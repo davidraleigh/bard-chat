@@ -434,6 +434,17 @@ describe('bardParse()', function () {
     //assert.equal(sentences[6], "Thy seat is up on high; whilst my gross flesh sinks downward, here to die.");
   });
 
+  it ('test lines to sentences', function () {
+    var lines = [];
+    lines.push("I have been studying how I may compare");
+    lines.push("This prison where I live unto the world:");
+    lines.push("And for because the world is populous");
+    lines.push("And here is not a creature but myself,");
+    lines.push("I cannot do it; yet I'll hammer it out.");
+    var sentences = ParseUtils.linesToSentences(lines);
+    assert.equal(sentences[0], "I have been studying how I may compare this prison where I live unto the world: And for because the world is populous And here is not a creature but myself, i cannot do it; yet I'll hammer it out.");
+  })
+
   //it ('regex ', function() {
   //  var text = "Cousin of Hereford, what dost thou object";
   //  var results = ParseUtils.extractProperNouns(text);

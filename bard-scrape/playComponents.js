@@ -143,8 +143,10 @@ function sortByWordCount(a, b) {
 };
 
 PlayDetails.prototype.addUnknownProperNoun = function(noun) {
-  if (noun in this.properNounMap || noun in this.characterMap || noun in this.locationMap)
+  // TODO this "And" is totally not a solution!!!
+  if (noun in this.properNounMap || noun in this.characterMap || noun in this.locationMap || noun === "And")
     return;
+
   this.properNounMap[noun] = true;
   this.properNounSet.push(noun);
 };

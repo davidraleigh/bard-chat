@@ -21,12 +21,22 @@ ParseUtils.sentenceToEndStopped = function(sentence) {
     return endStopped.replace(/[\:\;]/g, '').trim().capitalizeFirstLetter();
   });
 
-  return results
+  return results;
 };
 
-ParseUtils.endStoppedToCommaPhrases = function(endStopped) {
-  endStopped = endStopped.trim();
-}
+ParseUtils.sentenceToCommaPhrase = function(sentence, minPhraseSize) {
+  sentence = sentence.trim();
+  var phrases = sentence.match(/[^\.\!\?\:\;\,]+[\:\;\.\?\!\,']+(?=[ \n]|$)/g);
+  var results = [];
+  if (endStoppedPhrases === null)
+    return results;
+  results = endStoppedPhrases.map(function(endStopped) {
+    return endStopped.replace(/[\:\;]/g, '').trim().capitalizeFirstLetter();
+  });
+
+  return results;
+};
+
 
 ParseUtils.linesToSentences = function(lines, properNouns) {
   // if this hasn't been defined let it be an empty array

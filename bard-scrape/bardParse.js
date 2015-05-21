@@ -256,6 +256,8 @@ BardParse.parseFromHTML = function(body, playDetails, callback) {
         }
         jObj = jObj.next();
       }
+      console.log(playDetails.getAllProperNouns());
+
       callback();
     }
   );
