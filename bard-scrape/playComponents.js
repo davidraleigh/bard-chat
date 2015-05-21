@@ -8,6 +8,7 @@ var Dialog = function(speaker) {
   this.character = ParseUtils.allCapsToCapitalized(speaker);
   this.lines = [];
   this.sentences = [];
+  this.endStopped = [];
   var prev = null;
   var next = null;
 };
@@ -24,14 +25,46 @@ Dialog.prototype.getLines = function() {
   return this.lines;
 };
 
+Dialog.prototype.getEndStopped = function() {
+  return this.endStopped;
+}
+
 Dialog.prototype.linesToSentences = function(properNouns) {
   this.sentences = ParseUtils.linesToSentences(this.lines, properNouns);
+  var eStopped = [];
+  this.sentences.forEach(function(sentence) {
+    var temp = ParseUtils.sentenceToEndStopped(sentence);
+    if (temp.length < 2)
+      return;
+    Array.prototype.push.apply(eStopped, temp);
+  });
+  this.endStopped = eStopped;
 };
 
 Dialog.prototype.getSentences = function() {
   return this.sentences.slice();
 };
 
+Dialog.prototype.toString = function() {
+  var result = "";
+  result += this.getCharacter() + ', Lines: \t\n';
+  this.getLines().forEach(function(line) {
+    result += line + '\n';
+  });
+
+  result += '\n';
+  result += this.getCharacter() + ', Sentences: \t\n';
+  this.getSentences().forEach(function(element) {
+    result += element + '\n';
+  });
+
+  result += '\n';
+  result += this.getCharacter() + ', End Stopped: \t\n';
+  this.getEndStopped().forEach(function(element) {
+    result += element + '\n';
+  });
+  return result;
+};
 
 var Scene = function(sceneNumber, location) {
   this.dialogs = [];
@@ -44,22 +77,14 @@ var Scene = function(sceneNumber, location) {
 Scene.prototype.toString = function() {
   var result = "";
   result += this.sceneNumber + ' ' + this.location;
-  for (var i = 0; i < this.dialogs.length; i++) {
+  this.dialogs.forEach(function(dialog) {
     result += '\n';
-    result += this.dialogs[i].getCharacter() + ', Lines: \t\n';
-    var lines = this.dialogs[i].getLines();
-    for (var j = 0; j < lines.length; j++) {
-      result += lines[j] + '\n';
-    }
+    result += dialog.toString();
     result += '\n';
-    result += this.dialogs[i].getCharacter() + ', Sentences: \t\n';
-    this.dialogs[i].getSentences().forEach(function(element) {
-      result += element + '\n';
-    });
-    result += '\n';
-  }
+  });
+
   return result;
-}
+};
 
 Scene.prototype.addDialogue = function(dialog, properNouns) {
   dialog.linesToSentences(properNouns);

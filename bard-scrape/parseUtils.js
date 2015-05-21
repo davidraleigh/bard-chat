@@ -3,14 +3,30 @@
  */
 var ParseUtils = function() {};
 
+String.prototype.capitalizeFirstLetter = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 ParseUtils.getTitles = function() {
   return ['Sir', 'Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
 };
 
 ParseUtils.sentenceToEndStopped = function(sentence) {
   sentence = sentence.trim();
-  var reg = /[^\:\;]+[\:\;\.\?\!']+(?=[ \n]|$)/g;
+  var endStoppedPhrases = sentence.match(/[^\:\;]+[\:\;\.\?\!']+(?=[ \n]|$)/g);
+  var results = [];
+  if (endStoppedPhrases === null)
+    return results;
+  results = endStoppedPhrases.map(function(endStopped) {
+    return endStopped.replace(/[\:\;]/g, '').trim().capitalizeFirstLetter();
+  });
+
+  return results
 };
+
+ParseUtils.endStoppedToCommaPhrases = function(endStopped) {
+  endStopped = endStopped.trim();
+}
 
 ParseUtils.linesToSentences = function(lines, properNouns) {
   // if this hasn't been defined let it be an empty array
@@ -59,22 +75,28 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
       if (properNouns.indexOf(firstWord) === -1)
         firstLetter = firstLetter.toLowerCase();
 
-      sentences.push(currentSentence + " " + firstLetter + result[0].slice(1));
+      sentences.push((currentSentence + " " + firstLetter + result[0].slice(1)).capitalizeFirstLetter());
     } else {
-      sentences.push(result[0]);
+      sentences.push(result[0].capitalizeFirstLetter());
     }
 
     for (var j = 1; j < result.length - 1; j++) {
-      sentences.push(result[j].trim());
+      sentences.push(result[j].trim().capitalizeFirstLetter());
     }
-    if (result.length > 1) {
+
+    if (/[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g.test(result[result.length - 1]) && result.length > 1) {
+      sentences.push(result[result.length - 1].trim().capitalizeFirstLetter());
+      // TODO it seems like this assignment is unnecessary
+      currentSentence = "";
+    } else if (result.length > 1) {
       currentSentence = result[result.length - 1].trim();
     } else {
+      // TODO it seems like this assignment is unnecessary
       currentSentence = "";
     }
   }
   if (currentSentence.trim().length > 0) {
-    sentences.push(currentSentence);
+    sentences.push(currentSentence.trim().capitalizeFirstLetter());
   }
 
   return sentences;
@@ -148,8 +170,7 @@ ParseUtils.allCapsToCapitalized = function(name) {
         element = element.toLowerCase();
       } else if (/^(IX|IV|V?I{0,3})$/.test(element) === false) {
         // if not a roman numeral and not a 'de' or 'the'
-        element = element.toLowerCase();
-        element = element[0].toUpperCase() + element.slice(1);;
+        element = element.toLowerCase().capitalizeFirstLetter();
       }
       newName += " " + element;
     });

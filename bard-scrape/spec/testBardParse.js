@@ -115,7 +115,7 @@ describe('bardParse()', function () {
     dialog.linesToSentences();
     var sentences = dialog.getSentences();
     assert.equal(sentences[0], "He Cannot Gerard de Vabon want the Count Banal Lord Camel Captain Best.");
-    assert.equal(sentences[1], 'asdfasdf.');
+    assert.equal(sentences[1], 'Asdfasdf.');
     assert.equal(sentences[2], 'Appl!');
     assert.equal(sentences[3], "Snape says, 'If there was only a life.'");
     assert.equal(sentences[4], "Our banana kindom.");
@@ -410,25 +410,29 @@ describe('bardParse()', function () {
     assert.equal(playDetails.getLocations()[4], "Wales");
   });
 
-  // The DUKE OF LANCASTER'S palace
-  //The DUKE OF YORK's palace
-  //The coast of Wales
-  //The lists at Coventry
-  //A camp in Wales
-  //Wilds in Gloucestershire
-  //A royal palace
-  //The court
-  //Pomfret castle
-  //Ely House
-  //The same
-  //The palace
-  //Westminster Hall
-  //Windsor castle
-  //LANGLEY
-  //Wales
-  //Bristol
-  //London
+  it('test end-stopped', function () {
+    var results = ParseUtils.sentenceToEndStopped("We thank you both: yet one but flatters us, as well appeareth by the cause you come; namely, 'to appeal each other of high treason.'");
+    assert.equal(results[0], "We thank you both");
+    assert.equal(results[1], "Yet one but flatters us, as well appeareth by the cause you come");
+    assert.equal(results[2], "Namely, 'to appeal each other of high treason.'");
+  });
 
+  it('test lines to sentences', function() {
+    var lines = [];
+    lines.push("How now! what means death in this rude assault?");
+    lines.push("Villain, thy own hand yields thy death's instrument.");
+    lines.push("Go thou, and fill another room in hell.");
+    lines.push("That hand shall burn in never-quenching fire");
+    lines.push("That staggers thus my person. Exton, thy fierce hand");
+    lines.push("Hath with the king's blood stain'd the king's own land.");
+    lines.push("Mount, mount, my soul! thy seat is up on high;");
+    lines.push("Whilst my gross flesh sinks downward, here to die.");
+    var sentences = ParseUtils.linesToSentences(lines);
+
+    assert.equal(sentences[1], "What means death in this rude assault?");
+    assert.equal(sentences[2], "Villain, thy own hand yields thy death's instrument.");
+    //assert.equal(sentences[6], "Thy seat is up on high; whilst my gross flesh sinks downward, here to die.");
+  });
 
   //it ('regex ', function() {
   //  var text = "Cousin of Hereford, what dost thou object";
