@@ -9,6 +9,7 @@ var Dialog = function(speaker) {
   this.lines = [];
   this.sentences = [];
   this.endStopped = [];
+  this.phrases = [];
   var prev = null;
   var next = null;
 };
@@ -31,19 +32,27 @@ Dialog.prototype.getEndStopped = function() {
 
 Dialog.prototype.linesToSentences = function(properNouns) {
   this.sentences = ParseUtils.linesToSentences(this.lines, properNouns);
-  var eStopped = [];
+  var endStopped = [];
+  var phrases = [];
   this.sentences.forEach(function(sentence) {
-    var temp = ParseUtils.sentenceToEndStopped(sentence);
-    if (temp.length < 2)
-      return;
-    Array.prototype.push.apply(eStopped, temp);
+    var tempEnd = ParseUtils.sentenceToEndStopped(sentence);
+    var tempPhrase = ParseUtils.sentenceToCommaPhrase(sentence);
+    if (tempEnd.length > 1)
+      Array.prototype.push.apply(endStopped, tempEnd);
+    if (tempPhrase.length > 1)
+      Array.prototype.push.apply(phrases, tempPhrase);
   });
-  this.endStopped = eStopped;
+  this.endStopped = endStopped;
+  this.phrases = phrases;
 };
 
 Dialog.prototype.getSentences = function() {
   return this.sentences.slice();
 };
+
+Dialog.prototype.getPhrases = function() {
+  return this.phrases;
+}
 
 Dialog.prototype.toString = function() {
   var result = "";
@@ -61,6 +70,12 @@ Dialog.prototype.toString = function() {
   result += '\n';
   result += this.getCharacter() + ', End Stopped: \t\n';
   this.getEndStopped().forEach(function(element) {
+    result += element + '\n';
+  });
+
+  result += '\n';
+  result += this.getCharacter() + ', Phrases: \t\n';
+  this.getPhrases().forEach(function(element) {
     result += element + '\n';
   });
   return result;

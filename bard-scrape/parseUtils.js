@@ -25,13 +25,14 @@ ParseUtils.sentenceToEndStopped = function(sentence) {
 };
 
 ParseUtils.sentenceToCommaPhrase = function(sentence, minPhraseSize) {
+  // TODO require that phrases are at least 2 words long
   sentence = sentence.trim();
   var phrases = sentence.match(/[^\.\!\?\:\;\,]+[\:\;\.\?\!\,']+(?=[ \n]|$)/g);
   var results = [];
-  if (endStoppedPhrases === null)
+  if (phrases === null)
     return results;
-  results = endStoppedPhrases.map(function(endStopped) {
-    return endStopped.replace(/[\:\;]/g, '').trim().capitalizeFirstLetter();
+  results = phrases.map(function(endStopped) {
+    return endStopped.replace(/[\:\;\,]/g, '').trim().capitalizeFirstLetter();
   });
 
   return results;
