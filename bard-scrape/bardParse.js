@@ -66,8 +66,10 @@ BardParse.parse = function(body, callback) {
   BardParse.parseTitle(body, playDetails, function() {
     BardParse.parseLocations(body, playDetails, function() {
       BardParse.parseCharacterNames(body, playDetails, function() {
-        BardParse.parseFromHTML(body, playDetails, function() {
-          callback(playDetails);
+        BardParse.parseProperNouns(body, playDetails, function() {
+          BardParse.parseFromHTML(body, playDetails, function() {
+            callback(playDetails);
+          });
         });
       });
     });
@@ -94,7 +96,6 @@ BardParse.parseLocations = function(body, playDetails, callback) {
           var hText = jObj.text();
 
           if (hText.match(sceneRegex)) {
-            console.log(hText);
             var periodIndex = hText.indexOf('.') + 1;
             var place = hText.slice(periodIndex , hText.indexOf('.', periodIndex)).trim();
             playDetails.addLocation(place);
@@ -110,6 +111,43 @@ BardParse.parseLocations = function(body, playDetails, callback) {
   );
 };
 
+BardParse.parseProperNouns = function(body, playDetails, callback) {
+  jsdom.env(
+    body,
+    ["http://code.jquery.com/jquery.js"],
+    function (errors, window) {
+      if (errors) {
+        console.log(errors);
+        return;
+      }
+
+      var jObj = window.$("h3").first();
+      var dialog = false;
+      while(jObj.length > 0) {
+        if (jObj.is('a[name^="speech"]')) {
+          dialog = true;
+        } else if (jObj.is('blockquote') && dialog === true) {
+          // grab lines
+          var lines = jObj.children("a");
+
+          lines.each(function( index ) {
+            var line = window.$(this).text();
+            var allProperNouns = playDetails.getAllProperNouns();
+            var proper = ParseUtils.extractProperNouns(line, allProperNouns);
+
+            proper.forEach(function(element) {
+              playDetails.addUnknownProperNoun(element);
+            });
+          });
+          dialog = false;
+        }
+        jObj = jObj.next();
+      }
+      callback();
+    }
+  );
+}
+
 BardParse.parseCharacterNames = function(body, playDetails, callback) {
   jsdom.env(
     body,
@@ -122,30 +160,9 @@ BardParse.parseCharacterNames = function(body, playDetails, callback) {
 
       var jObj = window.$("h3").first();
 
-      var dialog = false;
-      var locations = playDetails.getLocations().slice();
-      var locationtTitles = ParseUtils.getTitles();
-      Array.prototype.push(locationtTitles, locations);
-
       while(jObj.length > 0) {
         if (jObj.is('a[name^="speech"]')) {
           playDetails.addCharacter(jObj.text());
-          dialog = true;
-        } else if (jObj.is('blockquote') && dialog === true) {
-          // grab lines
-          var lines = jObj.children("a");
-          var properNouns = playDetails.getCharacters().slice();
-          Array.prototype.push(properNouns, locationtTitles);
-          console.log("Proper nouns", properNouns);
-
-          lines.each(function( index ) {
-            var line = window.$(this).text();
-            var proper = ParseUtils.extractProperNouns(line, properNouns);
-
-            proper.forEach(function(element) { console.log( element, "\t:", line);});
-            playDetails.addCharacter(proper);
-          });
-          dialog = false;
         }
         jObj = jObj.next();
       }
@@ -192,14 +209,17 @@ BardParse.parseFromHTML = function(body, playDetails, callback) {
       var actNum = null;
       var scene = null;
       var dialog = null;
-
+      var properNouns = playDetails.getAllProperNouns();
       while(jObj.length > 0) {
         if (jObj.is('h3')) {
           var hText = jObj.text();
 
           // save scene if necessary
-          if ((hText.match(actRegex) || hText.match(sceneRegex)) && scene !== null)
+          if ((hText.match(actRegex) || hText.match(sceneRegex)) && scene !== null){
+            console.log(scene.toString());
             playDetails.addScene(actNum, scene);
+          }
+
 
           if (hText.match(actRegex)) {
             var romanNumeral = hText.slice(hText.toLowerCase().indexOf('act ') + 4);
@@ -228,7 +248,8 @@ BardParse.parseFromHTML = function(body, playDetails, callback) {
             dialog.addLine(window.$(this).text());
           });
 
-          scene.addDialogue(dialog);
+          scene.addDialogue(dialog, properNouns);
+
           dialog = null;
         } else if (jObj.is('blockquote')) {
           console.log('stage direction: ', jObj.text());
@@ -243,7 +264,9 @@ BardParse.parseFromHTML = function(body, playDetails, callback) {
 BardParse.parseFromHTMLFile = function(filename) {
   fs.readFile(filename, 'utf8', function (error, body) {
     if (!error) {
-      BardParse.parse(body);
+      BardParse.parse(body, function() {
+        console.log("complete");
+      });
     }
   });
 };

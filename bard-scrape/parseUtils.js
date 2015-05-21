@@ -5,7 +5,12 @@ var ParseUtils = function() {};
 
 ParseUtils.getTitles = function() {
   return ['Sir', 'Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
-}
+};
+
+ParseUtils.sentenceToEndStopped = function(sentence) {
+  sentence = sentence.trim();
+  var reg = /[^\:\;]+[\:\;\.\?\!']+(?=[ \n]|$)/g;
+};
 
 ParseUtils.linesToSentences = function(lines, properNouns) {
   // if this hasn't been defined let it be an empty array
@@ -131,6 +136,27 @@ ParseUtils.extractProperNouns = function(text, titles) {
 
   return results;
 };
+
+ParseUtils.allCapsToCapitalized = function(name) {
+  if (/[A-Z]{2,}/g.test(name)) {
+    var words = name.split(' ');
+    var newName = "";
+    words.forEach(function(element) {
+
+      if (element.toLowerCase() === 'de' || element.toLowerCase() === 'of') {
+        // if de or of then shift to all lower case
+        element = element.toLowerCase();
+      } else if (/^(IX|IV|V?I{0,3})$/.test(element) === false) {
+        // if not a roman numeral and not a 'de' or 'the'
+        element = element.toLowerCase();
+        element = element[0].toUpperCase() + element.slice(1);;
+      }
+      newName += " " + element;
+    });
+    name = newName.trim();
+  }
+  return name;
+}
 
 if ( typeof module !== "undefined" ) {
   exports.ParseUtils = ParseUtils;

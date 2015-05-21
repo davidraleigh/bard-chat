@@ -5,7 +5,7 @@
 var ParseUtils = require('./parseUtils.js').ParseUtils;
 
 var Dialog = function(speaker) {
-  this.character = speaker;
+  this.character = ParseUtils.allCapsToCapitalized(speaker);
   this.lines = [];
   this.sentences = [];
   var prev = null;
@@ -24,8 +24,8 @@ Dialog.prototype.getLines = function() {
   return this.lines;
 };
 
-Dialog.prototype.linesToSentences = function() {
-  this.sentences = ParseUtils.linesToSentences(this.lines);
+Dialog.prototype.linesToSentences = function(properNouns) {
+  this.sentences = ParseUtils.linesToSentences(this.lines, properNouns);
 };
 
 Dialog.prototype.getSentences = function() {
@@ -43,18 +43,26 @@ var Scene = function(sceneNumber, location) {
 
 Scene.prototype.toString = function() {
   var result = "";
+  result += this.sceneNumber + ' ' + this.location;
   for (var i = 0; i < this.dialogs.length; i++) {
-    result += this.dialogs[i].getCharacter() + '\\n';
+    result += '\n';
+    result += this.dialogs[i].getCharacter() + ', Lines: \t\n';
     var lines = this.dialogs[i].getLines();
     for (var j = 0; j < lines.length; j++) {
-      result += lines[j] + '\\n';
+      result += lines[j] + '\n';
     }
+    result += '\n';
+    result += this.dialogs[i].getCharacter() + ', Sentences: \t\n';
+    this.dialogs[i].getSentences().forEach(function(element) {
+      result += element + '\n';
+    });
+    result += '\n';
   }
   return result;
 }
 
-Scene.prototype.addDialogue = function(dialog) {
-  dialog.linesToSentences();
+Scene.prototype.addDialogue = function(dialog, properNouns) {
+  dialog.linesToSentences(properNouns);
 
   if (this.firstDialog === null) {
     this.firstDialog = dialog;
@@ -78,6 +86,8 @@ var PlayDetails = function(html) {
   this.characterMap = {};
   this.locationSet = [];
   this.locationMap = {};
+  this.properNounSet = [];
+  this.properNounMap = {};
 };
 
 PlayDetails.prototype.setFullHTML = function(html) {
@@ -107,9 +117,32 @@ function sortByWordCount(a, b) {
   return 1;
 };
 
+PlayDetails.prototype.addUnknownProperNoun = function(noun) {
+  if (noun in this.properNounMap || noun in this.characterMap || noun in this.locationMap)
+    return;
+  this.properNounMap[noun] = true;
+  this.properNounSet.push(noun);
+};
+
+PlayDetails.prototype.getUnknownProperNouns = function() {
+  return this.properNounSet.sort(sortByWordCount);
+}
+
+PlayDetails.prototype.getAllProperNouns = function() {
+  var allProperNouns = this.properNounSet.slice();
+  allProperNouns = allProperNouns.concat(this.locationSet.slice());
+  allProperNouns = allProperNouns.concat(this.characterSet.slice());
+  allProperNouns = allProperNouns.concat(ParseUtils.getTitles());
+  return allProperNouns.sort(sortByWordCount);
+}
+
 PlayDetails.prototype.addCharacter = function(name) {
+  // if name is all capitalized
+  name = ParseUtils.allCapsToCapitalized(name);
+
   if (this.hasCharacter(name))
     return;
+
   this.characterMap[name] = true;
   this.characterSet.push(name);
 };

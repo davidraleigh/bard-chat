@@ -360,6 +360,14 @@ describe('bardParse()', function () {
     assert.equal(playDetails.getCharacters().length, 4);
     playDetails.addCharacter("Tount of Bob");
     assert.equal(playDetails.getCharacters().length, 4);
+    playDetails.addCharacter("Tount of BOB");
+    assert.equal(playDetails.getCharacters().length, 4);
+    playDetails.addCharacter("DUKE OF EARL");
+    assert.equal(playDetails.getCharacters().length, 5);
+    assert.equal(playDetails.getCharacters()[1], "Duke of Earl");
+    playDetails.addCharacter("KING HENRY VIII");
+    assert.equal(playDetails.getCharacters().length, 6);
+    assert.equal(playDetails.getCharacters()[2], "King Henry VIII");
   });
 
   it ('PlayDetails get character test', function() {
