@@ -192,14 +192,14 @@ describe('bardParse()', function () {
 
   it ('regex test', function () {
     var text = "An Animal";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
   });
 
   it ('regex test', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not Bland. Andrew Is Also not Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -211,7 +211,7 @@ describe('bardParse()', function () {
   it ('regex test lots of words', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not Bland! Andrew Is Also not Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -222,7 +222,7 @@ describe('bardParse()', function () {
   it ('regex test with double spaces and lots of ??!!', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not Bland!!? Andrew Is.   Also not Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -232,7 +232,7 @@ describe('bardParse()', function () {
   it ('regex test with period and newline', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not Bland!!? Andrew Is.\nAlso not Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -243,7 +243,7 @@ describe('bardParse()', function () {
   it ('regex test with new line', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not Bland! Andrew Is\nAlso not Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -254,7 +254,7 @@ describe('bardParse()', function () {
   it ('regex test with I', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not I Bland! Andrew Is\nAlso not Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -265,7 +265,7 @@ describe('bardParse()', function () {
   it ('regex test with double spaces and lots of ??!!', function () {
     var bardParse = new module.BardParse();
     var text = "An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -277,7 +277,7 @@ describe('bardParse()', function () {
   it ('regex test with a bracket', function () {
     var bardParse = new module.BardParse();
     var text = "[To HELENA]  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -288,7 +288,7 @@ describe('bardParse()', function () {
   it ('regex test with a tab', function () {
     var bardParse = new module.BardParse();
     var text = "  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -301,7 +301,7 @@ describe('bardParse()', function () {
   it ('regex test with a Gerard de Vabon', function () {
     var bardParse = new module.BardParse();
     var text = "  An Gerard de Vabon is not Bland!!? Andrew    Is\tAlso    not     Paul de Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Gerard de Vabon");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -312,7 +312,7 @@ describe('bardParse()', function () {
   it ('regex test with a Paul of Stupid', function () {
     var bardParse = new module.BardParse();
     var text = "  An Gerard de Vabon is not Bland!!? Andrew    Is\tAlso    not     Paul of Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Gerard de Vabon");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is");
@@ -323,7 +323,7 @@ describe('bardParse()', function () {
   it ('regex test with a Paul of Stupid', function () {
     var bardParse = new module.BardParse();
     var text = "  An Captain Vabon is not King Bland!!? Andrew    Is\tAlso    not     Paul of Stupid.";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Captain Vabon");
     assert.equal(results[1], "King Bland");
     assert.equal(results[2], "Is");
@@ -334,7 +334,7 @@ describe('bardParse()', function () {
   it ('regex ." sentence completion', function() {
     var bardParse = new module.BardParse();
     var text = "Crying, 'That's good that's gone.' Our rash faults";
-    var results = module.BardParse.parseProperNouns(text);
+    var results = ParseUtils.extractProperNouns(text);
     assert.equal(results.length, 0);
   });
 
@@ -364,27 +364,63 @@ describe('bardParse()', function () {
 
   it ('PlayDetails get character test', function() {
     var playDetails = new PlayDetails("test");
-    playDetails.addLocation("Bob");
-    assert.equal(playDetails.getLocations()[0], "Bob");
+    playDetails.addLocation("The DUKE OF LANCASTER'S palace");
+    playDetails.addLocation("The DUKE OF YORK's palace");
+    playDetails.addLocation("The coast of Wales");
+    playDetails.addLocation("The lists at Coventry");
+    playDetails.addLocation("A camp in Wales");
+    playDetails.addLocation("Wilds in Gloucestershire");
+    playDetails.addLocation("A royal palace");
+    playDetails.addLocation("The court");
+    playDetails.addLocation("Pomfret castle");
+    assert.equal(playDetails.getLocations().length, 0);
+    playDetails.addLocation("Ely House");
     assert.equal(playDetails.getLocations().length, 1);
-    playDetails.addLocation("Count Bob");
-    assert.equal(playDetails.getLocations()[1], "Bob");
-    assert.equal(playDetails.getLocations()[0], "Count Bob");
+    assert.equal(playDetails.getLocations()[0], "Ely House");
+    playDetails.addLocation("The same");
+    playDetails.addLocation("The palace");
+    assert.equal(playDetails.getLocations().length, 1);
+    playDetails.addLocation("Westminster Hall");
     assert.equal(playDetails.getLocations().length, 2);
-    playDetails.addLocation("Count of Bob");
-    assert.equal(playDetails.getLocations()[2], "Bob");
-    assert.equal(playDetails.getLocations()[1], "Count Bob");
-    assert.equal(playDetails.getLocations()[0], "Count of Bob");
+    assert.equal(playDetails.getLocations()[0], "Ely House");
+    assert.equal(playDetails.getLocations()[1], "Westminster Hall");
+    playDetails.addLocation("Windsor castle");
+    playDetails.addLocation("LANGLEY");
+    assert.equal(playDetails.getLocations().length, 2);
+    playDetails.addLocation("Wales");
     assert.equal(playDetails.getLocations().length, 3);
-    playDetails.addLocation("Tount of Bob");
-    assert.equal(playDetails.getLocations()[3], "Bob");
-    assert.equal(playDetails.getLocations()[2], "Count Bob");
-    assert.equal(playDetails.getLocations()[0], "Count of Bob");
-    assert.equal(playDetails.getLocations()[1], "Tount of Bob");
+    assert.equal(playDetails.getLocations()[0], "Ely House");
+    assert.equal(playDetails.getLocations()[1], "Westminster Hall");
+    assert.equal(playDetails.getLocations()[2], "Wales");
+    playDetails.addLocation("Bristol");
     assert.equal(playDetails.getLocations().length, 4);
-    playDetails.addLocation("Tount of Bob");
-    assert.equal(playDetails.getLocations().length, 4);
+    assert.equal(playDetails.getLocations()[2], "Bristol");
+    assert.equal(playDetails.getLocations()[3], "Wales");
+    playDetails.addLocation("London");
+    assert.equal(playDetails.getLocations().length, 5);
+    assert.equal(playDetails.getLocations()[3], "London");
+    assert.equal(playDetails.getLocations()[4], "Wales");
   });
+
+  // The DUKE OF LANCASTER'S palace
+  //The DUKE OF YORK's palace
+  //The coast of Wales
+  //The lists at Coventry
+  //A camp in Wales
+  //Wilds in Gloucestershire
+  //A royal palace
+  //The court
+  //Pomfret castle
+  //Ely House
+  //The same
+  //The palace
+  //Westminster Hall
+  //Windsor castle
+  //LANGLEY
+  //Wales
+  //Bristol
+  //London
+
 
   //it ('regex ', function() {
   //  var text = "Cousin of Hereford, what dost thou object";

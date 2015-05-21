@@ -3,6 +3,10 @@
  */
 var ParseUtils = function() {};
 
+ParseUtils.getTitles = function() {
+  return ['Sir', 'Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
+}
+
 ParseUtils.linesToSentences = function(lines, properNouns) {
   // if this hasn't been defined let it be an empty array
   properNouns = properNouns || [];
@@ -76,7 +80,8 @@ ParseUtils.extractProperNouns = function(text, titles) {
   //var re = /[\n\t ][A-Z][a-z]+/g;
   var reCapitalized = "[A-Z][a-z]+";
   var reSeparator = "( (de|of) )";
-  var titles = titles || ['Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
+  //
+  var titles = titles || ParseUtils.getTitles();
 
   var reTitles = titles.reduce(function(previousValue, currentValue, index) {
     if (index === 1)
