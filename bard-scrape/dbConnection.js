@@ -18,6 +18,8 @@ var PlayDB = function() {
 };
 
 
+
+
 PlayDB.savePlay = function(playDetails, callback) {
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
@@ -36,6 +38,7 @@ PlayDB.savePlayOverview = function(db, playDetails, callback) {
   var playOverviewCollection = db.collection('playOverview');
 
   var playOverview = {
+    'playTitle' : playDetails.getTitle(),
     'characters' : playDetails.getCharacters(),
     'locations' : playDetails.getLocations(),
     'otherProperNouns' : playDetails.getOtherProperNouns(),
@@ -44,7 +47,7 @@ PlayDB.savePlayOverview = function(db, playDetails, callback) {
   };
   var playOverviewSet = { '$set' : playOverview };
 
-  playOverviewCollection.updateOne({ '_id' : playDetails.getTitle() }, playOverviewSet, { 'upsert':true }, function(err, result) {
+  playOverviewCollection.updateOne({ 'playTitle' : playDetails.getTitle() }, playOverviewSet, { 'upsert':true }, function(err, result) {
     console.log("Inserted 3 documents into the document collection", result);
     callback(result);
   });
@@ -88,8 +91,34 @@ PlayDB.savePlayOverview = function(db, playDetails, callback) {
 //
 //};
 
-PlayDB.saveSentences = function(db, playDetails, callback) {
+PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callback) {
+  var bulk = db.sentences.initializeOrderedBulkOp();
+  var play = playDetails.getTitle();
+  var filterObject = {'playTitle' : playDetails.getTitle()};
+  var sceneNumber = scene.getSceneNumber();
+  scene.getDialogs().forEach(function(dialog) {
+    var speaker = dialog.getCharacter();
+    dialog.getLines(true).forEach(function(upsertLineObject) {
+      filterObject['lineNumber'] = line.lineNumber;
+      // TODO should all this be moved into Dialog class?
+      upsertLineObject['actNumber'] = actNumber;
+      upsertLineObject['sceneNumber'] = sceneNumber;
+      upsertLineObject['playTitle'] = play;
+      upsertLineObject['speaker'] = speaker;
+      bulk.find(filterObject).upsert().update(upsertLineObject);
+    });
+  });
+  bulk.execute();
+};
 
+PlayDB.saveSentences = function(db, playDetails, callback) {
+  playDetails.getActNumbers().forEach(function(actNumber) {
+    playDetails.getScene(actNumber).forEach(function(scene) {
+      PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function() {
+        callback();
+      })
+    });
+  });
 };
 
 PlayDB.saveLines = function(playDetails, db, callback) {

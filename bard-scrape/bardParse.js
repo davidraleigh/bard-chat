@@ -221,6 +221,9 @@ BardParse.parseDialog = function(body, playDetails, callback) {
       var actNum = null;
       var scene = null;
       var dialog = null;
+      var peopleProperNouns = playDetails.getCharacters();
+      var locationProperNouns = playDetails.getLocations();
+      var otherProperNouns = playDetails.getOtherProperNouns();
       var properNouns = playDetails.getAllProperNouns().concat(ParseUtils.getTitles());
       while(jObj.length > 0) {
         if (jObj.is('h3')) {
@@ -253,11 +256,20 @@ BardParse.parseDialog = function(body, playDetails, callback) {
           // grab lines
           var lines = jObj.children("a");
           lines.each(function( index ) {
-            var line = window.$(this).text();
-            var proper = ParseUtils.extractProperNouns(line);
-
-            proper.forEach(function(element) { console.log( element, "\t:", line);});
-            dialog.addLine(window.$(this).text());
+            var lineText = window.$(this).text();
+            console.log(lineText);
+            var lineNumber = window.$(this).attr("NAME");
+            var proper = ParseUtils.extractProperNouns(lineText);
+            var people = peopleProperNouns.filter(function(n) {
+              return proper.indexOf(n) != -1
+            });
+            var locations = locationProperNouns.filter(function(n) {
+              return proper.indexOf(n) != -1
+            });
+            var others = otherProperNouns.filter(function(n) {
+              return proper.indexOf(n) != -1
+            });
+            dialog.addLine(lineText, lineNumber, people, locations, others);
           });
 
           scene.addDialogue(dialog, properNouns);

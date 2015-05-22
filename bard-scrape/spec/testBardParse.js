@@ -202,9 +202,8 @@ describe('bardParse()', function () {
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Stupid");
+    assert.equal(results[2], "Is Also");
+    assert.equal(results[3], "Stupid");
   });
 
 
@@ -214,9 +213,8 @@ describe('bardParse()', function () {
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Stupid");
+    assert.equal(results[2], "Is Also");
+    assert.equal(results[3], "Stupid");
   });
 
   it ('regex test with double spaces and lots of ??!!', function () {

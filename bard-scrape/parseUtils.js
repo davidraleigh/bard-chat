@@ -7,9 +7,33 @@ String.prototype.capitalizeFirstLetter = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+function sortByWordCount(a, b) {
+  var diff = b.split(' ').length - a.split(' ').length;
+  if (diff !== 0)
+    return diff;
+  else if (b > a)
+    return -1;
+  return 1;
+};
+
 ParseUtils.getTitles = function() {
   return ['Sir', 'Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
 };
+
+ParseUtils.getWordOccurence = function(text, subString, allowOverlapping) {
+  text+="";
+  subString+="";
+  if(subString.length<=0) return text.length+1;
+
+  var n=0, pos=0;
+  var step=(allowOverlapping)?(1):(subString.length);
+
+  while(true){
+    pos=text.indexOf(subString,pos);
+    if(pos>=0){ n++; pos+=step; } else break;
+  }
+  return(n);
+}
 
 ParseUtils.sentenceToEndStopped = function(sentence) {
   sentence = sentence.trim();
@@ -38,7 +62,6 @@ ParseUtils.sentenceToCommaPhrase = function(sentence, minPhraseSize) {
 
   return results;
 };
-
 
 ParseUtils.linesToSentences = function(lines, properNouns) {
   // if this hasn't been defined let it be an empty array
@@ -114,49 +137,40 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
   return sentences;
 };
 
-ParseUtils.extractProperNouns = function(text, titles) {
+ParseUtils.extractProperNouns = function(text) {
   text = text.trim();
-  //var re = /[\n\t ][A-Z][a-z]+/g;
-  var reCapitalized = "[A-Z][a-z]+";
-  var reSeparator = "( (de|of) )";
-  //
-  var titles = titles || ParseUtils.getTitles();
 
-  var reTitles = titles.reduce(function(previousValue, currentValue, index) {
-    if (index === 1)
-      return '(' + previousValue + ' )|(' + currentValue + ' )';
-    return previousValue + '|(' + currentValue + ' )';
-  });
-  //var re =     /[\n\t ](((Lord )|(Count )|(Countess )|(Captain )[A-Z][a-z]+)|([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g
-  //               (((Lord )|(Count )|(Countess )|(Captain )[A-Z][a-z]+)|([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))
-  var rePronoun = "(((" + reTitles + ')' + reCapitalized + ")|("  + reCapitalized + reSeparator + reCapitalized + ")|(" + reCapitalized + "))";
-  var reSpace = "[\\n\\t ]";
-
-  //var re =     /[\n\t ]    ((    [A-Z][a-z]+     ( de )        [A-Z][a-z]+      )|(    [A-Z][a-z]+      ))/g;
-  var reCapture = reSpace + rePronoun;
-  var re = new RegExp(reCapture, "g");
-
+  var re = /[\t\n ]+(([A-Z][a-z]+)+(( (of|de) )|[ a-z]|))+/g;
   var match = null;
   var properNounMap = {};
   // collect all words that start with a capital letter
   while ((match = re.exec(text)) != null) {
+    console.log(match[0]);
     var properNoun = text.slice(match.index + 1, match.index + match[0].length);
-    properNounMap[match.index + match[0].length] = properNoun;
+    properNounMap[match.index + match[0].length] = properNoun.trim();
   }
 
   // remove any words that start with a capital letter but are preceded by a . ? or !
-  //re = /[\?\.!\]][\n\t ]+[A-Z][a-z]+/g;
-  var reEnd = "((.')|[\\?\\.!\\]])";
-  //re = /[\?\.!\]][\n\t ]+(([A-Z][a-z]+( de )[A-Z][a-z]+)|([A-Z][a-z]+))/g;
-  var reExclude = reEnd + reSpace + "+" + rePronoun;
-  re = new RegExp(reExclude, 'g');
-
-  while((match = re.exec(text)) != null) {
-    var key = match.index + match[0].length + "";
-    if (key in properNounMap) {
-      delete properNounMap[key];
+  var keysToDelete = [];
+  for (var key in properNounMap) {
+    //((.')|[\?\.!\]])[\t ]+
+    var temp = properNounMap[key];
+    var reTest = "((.')|[\\?\\.!\\]])[\\t\\n ]+" + temp;
+    var regex = new RegExp(reTest);
+    if (regex.test(text)) {
+      // now that this regex is in the properNounMap see if there are pieces to keep
+      var tempSplit = temp.split(' ');
+      if (tempSplit.length > 1) {
+        var newStart = text.indexOf(tempSplit[1], parseInt(key) - temp.length + 1);
+        properNounMap[key] = text.slice(newStart, parseInt(key));
+      } else {
+        keysToDelete.push(key);
+      }
     }
   }
+  keysToDelete.forEach(function(key) {
+    delete properNounMap[key];
+  });
 
   function sortNumber(a,b) {
     return parseInt(a) - parseInt(b);
@@ -165,7 +179,7 @@ ParseUtils.extractProperNouns = function(text, titles) {
   var results = [];
   var vals = Object.keys(properNounMap).sort(sortNumber);
   vals.forEach(function(key) {
-    results.push(properNounMap[key]);
+    results.push(properNounMap[key].trim());
   });
 
   return results;

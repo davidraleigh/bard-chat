@@ -10,33 +10,108 @@ var Dialog = function(speaker) {
   this.sentences = [];
   this.endStopped = [];
   this.phrases = [];
+
+  // TODO maybe remove all the linked list stuff
   var prev = null;
   var next = null;
 };
 
-Dialog.prototype.addLine = function(line) {
-  this.lines.push(line);
+Dialog.prototype.getLineCount = function(){
+  return this.lines.length;
+}
+
+Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, other) {
+  this.lines.push(
+    {
+      'lineText' : lineText,
+      'lineNumber' : lineNumber,
+      'people' : people || [],
+      'locations' : locations || [],
+      'other' : other || []
+    });
 };
 
 Dialog.prototype.getCharacter = function() {
   return this.character;
 }
 
-Dialog.prototype.getLines = function() {
-  return this.lines;
+Dialog.prototype.getLines = function(bWithDetails) {
+  if (bWithDetails)
+    return this.lines;
+  return this.lines.map(function(line) { return line.lineText; });
 };
 
 Dialog.prototype.getEndStopped = function() {
   return this.endStopped;
 }
 
+Dialog.prototype.addSentence = function(sentenceText, people, locations, other, lineNumberStart, lineNumberEnd) {
+  var sentenceType = 'unknown';
+  if (sentenceText[sentenceText.length - 1] === '?')
+    sentenceType = 'question';
+  else if (sentenceText[sentenceText.length - 1] === '!')
+    sentenceType = 'exclamation';
+  else if (sentenceText.indexOf("No") === 0)
+    sentenceType = 'negation';
+  else if (sentenceText.indexOf('Yes') === 0)
+    sentenceType = 'affirmation';
+  else if (sentenceText.indexOf('But') === 0)
+    sentenceType = 'excuse';
+
+  this.sentences.push(
+    {
+      'sentenceText' : sentenceText,
+      'rangeStart' : lineNumberStart,
+      'rangeEnd' : lineNumberEnd,
+      'ICount' : ParseUtils.getWordOccurence(sentenceText, 'I', false),
+      'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'you', false),
+      'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'he', false),
+      'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'she', false),
+      'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'they', false),
+      'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'we', false),
+      'people' : people || [],
+      'locations' : locations || [],
+      'other' : other || [],
+      'characterCount' : sentenceText.length,
+      'type' : sentenceType
+    });
+}
+
 Dialog.prototype.linesToSentences = function(properNouns) {
-  this.sentences = ParseUtils.linesToSentences(this.lines, properNouns);
+  var lines = this.getLines(true);
+  var boundSentenceAdd = Dialog.prototype.addSentence.bind(this);
+
+  var sentences = ParseUtils.linesToSentences(this.getLines(), properNouns);
+  // TODO this makes me so sad. Better to fold this into linesToSentences, but for now the hack lives
+  sentences.forEach(function(sentenceText) {
+    var peopleNouns = [];
+    var locationNouns = [];
+    var otherNouns = [];
+    lines.forEach(function(lineObj) {
+      lineObj.people.forEach(function(person) {
+        if (sentenceText.indexOf(person) !== -1) {
+          peopleNouns.push(person);
+        }
+      });
+      lineObj.locations.forEach(function(location) {
+        if (sentenceText.indexOf(location) !== -1) {
+          locationNouns.push(location);
+        }
+      });
+      lineObj.other.forEach(function(other) {
+        if (sentenceText.indexOf(other) !== -1) {
+          otherNouns.push(other);
+        }
+      });
+    });
+    boundSentenceAdd(sentenceText, peopleNouns, locationNouns, otherNouns, lines[0].lineNumber, lines[lines.length - 1].lineNumber);
+  });
+
   var endStopped = [];
   var phrases = [];
   this.sentences.forEach(function(sentence) {
-    var tempEnd = ParseUtils.sentenceToEndStopped(sentence);
-    var tempPhrase = ParseUtils.sentenceToCommaPhrase(sentence);
+    var tempEnd = ParseUtils.sentenceToEndStopped(sentence.sentenceText);
+    var tempPhrase = ParseUtils.sentenceToCommaPhrase(sentence.sentenceText);
     if (tempEnd.length > 1)
       Array.prototype.push.apply(endStopped, tempEnd);
     if (tempPhrase.length > 1)
@@ -46,8 +121,10 @@ Dialog.prototype.linesToSentences = function(properNouns) {
   this.phrases = phrases;
 };
 
-Dialog.prototype.getSentences = function() {
-  return this.sentences.slice();
+Dialog.prototype.getSentences = function(bWithDetails) {
+  if (bWithDetails)
+    return this.sentences;
+  return this.sentences.map(function(sentence) { return sentence.sentenceText; });
 };
 
 Dialog.prototype.getPhrases = function() {
@@ -81,12 +158,16 @@ Dialog.prototype.toString = function() {
   return result;
 };
 
+
 var Scene = function(sceneNumber, location) {
   this.dialogs = [];
-  this.firstDialog = null;
-  this.lastDialog = null;
+  this.lineCount = 0;
   this.sceneNumber = sceneNumber;
   this.location = location;
+
+  // TODO perhaps remove all this linked list stuff
+  this.firstDialog = null;
+  this.lastDialog = null;
 };
 
 Scene.prototype.toString = function() {
@@ -101,9 +182,16 @@ Scene.prototype.toString = function() {
   return result;
 };
 
-Scene.prototype.addDialogue = function(dialog, properNouns) {
-  dialog.linesToSentences(properNouns);
+Scene.prototype.getDialogs = function() {
+  return this.dialogs;
+};
 
+Scene.prototype.addDialogue = function(dialog, properNouns) {
+  this.lineCount += dialog.lines.length;
+  dialog.linesToSentences(properNouns);
+  this.dialogs.push(dialog);
+
+  // TODO perhaps remove all this linked list stuff
   if (this.firstDialog === null) {
     this.firstDialog = dialog;
     this.lastDialog = dialog;
@@ -112,7 +200,14 @@ Scene.prototype.addDialogue = function(dialog, properNouns) {
     this.lastDialog.next = dialog;
     this.lastDialog = dialog;
   }
-  this.dialogs.push(dialog);
+};
+
+Scene.prototype.getLineCount = function() {
+  return this.lineCount;
+};
+
+Scene.prototype.getSceneNumber = function() {
+  return this.sceneNumber;
 };
 
 
@@ -129,6 +224,22 @@ var PlayDetails = function(html) {
   this.otherProperNounSet = [];
   this.otherProperNounMap = {};
 };
+
+PlayDetails.prototype.getActNumbers = function() {
+  function sortNumber(a,b) {
+    return parseInt(a) - parseInt(b);
+  }
+
+  return Object.keys(this.acts).sort(sortNumber);
+};
+
+PlayDetails.prototype.getScene = function(actNum) {
+  if (actNum in this.acts) {
+    return this.acts[actNum];
+  }
+  return null;
+};
+
 
 PlayDetails.prototype.setFullHTML = function(html) {
   this.fullHTML = html;

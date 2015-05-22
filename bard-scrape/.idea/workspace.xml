@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="837c322e-e627-419e-8e95-bad406452ba4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dbConnection.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bardParse.js" afterPath="$PROJECT_DIR$/bardParse.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbConnection.js" afterPath="$PROJECT_DIR$/dbConnection.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/parseUtils.js" afterPath="$PROJECT_DIR$/parseUtils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/playComponents.js" afterPath="$PROJECT_DIR$/playComponents.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/spec/testBardParse.js" afterPath="$PROJECT_DIR$/spec/testBardParse.js" />
@@ -35,62 +34,69 @@
       <file leaf-file-name="bardParse.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bardParse.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.419354" vertical-offset="2734" max-vertical-offset="3675">
-              <caret line="281" column="52" selection-start-line="281" selection-start-column="52" selection-end-line="281" selection-end-column="52" />
+            <state vertical-scroll-proportion="-5.354839" vertical-offset="2879" max-vertical-offset="3660">
+              <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#2591#3367#0" expanded="false" />
                 <element signature="e#4547#4962#0" expanded="false" />
                 <element signature="e#5025#5408#0" expanded="false" />
-                <element signature="e#8293#9606#0" expanded="false" />
+                <element signature="e#8461#8843#0" expanded="false" />
+                <element signature="e#8895#10208#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="playComponents.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="playComponents.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/playComponents.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.18453865" vertical-offset="661" max-vertical-offset="1365">
-              <caret line="132" column="0" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+            <state vertical-scroll-proportion="5.814815" vertical-offset="1102" max-vertical-offset="3525">
+              <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
               <folding>
-                <element signature="e#136#325#0" expanded="false" />
-                <element signature="e#444#472#0" expanded="false" />
-                <element signature="e#513#537#0" expanded="false" />
-                <element signature="e#584#613#0" expanded="false" />
-                <element signature="e#673#1197#0" expanded="false" />
-                <element signature="e#1243#1279#0" expanded="false" />
-                <element signature="e#1390#2035#0" expanded="false" />
-                <element signature="e#2082#2221#0" expanded="false" />
-                <element signature="e#2262#2475#0" expanded="false" />
-                <element signature="e#2538#2822#0" expanded="false" />
-                <element signature="e#3345#3372#0" expanded="false" />
-                <element signature="e#3424#3449#0" expanded="false" />
-                <element signature="e#3495#3519#0" expanded="false" />
-                <element signature="e#3581#3694#0" expanded="false" />
-                <element signature="n#!!block;n#sortByWordCount#0" expanded="false" />
-                <element signature="e#3928#4186#0" expanded="false" />
-                <element signature="e#4244#4303#0" expanded="false" />
-                <element signature="e#4358#4601#0" expanded="false" />
-                <element signature="e#4655#4849#0" expanded="false" />
-                <element signature="e#4904#4973#0" expanded="false" />
-                <element signature="e#5024#5164#0" expanded="false" />
-                <element signature="e#5222#5722#0" expanded="false" />
-                <element signature="e#5780#5852#0" expanded="false" />
-                <element signature="e#5902#5954#0" expanded="false" />
+                <element signature="e#136#375#0" expanded="false" />
+                <element signature="e#420#451#0" expanded="false" />
+                <element signature="e#777#805#0" expanded="false" />
+                <element signature="e#858#971#0" expanded="false" />
+                <element signature="e#1018#1047#0" expanded="false" />
+                <element signature="e#4275#4301#0" expanded="false" />
+                <element signature="e#5290#5503#0" expanded="false" />
+                <element signature="e#5546#5572#0" expanded="false" />
+                <element signature="e#6199#6554#0" expanded="false" />
+                <element signature="e#6784#6865#0" expanded="false" />
+                <element signature="e#6920#6947#0" expanded="false" />
+                <element signature="e#6997#7024#0" expanded="false" />
+                <element signature="e#7076#7101#0" expanded="false" />
+                <element signature="e#7147#7171#0" expanded="false" />
+                <element signature="e#7233#7346#0" expanded="false" />
+                <element signature="e#7580#7838#0" expanded="false" />
+                <element signature="e#7896#7955#0" expanded="false" />
+                <element signature="e#8010#8253#0" expanded="false" />
+                <element signature="e#8307#8501#0" expanded="false" />
+                <element signature="e#8556#8625#0" expanded="false" />
+                <element signature="e#8676#8816#0" expanded="false" />
+                <element signature="e#8874#9374#0" expanded="false" />
+                <element signature="e#9432#9504#0" expanded="false" />
+                <element signature="e#9554#9606#0" expanded="false" />
+                <element signature="e#9645#9737#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="parseUtils.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="parseUtils.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/parseUtils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-12.518518" vertical-offset="1687" max-vertical-offset="2160">
-              <caret line="192" column="0" selection-start-line="192" selection-start-column="0" selection-end-line="195" selection-end-column="1" />
+            <state vertical-scroll-proportion="1.7959183" vertical-offset="1160" max-vertical-offset="2235">
+              <caret line="184" column="17" selection-start-line="184" selection-start-column="17" selection-end-line="184" selection-end-column="17" />
               <folding>
                 <element signature="e#0#46#0" expanded="false" />
-                <element signature="e#4079#6142#0" expanded="false" />
+                <element signature="n#!!block;n#sortByWordCount#0" expanded="false" />
+                <element signature="e#399#499#0" expanded="false" />
+                <element signature="e#576#845#0" expanded="false" />
+                <element signature="e#900#1246#0" expanded="false" />
+                <element signature="e#1318#1748#0" expanded="false" />
+                <element signature="e#6089#6672#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -99,13 +105,23 @@
       <file leaf-file-name="dbConnection.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbConnection.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="377" max-vertical-offset="975">
-              <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="700" max-vertical-offset="1395">
+              <caret line="118" column="8" selection-start-line="118" selection-start-column="8" selection-end-line="118" selection-end-column="8" />
               <folding>
                 <element signature="e#0#46#0" expanded="false" />
-                <element signature="e#912#1544#0" expanded="false" />
-                <element signature="e#1547#1622#0" expanded="false" />
+                <element signature="e#914#1594#0" expanded="false" />
+                <element signature="e#1597#1672#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-13.958333" vertical-offset="10" max-vertical-offset="480">
+              <caret line="23" column="21" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -113,8 +129,8 @@
       <file leaf-file-name="richardII.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/richardII.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.2941175" vertical-offset="16935" max-vertical-offset="78315">
-              <caret line="1147" column="21" selection-start-line="1147" selection-start-column="17" selection-end-line="1147" selection-end-column="21" />
+            <state vertical-scroll-proportion="-328.2353" vertical-offset="345" max-vertical-offset="78315">
+              <caret line="1139" column="4" selection-start-line="1139" selection-start-column="4" selection-end-line="1139" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -123,8 +139,8 @@
       <file leaf-file-name="testBardParse.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/spec/testBardParse.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.9464285" vertical-offset="0" max-vertical-offset="7005">
-              <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
+            <state vertical-scroll-proportion="-2.375" vertical-offset="4022" max-vertical-offset="6975">
+              <caret line="277" column="0" selection-start-line="277" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -152,12 +168,12 @@
         <option value="$PROJECT_DIR$/spec/bardParse.js" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/richardII.html" />
-        <option value="$PROJECT_DIR$/parseUtils.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/spec/testBardParse.js" />
-        <option value="$PROJECT_DIR$/bardParse.js" />
-        <option value="$PROJECT_DIR$/playComponents.js" />
         <option value="$PROJECT_DIR$/dbConnection.js" />
+        <option value="$PROJECT_DIR$/playComponents.js" />
+        <option value="$PROJECT_DIR$/bardParse.js" />
+        <option value="$PROJECT_DIR$/spec/testBardParse.js" />
+        <option value="$PROJECT_DIR$/parseUtils.js" />
       </list>
     </option>
   </component>
@@ -383,8 +399,8 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24242425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32771084" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32771084" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -441,11 +457,6 @@
           <option name="timeStamp" value="140" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/spec/testBardParse.js</url>
-          <line>429</line>
-          <option name="timeStamp" value="193" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
           <line>42</line>
           <option name="timeStamp" value="201" />
@@ -462,7 +473,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>47</line>
+          <line>50</line>
           <option name="timeStamp" value="207" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -472,21 +483,81 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>287</line>
+          <line>299</line>
           <option name="timeStamp" value="210" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>22</line>
+          <line>24</line>
           <option name="timeStamp" value="211" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>25</line>
+          <line>27</line>
           <option name="timeStamp" value="212" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/playComponents.js</url>
+          <line>189</line>
+          <option name="timeStamp" value="214" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>110</line>
+          <option name="timeStamp" value="215" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>100</line>
+          <option name="timeStamp" value="216" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>99</line>
+          <option name="timeStamp" value="217" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>101</line>
+          <option name="timeStamp" value="218" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>117</line>
+          <option name="timeStamp" value="219" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>114</line>
+          <option name="timeStamp" value="220" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/playComponents.js</url>
+          <line>190</line>
+          <option name="timeStamp" value="223" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/bardParse.js</url>
+          <line>274</line>
+          <option name="timeStamp" value="224" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/playComponents.js</url>
+          <line>135</line>
+          <option name="timeStamp" value="226" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/spec/testBardParse.js</url>
+          <line>278</line>
+          <option name="timeStamp" value="267" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/spec/testBardParse.js</url>
+          <line>277</line>
+          <option name="timeStamp" value="268" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="213" />
+      <option name="time" value="269" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -500,7 +571,8 @@
             <element signature="e#2591#3367#0" expanded="false" />
             <element signature="e#4547#4962#0" expanded="false" />
             <element signature="e#5025#5408#0" expanded="false" />
-            <element signature="e#8293#9606#0" expanded="false" />
+            <element signature="e#8461#8843#0" expanded="false" />
+            <element signature="e#8895#10208#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -546,7 +618,8 @@
             <element signature="e#2591#3367#0" expanded="false" />
             <element signature="e#4547#4962#0" expanded="false" />
             <element signature="e#5025#5408#0" expanded="false" />
-            <element signature="e#8293#9606#0" expanded="false" />
+            <element signature="e#8461#8843#0" expanded="false" />
+            <element signature="e#8895#10208#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -584,7 +657,8 @@
             <element signature="e#2591#3367#0" expanded="false" />
             <element signature="e#4547#4962#0" expanded="false" />
             <element signature="e#5025#5408#0" expanded="false" />
-            <element signature="e#8293#9606#0" expanded="false" />
+            <element signature="e#8461#8843#0" expanded="false" />
+            <element signature="e#8895#10208#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -641,14 +715,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6818182" vertical-offset="0" max-vertical-offset="506">
-          <caret line="23" column="21" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/full.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-19.785408" vertical-offset="50020" max-vertical-offset="89415">
@@ -657,22 +723,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/parseUtils.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.518518" vertical-offset="1687" max-vertical-offset="2160">
-          <caret line="192" column="0" selection-start-line="192" selection-start-column="0" selection-end-line="195" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#4079#6142#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="-13.958333" vertical-offset="10" max-vertical-offset="480">
+          <caret line="23" column="21" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spec/testBardParse.js">
+    <entry file="file://$PROJECT_DIR$/dbConnection.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.9464285" vertical-offset="0" max-vertical-offset="7005">
-          <caret line="11" column="38" selection-start-line="11" selection-start-column="38" selection-end-line="11" selection-end-column="38" />
-          <folding />
+        <state vertical-scroll-proportion="0.0" vertical-offset="700" max-vertical-offset="1395">
+          <caret line="118" column="8" selection-start-line="118" selection-start-column="8" selection-end-line="118" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+            <element signature="e#914#1594#0" expanded="false" />
+            <element signature="e#1597#1672#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -684,69 +751,83 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/richardII.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-328.2353" vertical-offset="345" max-vertical-offset="78315">
+          <caret line="1139" column="4" selection-start-line="1139" selection-start-column="4" selection-end-line="1139" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bardParse.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.419354" vertical-offset="2734" max-vertical-offset="3675">
-          <caret line="281" column="52" selection-start-line="281" selection-start-column="52" selection-end-line="281" selection-end-column="52" />
+        <state vertical-scroll-proportion="-5.354839" vertical-offset="2879" max-vertical-offset="3660">
+          <caret line="274" column="0" selection-start-line="274" selection-start-column="0" selection-end-line="274" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#2591#3367#0" expanded="false" />
             <element signature="e#4547#4962#0" expanded="false" />
             <element signature="e#5025#5408#0" expanded="false" />
-            <element signature="e#8293#9606#0" expanded="false" />
+            <element signature="e#8461#8843#0" expanded="false" />
+            <element signature="e#8895#10208#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/richardII.html">
+    <entry file="file://$PROJECT_DIR$/spec/testBardParse.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.2941175" vertical-offset="16935" max-vertical-offset="78315">
-          <caret line="1147" column="21" selection-start-line="1147" selection-start-column="17" selection-end-line="1147" selection-end-column="21" />
+        <state vertical-scroll-proportion="-2.375" vertical-offset="4022" max-vertical-offset="6975">
+          <caret line="277" column="0" selection-start-line="277" selection-start-column="0" selection-end-line="277" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbConnection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="377" max-vertical-offset="975">
-          <caret line="91" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#912#1544#0" expanded="false" />
-            <element signature="e#1547#1622#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/playComponents.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18453865" vertical-offset="661" max-vertical-offset="1365">
-          <caret line="132" column="0" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+        <state vertical-scroll-proportion="5.814815" vertical-offset="1102" max-vertical-offset="3525">
+          <caret line="83" column="0" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
           <folding>
-            <element signature="e#136#325#0" expanded="false" />
-            <element signature="e#444#472#0" expanded="false" />
-            <element signature="e#513#537#0" expanded="false" />
-            <element signature="e#584#613#0" expanded="false" />
-            <element signature="e#673#1197#0" expanded="false" />
-            <element signature="e#1243#1279#0" expanded="false" />
-            <element signature="e#1390#2035#0" expanded="false" />
-            <element signature="e#2082#2221#0" expanded="false" />
-            <element signature="e#2262#2475#0" expanded="false" />
-            <element signature="e#2538#2822#0" expanded="false" />
-            <element signature="e#3345#3372#0" expanded="false" />
-            <element signature="e#3424#3449#0" expanded="false" />
-            <element signature="e#3495#3519#0" expanded="false" />
-            <element signature="e#3581#3694#0" expanded="false" />
+            <element signature="e#136#375#0" expanded="false" />
+            <element signature="e#420#451#0" expanded="false" />
+            <element signature="e#777#805#0" expanded="false" />
+            <element signature="e#858#971#0" expanded="false" />
+            <element signature="e#1018#1047#0" expanded="false" />
+            <element signature="e#4275#4301#0" expanded="false" />
+            <element signature="e#5290#5503#0" expanded="false" />
+            <element signature="e#5546#5572#0" expanded="false" />
+            <element signature="e#6199#6554#0" expanded="false" />
+            <element signature="e#6784#6865#0" expanded="false" />
+            <element signature="e#6920#6947#0" expanded="false" />
+            <element signature="e#6997#7024#0" expanded="false" />
+            <element signature="e#7076#7101#0" expanded="false" />
+            <element signature="e#7147#7171#0" expanded="false" />
+            <element signature="e#7233#7346#0" expanded="false" />
+            <element signature="e#7580#7838#0" expanded="false" />
+            <element signature="e#7896#7955#0" expanded="false" />
+            <element signature="e#8010#8253#0" expanded="false" />
+            <element signature="e#8307#8501#0" expanded="false" />
+            <element signature="e#8556#8625#0" expanded="false" />
+            <element signature="e#8676#8816#0" expanded="false" />
+            <element signature="e#8874#9374#0" expanded="false" />
+            <element signature="e#9432#9504#0" expanded="false" />
+            <element signature="e#9554#9606#0" expanded="false" />
+            <element signature="e#9645#9737#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/parseUtils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="1.7959183" vertical-offset="1160" max-vertical-offset="2235">
+          <caret line="184" column="17" selection-start-line="184" selection-start-column="17" selection-end-line="184" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
             <element signature="n#!!block;n#sortByWordCount#0" expanded="false" />
-            <element signature="e#3928#4186#0" expanded="false" />
-            <element signature="e#4244#4303#0" expanded="false" />
-            <element signature="e#4358#4601#0" expanded="false" />
-            <element signature="e#4655#4849#0" expanded="false" />
-            <element signature="e#4904#4973#0" expanded="false" />
-            <element signature="e#5024#5164#0" expanded="false" />
-            <element signature="e#5222#5722#0" expanded="false" />
-            <element signature="e#5780#5852#0" expanded="false" />
-            <element signature="e#5902#5954#0" expanded="false" />
+            <element signature="e#399#499#0" expanded="false" />
+            <element signature="e#576#845#0" expanded="false" />
+            <element signature="e#900#1246#0" expanded="false" />
+            <element signature="e#1318#1748#0" expanded="false" />
+            <element signature="e#6089#6672#0" expanded="false" />
           </folding>
         </state>
       </provider>
