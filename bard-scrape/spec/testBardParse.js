@@ -283,6 +283,14 @@ describe('bardParse()', function () {
     assert.equal(results[4], "Stupid");
   });
 
+  //
+  it ('regex test with a bracket', function () {
+    var text = "To God of heaven, King Richard and to me;";
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "God");
+    assert.equal(results[1], "King Richard");
+  });
+
   it ('regex test with a tab', function () {
     var bardParse = new module.BardParse();
     var text = "  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";

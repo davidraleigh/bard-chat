@@ -139,8 +139,8 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
 
 ParseUtils.extractProperNouns = function(text) {
   text = text.trim();
-
-  var re = /[\t\n ]+(([A-Z][a-z]+)+(( (of|de) )|[ a-z]|))+/g;
+  // maybe with properNouns?
+  var re = /[\t\n ]+(([A-Z][a-z]+(( (of|de) [A-Z][a-z]+)|[ a-z]|)))+/g;
   var match = null;
   var properNounMap = {};
   // collect all words that start with a capital letter
