@@ -126,13 +126,17 @@ var PlayDetails = function(html) {
   this.characterMap = {};
   this.locationSet = [];
   this.locationMap = {};
-  this.properNounSet = [];
-  this.properNounMap = {};
+  this.otherProperNounSet = [];
+  this.otherProperNounMap = {};
 };
 
 PlayDetails.prototype.setFullHTML = function(html) {
   this.fullHTML = html;
-}
+};
+
+PlayDetails.prototype.getFullHTML = function() {
+  return this.fullHTML;
+};
 
 PlayDetails.prototype.setTitle = function(title) {
   this.title = title;
@@ -157,24 +161,23 @@ function sortByWordCount(a, b) {
   return 1;
 };
 
-PlayDetails.prototype.addUnknownProperNoun = function(noun) {
+PlayDetails.prototype.addOtherProperNoun = function(noun) {
   // TODO this "And" is totally not a solution!!!
-  if (noun in this.properNounMap || noun in this.characterMap || noun in this.locationMap || noun === "And")
+  if (noun in this.otherProperNounMap || noun in this.characterMap || noun in this.locationMap || noun === "And")
     return;
 
-  this.properNounMap[noun] = true;
-  this.properNounSet.push(noun);
+  this.otherProperNounMap[noun] = true;
+  this.otherProperNounSet.push(noun);
 };
 
-PlayDetails.prototype.getUnknownProperNouns = function() {
-  return this.properNounSet.sort(sortByWordCount);
+PlayDetails.prototype.getOtherProperNouns = function() {
+  return this.otherProperNounSet.sort(sortByWordCount);
 }
 
 PlayDetails.prototype.getAllProperNouns = function() {
-  var allProperNouns = this.properNounSet.slice();
+  var allProperNouns = this.otherProperNounSet.slice();
   allProperNouns = allProperNouns.concat(this.locationSet.slice());
   allProperNouns = allProperNouns.concat(this.characterSet.slice());
-  allProperNouns = allProperNouns.concat(ParseUtils.getTitles());
   return allProperNouns.sort(sortByWordCount);
 }
 

@@ -19,6 +19,7 @@ var ParseUtils = require('./parseUtils.js').ParseUtils;
 var PlayDetails = require('./playComponents.js').PlayDetails;
 var Dialog = require('./playComponents.js').Dialog;
 var Scene = require('./playComponents.js').Scene;
+var PlayDB = require('./dbConnection.js').PlayDB;
 
 
 
@@ -42,8 +43,8 @@ BardParse.parseFromJSON = function() {
     var processedPlays = [];
     // get the list of all plays and their associated URLs
     var obj =  JSON.parse(data);
-    obj.mitLibrary.forEach(function(element, index, array) {
-
+    for (var i = 0; i < obj.mitLibrary.length; i++) {
+      var element = obj.mitLibrary[i];
       console.log("making request to :", element.play.href);
       request(element.play.href, function(error, response, body) {
 
@@ -52,13 +53,23 @@ BardParse.parseFromJSON = function() {
           //console.log(body);
 
           BardParse.parse(body, function(playDetails) {
-            processedPlays.push(playDetails);
+            BardParse.save(playDetails, function(success) {
+              if (success)
+                console.log("completed database request");
+              else
+                console.log("failed database request");
+            });
           });
           console.log("parsed :", element.play.href);
         }
       });
-    });
+    };
+    // TODO save to database
   });
+};
+
+BardParse.save = function(playDetails, callback) {
+  PlayDB.savePlay(playDetails, callback);
 };
 
 BardParse.parse = function(body, callback) {
@@ -67,7 +78,7 @@ BardParse.parse = function(body, callback) {
     BardParse.parseLocations(body, playDetails, function() {
       BardParse.parseCharacterNames(body, playDetails, function() {
         BardParse.parseProperNouns(body, playDetails, function() {
-          BardParse.parseFromHTML(body, playDetails, function() {
+          BardParse.parseDialog(body, playDetails, function() {
             callback(playDetails);
           });
         });
@@ -132,11 +143,12 @@ BardParse.parseProperNouns = function(body, playDetails, callback) {
 
           lines.each(function( index ) {
             var line = window.$(this).text();
-            var allProperNouns = playDetails.getAllProperNouns();
+            var allProperNouns = playDetails.getAllProperNouns().concat(ParseUtils.getTitles());
+            //TODO check that titles are at end of allProperNouns list
             var proper = ParseUtils.extractProperNouns(line, allProperNouns);
 
             proper.forEach(function(element) {
-              playDetails.addUnknownProperNoun(element);
+              playDetails.addOtherProperNoun(element);
             });
           });
           dialog = false;
@@ -190,7 +202,7 @@ BardParse.parseTitle = function(body, playDetails, callback) {
   );
 }
 
-BardParse.parseFromHTML = function(body, playDetails, callback) {
+BardParse.parseDialog = function(body, playDetails, callback) {
   // get first ACT object
   var actRegex = '^([Aa][Cc][Tt])\\s';
   var sceneRegex = '^([Ss][Cc][Ee][Nn][Ee])\\s';
@@ -209,7 +221,7 @@ BardParse.parseFromHTML = function(body, playDetails, callback) {
       var actNum = null;
       var scene = null;
       var dialog = null;
-      var properNouns = playDetails.getAllProperNouns();
+      var properNouns = playDetails.getAllProperNouns().concat(ParseUtils.getTitles());
       while(jObj.length > 0) {
         if (jObj.is('h3')) {
           var hText = jObj.text();
@@ -266,8 +278,13 @@ BardParse.parseFromHTML = function(body, playDetails, callback) {
 BardParse.parseFromHTMLFile = function(filename) {
   fs.readFile(filename, 'utf8', function (error, body) {
     if (!error) {
-      BardParse.parse(body, function() {
-        console.log("complete");
+      BardParse.parse(body, function(playDetails) {
+          BardParse.save(playDetails, function(err, success) {
+            if (success)
+              console.log("completed database request");
+            else
+              console.log("failed database request");
+          });
       });
     }
   });

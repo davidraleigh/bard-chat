@@ -59,7 +59,7 @@ app.use(function(err, req, res, next) {
 
 var bardParse = new rH.BardParse();
 rH.BardParse.parseFromHTMLFile('./richardII.html');
-//bardParse.parseFromJSON();
-//parseFromMIT();
+//rH.BardParse.parseFromJSON();
+//bardParse.parseFromMIT();
 
 module.exports = app;

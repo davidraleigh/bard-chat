@@ -26,6 +26,7 @@ ParseUtils.sentenceToEndStopped = function(sentence) {
 
 ParseUtils.sentenceToCommaPhrase = function(sentence, minPhraseSize) {
   // TODO require that phrases are at least 2 words long
+  // TODO separate out quoted sections first
   sentence = sentence.trim();
   var phrases = sentence.match(/[^\.\!\?\:\;\,]+[\:\;\.\?\!\,']+(?=[ \n]|$)/g);
   var results = [];

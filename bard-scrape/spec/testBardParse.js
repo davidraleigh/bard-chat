@@ -442,7 +442,7 @@ describe('bardParse()', function () {
     lines.push("And here is not a creature but myself,");
     lines.push("I cannot do it; yet I'll hammer it out.");
     var sentences = ParseUtils.linesToSentences(lines);
-    assert.equal(sentences[0], "I have been studying how I may compare this prison where I live unto the world: And for because the world is populous And here is not a creature but myself, i cannot do it; yet I'll hammer it out.");
+    assert.equal(sentences[0], "I have been studying how I may compare this prison where I live unto the world: and for because the world is populous and here is not a creature but myself, i cannot do it; yet I'll hammer it out.");
   })
 
   //it ('regex ', function() {
