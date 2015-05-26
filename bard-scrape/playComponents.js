@@ -63,12 +63,12 @@ Dialog.prototype.addSentence = function(sentenceText, people, locations, other, 
       'sentenceText' : sentenceText,
       'rangeStart' : lineNumberStart,
       'rangeEnd' : lineNumberEnd,
-      'ICount' : ParseUtils.getWordOccurence(sentenceText, 'I', false),
-      'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'you', false),
-      'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'he', false),
-      'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'she', false),
-      'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'they', false),
-      'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), 'we', false),
+      'ICount' : ParseUtils.getWordOccurence(sentenceText, ' I ', false),
+      'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' you ', false),
+      'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' he ', false),
+      'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' she ', false),
+      'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' they ', false),
+      'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' we ', false),
       'people' : people || [],
       'locations' : locations || [],
       'other' : other || [],
@@ -233,11 +233,49 @@ PlayDetails.prototype.getActNumbers = function() {
   return Object.keys(this.acts).sort(sortNumber);
 };
 
-PlayDetails.prototype.getScene = function(actNum) {
-  if (actNum in this.acts) {
-    return this.acts[actNum];
+PlayDetails.prototype.getScenes = function(actNumber) {
+  if (actNumber in this.acts) {
+    return this.acts[actNumber];
   }
   return null;
+};
+
+PlayDetails.prototype.getScene = function(actNumber, sceneNumber) {
+  if (!this.hasScene(actNumber, sceneNumber)) {
+    return null;
+  }
+
+  var result = null;
+  this.acts[actNumber].forEach(function(scene) {
+    if (scene.getSceneNumber() === sceneNumber) {
+      result = scene;
+      return;
+    }
+  });
+
+  return result;
+}
+
+PlayDetails.prototype.hasAct = function(actNumber) {
+  if (actNumber in this.acts) {
+    return true;
+  }
+  return false;
+};
+
+PlayDetails.prototype.hasScene = function(actNumber, sceneNumber) {
+  if (!this.hasAct(actNumber))
+    return false;
+
+  var bHasScene = false;
+  this.acts[actNumber].forEach(function(scene) {
+    if (scene.getSceneNumber() === sceneNumber) {
+      bHasScene = true;
+      return;
+    }
+  });
+
+  return bHasScene;
 };
 
 

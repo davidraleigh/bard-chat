@@ -20,6 +20,9 @@ var PlayDetails = require('./playComponents.js').PlayDetails;
 var Dialog = require('./playComponents.js').Dialog;
 var Scene = require('./playComponents.js').Scene;
 var PlayDB = require('./dbConnection.js').PlayDB;
+//var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
+
+
 
 
 
@@ -85,7 +88,7 @@ BardParse.parse = function(body, callback) {
       });
     });
   });
-}
+};
 
 BardParse.parseLocations = function(body, playDetails, callback) {
   // get first ACT object
@@ -186,7 +189,7 @@ BardParse.parseCharacterNames = function(body, playDetails, callback) {
 BardParse.parseTitle = function(body, playDetails, callback) {
   jsdom.env(
     body,
-    ["http://code.jquery.com/jquery.js"],
+   ["http://code.jquery.com/jquery.js"],
     function (errors, window) {
       if (errors) {
         console.log(errors);
@@ -298,6 +301,8 @@ BardParse.parseFromHTMLFile = function(filename) {
               console.log("failed database request");
           });
       });
+    } else {
+      console.log(error);
     }
   });
 };

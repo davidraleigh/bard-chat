@@ -3,6 +3,8 @@
  */
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
+var ObjectID = require('mongodb').ObjectID;
+
 
 var ParseUtils = require('./parseUtils.js').ParseUtils;
 var PlayDetails = require('./playComponents.js').PlayDetails;
@@ -24,11 +26,10 @@ PlayDB.savePlay = function(playDetails, callback) {
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     console.log("Connected correctly to server");
-
-    PlayDB.savePlayOverview(db, playDetails, function() {
-      PlayDB.saveLines(db, playDetails, function() {
-        db.close();
-        callback();
+    var playOverviewCollection = db.collection('playOverview');
+    playOverviewCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err, reply) {
+      PlayDB.savePlayOverview(db, playDetails, function() {
+        PlayDB.saveScenes(db, playDetails, callback);
       });
     });
   });
@@ -49,80 +50,97 @@ PlayDB.savePlayOverview = function(db, playDetails, callback) {
 
   playOverviewCollection.updateOne({ 'playTitle' : playDetails.getTitle() }, playOverviewSet, { 'upsert':true }, function(err, result) {
     console.log("Inserted 3 documents into the document collection", result);
-    callback(result);
+    if (callback)
+      callback();
   });
 };
 
-//PlayDB.saveCharacters = function(db, collection, playDetails, callback) {
-//  var playOverviewCollection = db.collection('playOverview');
-//  var playOverview = { 'characters' : playDetails.getCharacters() };
-//  var charactersSet = { '$set' : playOverview };
-//  playOverviewCollection.updateOne({ '_id' : playDetails.getTitle() }, charactersSet, { 'upsert':true }, function(err, result) {
-//    console.log("Inserted 3 documents into the document collection", result);
-//    callback(result);
-//  });
-//};
-//
-//PlayDB.saveLocations = function(playDetails, db, callback) {
-//  var playOverviewCollection = db.collection('playOverview');
-//  var playOverview = { 'locations' : playDetails.getLocations() };
-//  var locationsSet = { '$set' : playOverview };
-//  playOverviewCollection.updateOne({ '_id' : playDetails.getTitle() }, locationsSet, { 'upsert':true }, function(err, result) {
-//    console.log("Inserted 3 documents into the document collection", result);
-//    callback(result);
-//  });
-//};
-//
-//PlayDB.updateOtherProperNouns = function(playDetails, db, callback) {
-//  var playOverviewCollection = db.collection('playOverview');
-//  var playOverview = {  'otherProperNouns' : playDetails.getOtherProperNouns() };
-//  var playOverviewSet = { '$set' : playOverview };
-//  playOverviewCollection.updateOne({ '_id' : playDetails.getTitle() }, playOverviewSet, { 'upsert':true }, function(err, result) {
-//    console.log("Inserted 3 documents into the document collection", result);
-//    callback(result);
-//  });
-//};
-//
-//PlayDB.saveTitle = function(playDetails, db, callback) {
-//
-//};
-
-//PlayDB.saveHTML = function(playDetails, db, callback) {
-//
-//};
-
-PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callback) {
-  var bulk = db.sentences.initializeOrderedBulkOp();
+PlayDB.insertSceneLines = function(db, playDetails, scene, actNumber, callback) {
   var play = playDetails.getTitle();
   var filterObject = {'playTitle' : playDetails.getTitle()};
   var sceneNumber = scene.getSceneNumber();
+  var insertArray = [];
   scene.getDialogs().forEach(function(dialog) {
     var speaker = dialog.getCharacter();
     dialog.getLines(true).forEach(function(upsertLineObject) {
-      filterObject['lineNumber'] = line.lineNumber;
+      filterObject['lineNumber'] = upsertLineObject.lineNumber;
       // TODO should all this be moved into Dialog class?
       upsertLineObject['actNumber'] = actNumber;
       upsertLineObject['sceneNumber'] = sceneNumber;
       upsertLineObject['playTitle'] = play;
       upsertLineObject['speaker'] = speaker;
-      bulk.find(filterObject).upsert().update(upsertLineObject);
+      upsertLineObject['_id'] = new ObjectID();
+      insertArray.push(upsertLineObject);
     });
   });
-  bulk.execute();
+
+
+  var linesCollection = db.collection('lines');
+  linesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
+    if (err) {
+      console.log(err);
+    }
+    console.log(result);
+    if (callback)
+      callback();
+  });
 };
 
-PlayDB.saveSentences = function(db, playDetails, callback) {
-  playDetails.getActNumbers().forEach(function(actNumber) {
-    playDetails.getScene(actNumber).forEach(function(scene) {
-      PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function() {
-        callback();
-      })
+PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callback) {
+  var play = playDetails.getTitle();
+  var filterObject = {'playTitle' : playDetails.getTitle()};
+  var sceneNumber = scene.getSceneNumber();
+  var insertArray = [];
+  scene.getDialogs().forEach(function(dialog) {
+    var speaker = dialog.getCharacter();
+    dialog.getSentences(true).forEach(function(upsertSentenceObject) {
+      filterObject['lineNumber'] = upsertSentenceObject.lineNumber;
+      // TODO should all this be moved into Dialog class?
+      upsertSentenceObject['actNumber'] = actNumber;
+      upsertSentenceObject['sceneNumber'] = sceneNumber;
+      upsertSentenceObject['playTitle'] = play;
+      upsertSentenceObject['speaker'] = speaker;
+      upsertSentenceObject['_id'] = new ObjectID();
+      insertArray.push(upsertSentenceObject);
+    });
+  });
+
+  var sentencesCollection = db.collection('sentences');
+  sentencesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
+    if (err) {
+      console.log(err);
+    }
+    console.log(result);
+    callback();
+  });
+};
+
+PlayDB.saveScenes = function(db, playDetails, callback) {
+  var sentencesCollection = db.collection('sentences');
+  var linesCollection = db.collection('lines');
+  sentencesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
+    linesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
+      PlayDB.saveScene(db, playDetails, 1, 1, callback);
     });
   });
 };
 
-PlayDB.saveLines = function(playDetails, db, callback) {
+PlayDB.saveScene = function(db, playDetails, actNumber, sceneNumber, callback) {
+  if (!playDetails.hasScene(actNumber, sceneNumber)) {
+    actNumber += 1;
+    sceneNumber = 1;
+    if (!playDetails.hasScene(actNumber, sceneNumber)) {
+      callback();
+    }
+  }
 
+
+  var scene = playDetails.getScene(actNumber, sceneNumber);
+  PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function() {
+    PlayDB.insertSceneLines(db, playDetails, scene, actNumber, function() {
+      PlayDB.saveScene(db, playDetails, actNumber, sceneNumber + 1, callback);
+    });
+  });
 };
 
 PlayDB.saveEndStopped = function(playDetails, db, callback) {
