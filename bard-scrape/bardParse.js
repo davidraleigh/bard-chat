@@ -34,6 +34,45 @@ var BardParse = function () {
 //  return ParseUtils.extractProperNouns(text);
 //}
 
+BardParse.parsePlayFromJSON = function(playArray, index, callback) {
+  if (index >= playArray.length) {
+    callback();
+    return;
+  }
+
+  var element = playArray[index];
+  console.log("making request to :", element.play.href);
+  request(element.play.href, function(error, response, body) {
+    if (error) {
+      callback(error);
+      return;
+    }
+
+    console.log("completed request to :", element.play.href);
+    if (!error && response.statusCode == 200) {
+      //console.log(body);
+
+      BardParse.parse(body, function(playDetails) {
+        console.log("parsed :", element.play.href);
+        BardParse.save(playDetails, function(err) {
+          if (err) {
+            console.log("failed database request", err);
+            callback(error);
+            return;
+          }
+
+          console.log("completed database save of ", element.play.href);
+          BardParse.parsePlayFromJSON(playArray, index + 1, callback);
+        });
+      });
+    } else {
+      callback(error);
+      return;
+    }
+  });
+
+}
+
 BardParse.parseFromJSON = function() {
   fs.readFile('mitPlays.json','utf8', function (err, data) {
     // error check
@@ -43,6 +82,9 @@ BardParse.parseFromJSON = function() {
     }
     // get the list of all plays and their associated URLs
     var obj =  JSON.parse(data);
+    BardParse.parsePlayFromJSON(obj.mitLibrary, 0, function() {
+      console.log('finished parsing all plays');
+    });
     for (var i = 0; i < obj.mitLibrary.length; i++) {
       var element = obj.mitLibrary[i];
       console.log("making request to :", element.play.href);
@@ -53,6 +95,7 @@ BardParse.parseFromJSON = function() {
           //console.log(body);
 
           BardParse.parse(body, function(playDetails) {
+            console.log("parsed :", element.play.href);
             BardParse.save(playDetails, function(err) {
               if (err)
                 console.log("failed database request", err);
@@ -61,7 +104,7 @@ BardParse.parseFromJSON = function() {
 
             });
           });
-          console.log("parsed :", element.play.href);
+
         }
       });
     };
