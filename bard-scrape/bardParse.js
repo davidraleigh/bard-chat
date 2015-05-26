@@ -261,16 +261,16 @@ BardParse.parseDialog = function(body, playDetails, callback) {
             console.log(lineText);
             var lineNumber = window.$(this).attr("NAME");
             var proper = ParseUtils.extractProperNouns(lineText);
-            var people = peopleProperNouns.filter(function(n) {
+            var linePeople = peopleProperNouns.filter(function(n) {
               return proper.indexOf(n) != -1
             });
-            var locations = locationProperNouns.filter(function(n) {
+            var lineLocations = locationProperNouns.filter(function(n) {
               return proper.indexOf(n) != -1
             });
-            var others = otherProperNouns.filter(function(n) {
+            var lineOthersNouns = otherProperNouns.filter(function(n) {
               return proper.indexOf(n) != -1
             });
-            dialog.addLine(lineText, lineNumber, people, locations, others);
+            dialog.addLine(lineText, lineNumber, linePeople, lineLocations, lineOthersNouns);
           });
 
           scene.addDialogue(dialog, properNouns);

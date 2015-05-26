@@ -10,6 +10,9 @@ var Dialog = function(speaker) {
   this.sentences = [];
   this.endStopped = [];
   this.phrases = [];
+  this.people = [];
+  this.locations= [];
+  this.otherNouns = [];
 
   // TODO maybe remove all the linked list stuff
   var prev = null;
@@ -20,15 +23,18 @@ Dialog.prototype.getLineCount = function(){
   return this.lines.length;
 }
 
-Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, other) {
+Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, otherNouns) {
   this.lines.push(
     {
       'lineText' : lineText,
       'lineNumber' : lineNumber,
       'people' : people || [],
       'locations' : locations || [],
-      'other' : other || []
+      'otherNouns' : otherNouns || []
     });
+  Array.prototype.push.apply(this.people, people);
+  Array.prototype.push.apply(this.locations, locations);
+  Array.prototype.push.apply(this.otherNouns, otherNouns);
 };
 
 Dialog.prototype.getCharacter = function() {
@@ -41,84 +47,207 @@ Dialog.prototype.getLines = function(bWithDetails) {
   return this.lines.map(function(line) { return line.lineText; });
 };
 
-Dialog.prototype.getEndStopped = function() {
-  return this.endStopped;
+Dialog.prototype.getEndStopped = function(bWithDetails) {
+  if (bWithDetails)
+    return this.endStopped;
+  return this.endStopped.map(function(line) { return line.lineText; });
 }
 
-Dialog.prototype.addSentence = function(sentenceText, people, locations, other, lineNumberStart, lineNumberEnd) {
-  var sentenceType = 'unknown';
+Dialog.prototype.addSentence = function(sentenceText, people, locations, otherNouns, dialogBlockStart, dialogBlockEnd) {
+  var communicationType = 'unknown';
   if (sentenceText[sentenceText.length - 1] === '?')
-    sentenceType = 'question';
+    communicationType = 'question';
   else if (sentenceText[sentenceText.length - 1] === '!')
-    sentenceType = 'exclamation';
+    communicationType = 'exclamation';
   else if (sentenceText.indexOf("No") === 0)
-    sentenceType = 'negation';
+    communicationType = 'negation';
   else if (sentenceText.indexOf('Yes') === 0)
-    sentenceType = 'affirmation';
+    communicationType = 'affirmation';
   else if (sentenceText.indexOf('But') === 0)
-    sentenceType = 'excuse';
+    communicationType = 'excuse';
 
-  this.sentences.push(
+  var sentence = {
+    'sentenceText' : sentenceText,
+    'dialogBlockStart' : dialogBlockStart,
+    'dialogBlockEnd' : dialogBlockEnd,
+    'ICount' : ParseUtils.getWordOccurence(sentenceText, ' I ', false),
+    'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' you ', false),
+    'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' he ', false),
+    'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' she ', false),
+    'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' they ', false),
+    'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' we ', false),
+    'people' : people || [],
+    'locations' : locations || [],
+    'otherNouns' : otherNouns || [],
+    'characterCount' : sentenceText.length,
+    'communicationType' : communicationType
+  };
+  this.sentences.push(sentence);
+  return sentence;
+};
+
+Dialog.prototype.addEndStopped = function(endStoppedText, people, locations, otherNouns, dialogBlockStart, dialogBlockEnd) {
+    var communicationType = 'unknown';
+    if (endStoppedText[endStoppedText.length - 1] === '?')
+      communicationType = 'question';
+    else if (endStoppedText[endStoppedText.length - 1] === '!')
+      communicationType = 'exclamation';
+    else if (endStoppedText.indexOf("No") === 0)
+      communicationType = 'negation';
+    else if (endStoppedText.indexOf('Yes') === 0)
+      communicationType = 'affirmation';
+    else if (endStoppedText.indexOf('But') === 0)
+      communicationType = 'excuse';
+
+    this.endStopped.push(
+      {
+        'endStoppedText' : endStoppedText,
+        'dialogBlockStart' : dialogBlockStart,
+        'dialogBlockEnd' : dialogBlockEnd,
+        'ICount' : ParseUtils.getWordOccurence(endStoppedText, ' I ', false),
+        'youCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' you ', false),
+        'heCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' he ', false),
+        'sheCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' she ', false),
+        'theyCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' they ', false),
+        'weCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' we ', false),
+        'people' : people || [],
+        'locations' : locations || [],
+        'otherNouns' : otherNouns || [],
+        'characterCount' : endStoppedText.length,
+        'communicationType' : communicationType
+      });
+};
+
+Dialog.prototype.addPhrase = function(phraseText, people, locations, otherNouns, dialogBlockStart, dialogBlockEnd) {
+  var communicationType = 'unknown';
+  if (phraseText[phraseText.length - 1] === '?')
+    communicationType = 'question';
+  else if (phraseText[phraseText.length - 1] === '!')
+    communicationType = 'exclamation';
+  else if (phraseText.indexOf("No") === 0)
+    communicationType = 'negation';
+  else if (phraseText.indexOf('Yes') === 0)
+    communicationType = 'affirmation';
+  else if (phraseText.indexOf('But') === 0)
+    communicationType = 'excuse';
+
+  this.phrases.push(
     {
-      'sentenceText' : sentenceText,
-      'rangeStart' : lineNumberStart,
-      'rangeEnd' : lineNumberEnd,
-      'ICount' : ParseUtils.getWordOccurence(sentenceText, ' I ', false),
-      'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' you ', false),
-      'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' he ', false),
-      'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' she ', false),
-      'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' they ', false),
-      'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' we ', false),
+      'phraseText' : phraseText,
+      'dialogBlockStart' : dialogBlockStart,
+      'dialogBlockEnd' : dialogBlockEnd,
+      'ICount' : ParseUtils.getWordOccurence(phraseText, ' I ', false),
+      'youCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' you ', false),
+      'heCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' he ', false),
+      'sheCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' she ', false),
+      'theyCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' they ', false),
+      'weCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' we ', false),
       'people' : people || [],
       'locations' : locations || [],
-      'other' : other || [],
-      'characterCount' : sentenceText.length,
-      'type' : sentenceType
+      'otherNouns' : otherNouns || [],
+      'characterCount' : phraseText.length,
+      'communicationType' : communicationType
     });
-}
+};
+
+Dialog.prototype.sentencesToEndStopped = function() {
+  var boundEndStoppedAdd = Dialog.prototype.addEndStopped.bind(this);
+
+  this.sentences.forEach(function(sentenceObj) {
+    var endStoppedLines = ParseUtils.sentenceToEndStopped(sentenceObj.sentenceText);
+    endStoppedLines.forEach(function(endStoppedText) {
+      var endStoppedPeople = [];
+      var endStoppedLocations = [];
+      var endStoppedOtherNouns = [];
+
+      sentenceObj.people.forEach(function(person) {
+        if (endStoppedText.indexOf(person) !== -1) {
+          endStoppedPeople.push(person);
+        }
+      });
+      sentenceObj.locations.forEach(function(location){
+        if (endStoppedText.indexOf(location) !== -1) {
+          endStoppedLocations.push(location);
+        }
+      });
+      sentenceObj.otherNouns.forEach(function(otherNoun) {
+        if (endStoppedText.indexOf(otherNoun) !== -1) {
+          endStoppedOtherNouns.push(otherNoun);
+        }
+      });
+
+      // TODO, this is wrong, a end stopped will not have all the people of a sentence, but it will have a subset
+      boundEndStoppedAdd(endStoppedText, endStoppedPeople, endStoppedLocations, endStoppedOtherNouns, sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
+    });
+  });
+};
+
+Dialog.prototype.sentencesToPhrases = function() {
+  var boundPhraseAdd = Dialog.prototype.addPhrase.bind(this);
+
+  this.sentences.forEach(function(sentenceObj) {
+    var phrases = ParseUtils.sentenceToCommaPhrase(sentenceObj.sentenceText);
+    phrases.forEach(function(phraseText) {
+      var phrasePeople = [];
+      var phraseLocations = [];
+      var phraseOtherNouns = [];
+
+      sentenceObj.people.forEach(function(person) {
+        if (phraseText.indexOf(person) !== -1) {
+          phrasePeople.push(person);
+        }
+      });
+      sentenceObj.locations.forEach(function(location){
+        if (phraseText.indexOf(location) !== -1) {
+          phraseLocations.push(location);
+        }
+      });
+      sentenceObj.otherNouns.forEach(function(otherNoun) {
+        if (phraseText.indexOf(otherNoun) !== -1) {
+          phraseOtherNouns.push(otherNoun);
+        }
+      });
+
+      // TODO, this is wrong, a phrase will not have all the people of a sentence, but it will have a subset
+      boundPhraseAdd(phraseText, phrasePeople, phraseLocations, phraseOtherNouns, sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
+    });
+  });
+};
 
 Dialog.prototype.linesToSentences = function(properNouns) {
   var lines = this.getLines(true);
-  var boundSentenceAdd = Dialog.prototype.addSentence.bind(this);
 
   var sentences = ParseUtils.linesToSentences(this.getLines(), properNouns);
   // TODO this makes me so sad. Better to fold this into linesToSentences, but for now the hack lives
-  sentences.forEach(function(sentenceText) {
-    var peopleNouns = [];
-    var locationNouns = [];
-    var otherNouns = [];
-    lines.forEach(function(lineObj) {
-      lineObj.people.forEach(function(person) {
-        if (sentenceText.indexOf(person) !== -1) {
-          peopleNouns.push(person);
-        }
-      });
-      lineObj.locations.forEach(function(location) {
-        if (sentenceText.indexOf(location) !== -1) {
-          locationNouns.push(location);
-        }
-      });
-      lineObj.other.forEach(function(other) {
-        if (sentenceText.indexOf(other) !== -1) {
-          otherNouns.push(other);
-        }
-      });
+  for (var i = 0; i < sentences.length; i++) {
+    var sentenceText = sentences[i];
+    var sentencePeople = [];
+    var sentenceLocations = [];
+    var sentenceOtherNouns = [];
+    this.people.forEach(function(person) {
+      if (sentenceText.indexOf(person) !== -1) {
+        sentencePeople.push(person);
+      }
     });
-    boundSentenceAdd(sentenceText, peopleNouns, locationNouns, otherNouns, lines[0].lineNumber, lines[lines.length - 1].lineNumber);
-  });
+    this.locations.forEach(function(location) {
+      if (sentenceText.indexOf(location) !== -1) {
+        sentenceLocations.push(location);
+      }
+    });
+    this.otherNouns.forEach(function(otherNoun) {
+      if (sentenceText.indexOf(otherNoun) !== -1) {
+        sentenceOtherNouns.push(otherNoun);
+      }
+    });
 
-  var endStopped = [];
-  var phrases = [];
-  this.sentences.forEach(function(sentence) {
-    var tempEnd = ParseUtils.sentenceToEndStopped(sentence.sentenceText);
-    var tempPhrase = ParseUtils.sentenceToCommaPhrase(sentence.sentenceText);
-    if (tempEnd.length > 1)
-      Array.prototype.push.apply(endStopped, tempEnd);
-    if (tempPhrase.length > 1)
-      Array.prototype.push.apply(phrases, tempPhrase);
-  });
-  this.endStopped = endStopped;
-  this.phrases = phrases;
+    this.addSentence(sentenceText, sentencePeople, sentenceLocations, sentenceOtherNouns, lines[0].lineNumber, lines[lines.length - 1].lineNumber);
+  }
+};
+
+Dialog.prototype.createLineDerivatives = function(properNouns) {
+  this.linesToSentences(properNouns);
+  this.sentencesToEndStopped();
+  this.sentencesToPhrases();
 };
 
 Dialog.prototype.getSentences = function(bWithDetails) {
@@ -188,7 +317,7 @@ Scene.prototype.getDialogs = function() {
 
 Scene.prototype.addDialogue = function(dialog, properNouns) {
   this.lineCount += dialog.lines.length;
-  dialog.linesToSentences(properNouns);
+  dialog.createLineDerivatives(properNouns);
   this.dialogs.push(dialog);
 
   // TODO perhaps remove all this linked list stuff
