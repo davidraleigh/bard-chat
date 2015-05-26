@@ -20,7 +20,7 @@ ParseUtils.getTitles = function() {
   return ['Sir', 'Lord', 'Count', 'Captain', 'King', 'Countess', 'Prince', 'Princess', 'Saint'];
 };
 
-ParseUtils.getWordOccurence = function(text, subString, allowOverlapping) {
+ParseUtils.getWordOccurrence = function(text, subString, allowOverlapping) {
   text+="";
   subString+="";
   if(subString.length<=0) return text.length+1;
@@ -145,7 +145,6 @@ ParseUtils.extractProperNouns = function(text) {
   var properNounMap = {};
   // collect all words that start with a capital letter
   while ((match = re.exec(text)) != null) {
-    console.log(match[0]);
     var properNoun = text.slice(match.index + 1, match.index + match[0].length);
     properNounMap[match.index + match[0].length] = properNoun.trim();
   }

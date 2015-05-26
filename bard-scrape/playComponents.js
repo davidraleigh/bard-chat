@@ -21,7 +21,7 @@ var Dialog = function(speaker) {
 
 Dialog.prototype.getLineCount = function(){
   return this.lines.length;
-}
+};
 
 Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, otherNouns) {
   this.lines.push(
@@ -39,19 +39,7 @@ Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, oth
 
 Dialog.prototype.getCharacter = function() {
   return this.character;
-}
-
-Dialog.prototype.getLines = function(bWithDetails) {
-  if (bWithDetails)
-    return this.lines;
-  return this.lines.map(function(line) { return line.lineText; });
 };
-
-Dialog.prototype.getEndStopped = function(bWithDetails) {
-  if (bWithDetails)
-    return this.endStopped;
-  return this.endStopped.map(function(line) { return line.lineText; });
-}
 
 Dialog.prototype.addSentence = function(sentenceText, people, locations, otherNouns, dialogBlockStart, dialogBlockEnd) {
   var communicationType = 'unknown';
@@ -70,12 +58,12 @@ Dialog.prototype.addSentence = function(sentenceText, people, locations, otherNo
     'sentenceText' : sentenceText,
     'dialogBlockStart' : dialogBlockStart,
     'dialogBlockEnd' : dialogBlockEnd,
-    'ICount' : ParseUtils.getWordOccurence(sentenceText, ' I ', false),
-    'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' you ', false),
-    'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' he ', false),
-    'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' she ', false),
-    'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' they ', false),
-    'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' we ', false),
+    'ICount' : ParseUtils.getWordOccurrence(sentenceText, ' I ', false),
+    'youCount' : ParseUtils.getWordOccurrence(sentenceText.toLowerCase(), ' you ', false),
+    'heCount' : ParseUtils.getWordOccurrence(sentenceText.toLowerCase(), ' he ', false),
+    'sheCount' : ParseUtils.getWordOccurrence(sentenceText.toLowerCase(), ' she ', false),
+    'theyCount' : ParseUtils.getWordOccurrence(sentenceText.toLowerCase(), ' they ', false),
+    'weCount' : ParseUtils.getWordOccurrence(sentenceText.toLowerCase(), ' we ', false),
     'people' : people || [],
     'locations' : locations || [],
     'otherNouns' : otherNouns || [],
@@ -104,12 +92,12 @@ Dialog.prototype.addEndStopped = function(endStoppedText, people, locations, oth
         'endStoppedText' : endStoppedText,
         'dialogBlockStart' : dialogBlockStart,
         'dialogBlockEnd' : dialogBlockEnd,
-        'ICount' : ParseUtils.getWordOccurence(endStoppedText, ' I ', false),
-        'youCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' you ', false),
-        'heCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' he ', false),
-        'sheCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' she ', false),
-        'theyCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' they ', false),
-        'weCount' : ParseUtils.getWordOccurence(endStoppedText.toLowerCase(), ' we ', false),
+        'ICount' : ParseUtils.getWordOccurrence(endStoppedText, ' I ', false),
+        'youCount' : ParseUtils.getWordOccurrence(endStoppedText.toLowerCase(), ' you ', false),
+        'heCount' : ParseUtils.getWordOccurrence(endStoppedText.toLowerCase(), ' he ', false),
+        'sheCount' : ParseUtils.getWordOccurrence(endStoppedText.toLowerCase(), ' she ', false),
+        'theyCount' : ParseUtils.getWordOccurrence(endStoppedText.toLowerCase(), ' they ', false),
+        'weCount' : ParseUtils.getWordOccurrence(endStoppedText.toLowerCase(), ' we ', false),
         'people' : people || [],
         'locations' : locations || [],
         'otherNouns' : otherNouns || [],
@@ -136,12 +124,12 @@ Dialog.prototype.addPhrase = function(phraseText, people, locations, otherNouns,
       'phraseText' : phraseText,
       'dialogBlockStart' : dialogBlockStart,
       'dialogBlockEnd' : dialogBlockEnd,
-      'ICount' : ParseUtils.getWordOccurence(phraseText, ' I ', false),
-      'youCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' you ', false),
-      'heCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' he ', false),
-      'sheCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' she ', false),
-      'theyCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' they ', false),
-      'weCount' : ParseUtils.getWordOccurence(phraseText.toLowerCase(), ' we ', false),
+      'ICount' : ParseUtils.getWordOccurrence(phraseText, ' I ', false),
+      'youCount' : ParseUtils.getWordOccurrence(phraseText.toLowerCase(), ' you ', false),
+      'heCount' : ParseUtils.getWordOccurrence(phraseText.toLowerCase(), ' he ', false),
+      'sheCount' : ParseUtils.getWordOccurrence(phraseText.toLowerCase(), ' she ', false),
+      'theyCount' : ParseUtils.getWordOccurrence(phraseText.toLowerCase(), ' they ', false),
+      'weCount' : ParseUtils.getWordOccurrence(phraseText.toLowerCase(), ' we ', false),
       'people' : people || [],
       'locations' : locations || [],
       'otherNouns' : otherNouns || [],
@@ -253,12 +241,30 @@ Dialog.prototype.createLineDerivatives = function(properNouns) {
 Dialog.prototype.getSentences = function(bWithDetails) {
   if (bWithDetails)
     return this.sentences;
+
   return this.sentences.map(function(sentence) { return sentence.sentenceText; });
 };
 
-Dialog.prototype.getPhrases = function() {
-  return this.phrases;
-}
+Dialog.prototype.getLines = function(bWithDetails) {
+  if (bWithDetails)
+    return this.lines;
+
+  return this.lines.map(function(line) { return line.lineText; });
+};
+
+Dialog.prototype.getEndStopped = function(bWithDetails) {
+  if (bWithDetails)
+    return this.endStopped;
+
+  return this.endStopped.map(function(endStoppedLine) { return endStoppedLine.endStoppedText; });
+};
+
+Dialog.prototype.getPhrases = function(bWithDetails) {
+  if (bWithDetails)
+    return this.phrases;
+
+  return this.phrases.map(function(phrase) { return phrase.phraseText; });
+};
 
 Dialog.prototype.toString = function() {
   var result = "";

@@ -41,7 +41,6 @@ BardParse.parseFromJSON = function() {
       console.log(err);
       return;
     }
-    var processedPlays = [];
     // get the list of all plays and their associated URLs
     var obj =  JSON.parse(data);
     for (var i = 0; i < obj.mitLibrary.length; i++) {
@@ -54,11 +53,12 @@ BardParse.parseFromJSON = function() {
           //console.log(body);
 
           BardParse.parse(body, function(playDetails) {
-            BardParse.save(playDetails, function(success) {
-              if (success)
-                console.log("completed database request");
+            BardParse.save(playDetails, function(err) {
+              if (err)
+                console.log("failed database request", err);
               else
-                console.log("failed database request");
+                console.log("completed database save of ", element.play.href);
+
             });
           });
           console.log("parsed :", element.play.href);
@@ -112,7 +112,7 @@ BardParse.parseLocations = function(body, playDetails, callback) {
             var place = hText.slice(periodIndex , hText.indexOf('.', periodIndex)).trim();
             playDetails.addLocation(place);
           } else {
-            console.log('Error with h3!!', hText);
+            console.log(hText);
           }
         }
         jObj = jObj.next();
@@ -232,7 +232,7 @@ BardParse.parseDialog = function(body, playDetails, callback) {
 
           // save scene if necessary
           if ((hText.match(actRegex) || hText.match(sceneRegex)) && scene !== null){
-            console.log(scene.toString());
+            //console.log(scene.toString());
             playDetails.addScene(actNum, scene);
           }
 
@@ -244,11 +244,11 @@ BardParse.parseDialog = function(body, playDetails, callback) {
             scene = null;
           } else if (hText.match(sceneRegex)) {
             var romanNumeral = hText.slice(hText.toLowerCase().indexOf('scene ') + 6, hText.indexOf('.'));
-            console.log(hText);
+            //console.log(hText);
             var sceneNum = toArabic(romanNumeral);
             scene = new Scene(sceneNum, hText.slice(hText.indexOf('.') + 1).trim());
           } else {
-            console.log('Error with h3!!');
+            console.log('Error with h3!!', hText);
           }
         } else if (jObj.is('a[name^="speech"]')) {
           // grab player name to create new Dialog block
@@ -258,7 +258,7 @@ BardParse.parseDialog = function(body, playDetails, callback) {
           var lines = jObj.children("a");
           lines.each(function( index ) {
             var lineText = window.$(this).text();
-            console.log(lineText);
+            //console.log(lineText);
             var lineNumber = window.$(this).attr("NAME");
             var proper = ParseUtils.extractProperNouns(lineText);
             var linePeople = peopleProperNouns.filter(function(n) {
@@ -281,7 +281,9 @@ BardParse.parseDialog = function(body, playDetails, callback) {
         }
         jObj = jObj.next();
       }
-      console.log(playDetails.getAllProperNouns());
+      // add last scene
+      playDetails.addScene(actNum, scene);
+      console.log("all proper nouns: \n",playDetails.getAllProperNouns());
 
       callback();
     }
@@ -292,11 +294,11 @@ BardParse.parseFromHTMLFile = function(filename) {
   fs.readFile(filename, 'utf8', function (error, body) {
     if (!error) {
       BardParse.parse(body, function(playDetails) {
-          BardParse.save(playDetails, function(err, success) {
-            if (success)
-              console.log("completed database request");
+          BardParse.save(playDetails, function(err) {
+            if (err)
+              console.log("failed database request", err);
             else
-              console.log("failed database request");
+              console.log("completed database request");
           });
       });
     } else {

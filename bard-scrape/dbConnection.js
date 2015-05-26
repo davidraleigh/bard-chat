@@ -24,7 +24,15 @@ PlayDB.savePlay = function(playDetails, callback) {
     console.log("Connected correctly to server");
     var playOverviewCollection = db.collection('playOverview');
     playOverviewCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err, reply) {
-      PlayDB.savePlayOverview(db, playDetails, function() {
+      if (err) {
+        callback(err);
+        return;
+      }
+      PlayDB.savePlayOverview(db, playDetails, function(err) {
+        if (err) {
+          callback(err);
+          return;
+        }
         PlayDB.saveScenes(db, playDetails, callback);
       });
     });
@@ -45,9 +53,12 @@ PlayDB.savePlayOverview = function(db, playDetails, callback) {
   var playOverviewSet = { '$set' : playOverview };
 
   playOverviewCollection.updateOne({ 'playTitle' : playDetails.getTitle() }, playOverviewSet, { 'upsert':true }, function(err, result) {
+    if (err) {
+      callback(err);
+      return;
+    }
     console.log("Inserted play overview", result.result);
-    if (callback)
-      callback();
+    callback();
   });
 };
 
@@ -56,10 +67,26 @@ PlayDB.saveScenes = function(db, playDetails, callback) {
   var linesCollection = db.collection('lines');
   var endStoppedCollection = db.collection('endStopped');
   var phrasesCollection = db.collection('phrases');
-  sentencesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
-    linesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
-      endStoppedCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
-        phrasesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function () {
+  sentencesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    linesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err) {
+      if (err) {
+        callback(err);
+        return;
+      }
+      endStoppedCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err) {
+        if (err) {
+          callback(err);
+          return;
+        }
+        phrasesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function (err) {
+          if (err) {
+            callback(err);
+            return;
+          }
           PlayDB.saveScene(db, playDetails, 1, 1, callback);
         });
       });
@@ -78,10 +105,26 @@ PlayDB.saveScene = function(db, playDetails, actNumber, sceneNumber, callback) {
   }
 
   var scene = playDetails.getScene(actNumber, sceneNumber);
-  PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function() {
-    PlayDB.insertSceneLines(db, playDetails, scene, actNumber, function() {
-      PlayDB.insertEndStopped(db, playDetails, scene, actNumber, function() {
-        PlayDB.insertPhrases(db, playDetails, scene, actNumber, function () {
+  PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function(err) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    PlayDB.insertSceneLines(db, playDetails, scene, actNumber, function(err) {
+      if (err) {
+        callback(err);
+        return;
+      }
+      PlayDB.insertEndStopped(db, playDetails, scene, actNumber, function(err) {
+        if (err) {
+          callback(err);
+          return;
+        }
+        PlayDB.insertPhrases(db, playDetails, scene, actNumber, function (err) {
+          if (err) {
+            callback(err);
+            return;
+          }
           PlayDB.saveScene(db, playDetails, actNumber, sceneNumber + 1, callback);
         });
       });
@@ -112,11 +155,11 @@ PlayDB.insertSceneLines = function(db, playDetails, scene, actNumber, callback) 
   var linesCollection = db.collection('lines');
   linesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
     if (err) {
-      console.log(err);
+      callback(err);
+      return;
     }
     console.log("insert lines: ", result.result);
-    if (callback)
-      callback();
+    callback();
   });
 };
 
@@ -158,7 +201,8 @@ PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callba
   var sentencesCollection = db.collection('sentences');
   sentencesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
     if (err) {
-      console.log(err);
+      callback(err);
+      return;
     }
     console.log("insert sentences: ", result.result);
     callback();
@@ -187,11 +231,11 @@ PlayDB.insertEndStopped = function(db, playDetails, scene, actNumber, callback) 
   var endStoppedCollection = db.collection('endStopped');
   endStoppedCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
     if (err) {
-      console.log(err);
+      callback(err);
+      return;
     }
     console.log("insert endStopped: ", result.result);
-    if (callback)
-      callback();
+    callback();
   });
 };
 
@@ -217,11 +261,11 @@ PlayDB.insertPhrases = function(db, playDetails, scene, actNumber, callback) {
   var phrasesCollection = db.collection('phrases');
   phrasesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
     if (err) {
-      console.log(err);
+      callback(err);
+      return;
     }
     console.log("insert phrases: ", result.result);
-    if (callback)
-      callback();
+    callback();
   });
 };
 

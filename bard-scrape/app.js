@@ -58,8 +58,8 @@ app.use(function(err, req, res, next) {
 });
 
 var bardParse = new rH.BardParse();
-rH.BardParse.parseFromHTMLFile('./richardII.html');
-//rH.BardParse.parseFromJSON();
+//rH.BardParse.parseFromHTMLFile('./richardII.html');
+rH.BardParse.parseFromJSON();
 //bardParse.parseFromMIT();
 
 module.exports = app;
