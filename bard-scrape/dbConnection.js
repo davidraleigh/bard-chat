@@ -13,14 +13,10 @@ var Scene = require('./playComponents.js').Scene;
 
 // Connection URL
 var url = 'mongodb://localhost:27017/bard';
-// Use connect method to connect to the Server
 
 
 var PlayDB = function() {
 };
-
-
-
 
 PlayDB.savePlay = function(playDetails, callback) {
   MongoClient.connect(url, function(err, db) {
@@ -31,6 +27,35 @@ PlayDB.savePlay = function(playDetails, callback) {
       PlayDB.savePlayOverview(db, playDetails, function() {
         PlayDB.saveScenes(db, playDetails, callback);
       });
+    });
+  });
+};
+
+PlayDB.saveScenes = function(db, playDetails, callback) {
+  var sentencesCollection = db.collection('sentences');
+  var linesCollection = db.collection('lines');
+  sentencesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
+    linesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
+      PlayDB.saveScene(db, playDetails, 1, 1, callback);
+    });
+  });
+};
+
+PlayDB.saveScene = function(db, playDetails, actNumber, sceneNumber, callback) {
+  if (!playDetails.hasScene(actNumber, sceneNumber)) {
+    actNumber += 1;
+    sceneNumber = 1;
+    if (!playDetails.hasScene(actNumber, sceneNumber)) {
+      callback();
+      return;
+    }
+  }
+
+
+  var scene = playDetails.getScene(actNumber, sceneNumber);
+  PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function() {
+    PlayDB.insertSceneLines(db, playDetails, scene, actNumber, function() {
+      PlayDB.saveScene(db, playDetails, actNumber, sceneNumber + 1, callback);
     });
   });
 };
@@ -112,34 +137,6 @@ PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callba
     }
     console.log(result);
     callback();
-  });
-};
-
-PlayDB.saveScenes = function(db, playDetails, callback) {
-  var sentencesCollection = db.collection('sentences');
-  var linesCollection = db.collection('lines');
-  sentencesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
-    linesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function() {
-      PlayDB.saveScene(db, playDetails, 1, 1, callback);
-    });
-  });
-};
-
-PlayDB.saveScene = function(db, playDetails, actNumber, sceneNumber, callback) {
-  if (!playDetails.hasScene(actNumber, sceneNumber)) {
-    actNumber += 1;
-    sceneNumber = 1;
-    if (!playDetails.hasScene(actNumber, sceneNumber)) {
-      callback();
-    }
-  }
-
-
-  var scene = playDetails.getScene(actNumber, sceneNumber);
-  PlayDB.insertSceneSentences(db, playDetails, scene, actNumber, function() {
-    PlayDB.insertSceneLines(db, playDetails, scene, actNumber, function() {
-      PlayDB.saveScene(db, playDetails, actNumber, sceneNumber + 1, callback);
-    });
   });
 };
 

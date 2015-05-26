@@ -20,11 +20,9 @@ var PlayDetails = require('./playComponents.js').PlayDetails;
 var Dialog = require('./playComponents.js').Dialog;
 var Scene = require('./playComponents.js').Scene;
 var PlayDB = require('./dbConnection.js').PlayDB;
+
+var jqueryURL = 'http://localhost:8080/static/jquery.js';
 //var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
-
-
-
-
 
 
 var BardParse = function () {
@@ -96,7 +94,7 @@ BardParse.parseLocations = function(body, playDetails, callback) {
 
   jsdom.env(
     body,
-    ["http://code.jquery.com/jquery.js"],
+    [jqueryURL],//"http://code.jquery.com/jquery.js"
     function (errors, window) {
       if (errors) {
         console.log(errors);
@@ -128,7 +126,7 @@ BardParse.parseLocations = function(body, playDetails, callback) {
 BardParse.parseProperNouns = function(body, playDetails, callback) {
   jsdom.env(
     body,
-    ["http://code.jquery.com/jquery.js"],
+    [jqueryURL],
     function (errors, window) {
       if (errors) {
         console.log(errors);
@@ -166,7 +164,7 @@ BardParse.parseProperNouns = function(body, playDetails, callback) {
 BardParse.parseCharacterNames = function(body, playDetails, callback) {
   jsdom.env(
     body,
-    ["http://code.jquery.com/jquery.js"],
+    [jqueryURL],
     function (errors, window) {
       if (errors) {
         console.log(errors);
@@ -189,7 +187,7 @@ BardParse.parseCharacterNames = function(body, playDetails, callback) {
 BardParse.parseTitle = function(body, playDetails, callback) {
   jsdom.env(
     body,
-   ["http://code.jquery.com/jquery.js"],
+   [jqueryURL],
     function (errors, window) {
       if (errors) {
         console.log(errors);
@@ -212,7 +210,7 @@ BardParse.parseDialog = function(body, playDetails, callback) {
 
   jsdom.env(
     body,
-    ["http://code.jquery.com/jquery.js"],
+    [jqueryURL],
     function (errors, window) {
       if (errors) {
         console.log(errors);
