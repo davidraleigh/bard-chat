@@ -370,6 +370,11 @@ var PlayDetails = function(html) {
   this.otherProperNounMap = {};
   this.prologue = {};
   this.epilogue = {};
+  this.isPlayComplete = false;
+};
+
+PlayDetails.prototype.setPlayAsComplete = function() {
+  this.isPlayComplete = true;
 };
 
 PlayDetails.prototype.addPrologue = function(dialog, properNouns) {

@@ -61,7 +61,7 @@ var bardParse = new rH.BardParse();
 //rH.BardParse.parseFromHTMLFile('./pericles.html');
 //rH.BardParse.parseFromHTMLFile('./richardII.html');
 //rH.BardParse.parseFromHTMLFile('./henryV.html');
+//rH.BardParse.parseFromHTMLFile('./henry4pt2.html');
 rH.BardParse.parseFromJSON();
-//bardParse.parseFromMIT();
 
 module.exports = app;
