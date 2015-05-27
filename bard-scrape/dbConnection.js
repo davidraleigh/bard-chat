@@ -5,12 +5,6 @@ var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
 var ObjectID = require('mongodb').ObjectID;
 
-
-var ParseUtils = require('./parseUtils.js').ParseUtils;
-var PlayDetails = require('./playComponents.js').PlayDetails;
-var Dialog = require('./playComponents.js').Dialog;
-var Scene = require('./playComponents.js').Scene;
-
 // Connection URL
 var url = 'mongodb://localhost:27017/bard';
 
@@ -24,6 +18,7 @@ PlayDB.savePlay = function(playDetails, callback) {
     console.log("Connected correctly to server");
     var playOverviewCollection = db.collection('playOverview');
     playOverviewCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err, reply) {
+      console.log('deleted play overview for :', playDetails.getTitle());
       if (err) {
         callback(err);
         return;
@@ -72,21 +67,25 @@ PlayDB.saveScenes = function(db, playDetails, callback) {
       callback(err);
       return;
     }
+    console.log('deleted play sentences for :', playDetails.getTitle());
     linesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err) {
       if (err) {
         callback(err);
         return;
       }
+      console.log('deleted play lines for :', playDetails.getTitle());
       endStoppedCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err) {
         if (err) {
           callback(err);
           return;
         }
+        console.log('deleted play endStopped for :', playDetails.getTitle());
         phrasesCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function (err) {
           if (err) {
             callback(err);
             return;
           }
+          console.log('deleted play phrases for :', playDetails.getTitle());
           PlayDB.saveScene(db, playDetails, 1, 1, callback);
         });
       });

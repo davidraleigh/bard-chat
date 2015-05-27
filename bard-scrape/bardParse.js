@@ -22,17 +22,11 @@ var Scene = require('./playComponents.js').Scene;
 var PlayDB = require('./dbConnection.js').PlayDB;
 
 var jqueryURL = 'http://localhost:8080/static/jquery.js';
-//var $ = require('jquery')(require("jsdom").jsdom().parentWindow);
 
 
 var BardParse = function () {
   this.plays = [];
 };
-
-// TODO delete this
-//BardParse.parseProperNouns = function(text) {
-//  return ParseUtils.extractProperNouns(text);
-//}
 
 BardParse.parsePlayFromJSON = function(playArray, index, callback) {
   if (index >= playArray.length) {
@@ -134,7 +128,7 @@ BardParse.parseLocations = function(body, playDetails, callback) {
             var place = hText.slice(periodIndex , hText.indexOf('.', periodIndex)).trim();
             playDetails.addLocation(place);
           } else {
-            console.log(hText);
+            console.log('parsing locaitons, leftover h3 is : ',hText);
           }
         }
         jObj = jObj.next();
@@ -229,6 +223,8 @@ BardParse.parseDialog = function(body, playDetails, callback) {
   // get first ACT object
   var actRegex = '^([Aa][Cc][Tt])\\s';
   var sceneRegex = '^([Ss][Cc][Ee][Nn][Ee])\\s';
+  var prologueRegex = '^([Pp][Rr][Oo][Ll][Oo][Gg][Uu][Ee])'
+  var epilogueRegex = '^([Ee][Pp][Ii][Ll][Oo][Gg][Uu][Ee])'
 
   jsdom.env(
     body,
@@ -244,6 +240,8 @@ BardParse.parseDialog = function(body, playDetails, callback) {
       var actNum = null;
       var scene = null;
       var dialog = null;
+      var bInEpilogue = false;
+      var bInPrologue = false;
       var peopleProperNouns = playDetails.getCharacters();
       var locationProperNouns = playDetails.getLocations();
       var otherProperNouns = playDetails.getOtherProperNouns();
@@ -252,7 +250,13 @@ BardParse.parseDialog = function(body, playDetails, callback) {
         if (jObj.is('h3')) {
           var hText = jObj.text();
 
+          // SO UGLY!!!!! Henry IV prologue work around
+          if (hText.match('None')) {
+            actNum = 1;
+            bInPrologue = true;
+          }
           // save scene if necessary
+          // TODO add epilogue?
           if ((hText.match(actRegex) || hText.match(sceneRegex)) && scene !== null){
             //console.log(scene.toString());
             playDetails.addScene(actNum, scene);
@@ -262,25 +266,50 @@ BardParse.parseDialog = function(body, playDetails, callback) {
           if (hText.match(actRegex)) {
             var romanNumeral = hText.slice(hText.toLowerCase().indexOf('act ') + 4);
             actNum = toArabic(romanNumeral);
+            console.log('parsing Act ', actNum);
             // null out scene object
             scene = null;
+            // there are cases where the prologue isn't announced in the html, to
+            // handle that we always assume there may be a prologue immediately following
+            // an new act declaration in the html
+            bInPrologue = true;
           } else if (hText.match(sceneRegex)) {
             var romanNumeral = hText.slice(hText.toLowerCase().indexOf('scene ') + 6, hText.indexOf('.'));
-            //console.log(hText);
             var sceneNum = toArabic(romanNumeral);
+            console.log('parsing Act: ', actNum, ', Scene: ', sceneNum);
             scene = new Scene(sceneNum, hText.slice(hText.indexOf('.') + 1).trim());
+            // there are cases where the prologue isn't announced in the html, to
+            // handle that we always assume there may be a prologue immediately following
+            // an new act declaration in the html. if there wasn't a declaration then
+            // we must set it back to false
+            bInPrologue = false;
+          } else if (hText.match(prologueRegex)) {
+            bInPrologue = true;
+          } else if (hText.match(epilogueRegex)) {
+            console.log('Parsing epilogue');
+            bInEpilogue = true;
           } else {
             console.log('Error with h3!!', hText);
           }
-        } else if (jObj.is('a[name^="speech"]')) {
+        } else if (jObj.is('a[name^="speech"]') && /*this here is because a dialog for prologue and epilogue will already have been created*/ dialog === null) {
           // grab player name to create new Dialog block
-          dialog = new Dialog(jObj.text());
-        } else if (jObj.is('blockquote') && dialog !== null) {
+          // GODDAM HENRY THE 5th
+          if (bInEpilogue) {
+            dialog = new Dialog(jObj.text(), 'epilogue');
+          } else {
+            dialog = new Dialog(jObj.text());
+          }
+        } else if (jObj.is('blockquote') && dialog !== null && /*this part here is for epilogue and prologue --> */jObj.children('a').length > 0) {
           // grab lines
           var lines = jObj.children("a");
-          lines.each(function( index ) {
+          lines.each(function() {
             var lineText = window.$(this).text();
-            //console.log(lineText);
+            // GODDAM IT HENRY THE V!!!!!!
+            if (lineText === 'EPILOGUE') {
+              bInEpilogue = true;
+              return;
+            }
+
             var lineNumber = window.$(this).attr("NAME");
             var proper = ParseUtils.extractProperNouns(lineText);
             var linePeople = peopleProperNouns.filter(function(n) {
@@ -299,7 +328,23 @@ BardParse.parseDialog = function(body, playDetails, callback) {
 
           dialog = null;
         } else if (jObj.is('blockquote')) {
-          console.log('stage direction: ', jObj.text());
+          var lastStageDirection = jObj.text();
+          if (lastStageDirection.indexOf("Enter") > -1) {
+            var player = lastStageDirection.slice(lastStageDirection.indexOf("Enter") + 5).trim();
+            if (bInPrologue) {
+              scene = new Scene('PROLOGUE', '');
+              // with all prologues we always assume that they will be
+              // followed by a stage direction for the speaker who enters
+              // and gives the prologue. if this is false, there will be bugs
+              dialog = new Dialog(player, 'prologue');
+              console.log('Parsing prologue');
+              bInPrologue = false;
+            } else if (bInEpilogue) {
+              scene = new Scene('EPILOGUE', '');
+              dialog = new Dialog(player, 'epilogue');
+              bInEpilogue = false;
+            }
+          }
         }
         jObj = jObj.next();
       }

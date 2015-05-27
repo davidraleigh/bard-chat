@@ -58,7 +58,9 @@ app.use(function(err, req, res, next) {
 });
 
 var bardParse = new rH.BardParse();
-rH.BardParse.parseFromHTMLFile('./richardII.html');
+//rH.BardParse.parseFromHTMLFile('./pericles.html');
+//rH.BardParse.parseFromHTMLFile('./richardII.html');
+rH.BardParse.parseFromHTMLFile('./henryV.html');
 //rH.BardParse.parseFromJSON();
 //bardParse.parseFromMIT();
 

@@ -4,7 +4,7 @@
 
 var ParseUtils = require('./parseUtils.js').ParseUtils;
 
-var Dialog = function(speaker) {
+var Dialog = function(speaker, type) {
   this.character = ParseUtils.allCapsToCapitalized(speaker);
   this.lines = [];
   this.sentences = [];
@@ -13,15 +13,25 @@ var Dialog = function(speaker) {
   this.people = [];
   this.locations= [];
   this.otherNouns = [];
+  this.type = type || 'dialog'; // prologue || epilogue
+
 
   // TODO maybe remove all the linked list stuff
   var prev = null;
   var next = null;
 };
 
-Dialog.prototype.getLineCount = function(){
-  return this.lines.length;
+Dialog.prototype.isPrologue = function() {
+  return this.type === 'prologue';
 };
+
+Dialog.prototype.isEpilogue = function() {
+  return this.type === 'epilogue';
+};
+
+//Dialog.prototype.getLineCount = function(){
+//  return this.lines.length;
+//};
 
 Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, otherNouns) {
   this.lines.push(
@@ -337,9 +347,9 @@ Scene.prototype.addDialogue = function(dialog, properNouns) {
   }
 };
 
-Scene.prototype.getLineCount = function() {
-  return this.lineCount;
-};
+//Scene.prototype.getLineCount = function() {
+//  return this.lineCount;
+//};
 
 Scene.prototype.getSceneNumber = function() {
   return this.sceneNumber;
@@ -358,6 +368,26 @@ var PlayDetails = function(html) {
   this.locationMap = {};
   this.otherProperNounSet = [];
   this.otherProperNounMap = {};
+  this.prologue = {};
+  this.epilogue = {};
+};
+
+PlayDetails.prototype.addPrologue = function(dialog, properNouns) {
+  dialog.createLineDerivatives(properNouns);
+  this.prologue = dialog;
+};
+
+PlayDetails.prototype.getPrologue = function() {
+  return this.prologue;
+};
+
+PlayDetails.prototype.addEpilogue = function(dialog, properNouns) {
+  dialog.createLineDerivatives(properNouns);
+  this.epilogue = dialog;
+};
+
+PlayDetails.prototype.getEpilogue = function() {
+  return this.epilogue;
 };
 
 PlayDetails.prototype.getActNumbers = function() {
