@@ -14,6 +14,8 @@ var fs = require("fs");
 var request = require('request');
 var jsdom = require("jsdom");
 var toArabic = require('roman-numerals').toArabic;
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
 
 var ParseUtils = require('./parseUtils.js').ParseUtils;
 var PlayDetails = require('./playComponents.js').PlayDetails;
@@ -22,13 +24,14 @@ var Scene = require('./playComponents.js').Scene;
 var PlayDB = require('./dbConnection.js').PlayDB;
 
 var jqueryURL = 'http://localhost:8080/static/jquery.js';
-
+// DATABASE Connection URL
+var url = 'mongodb://localhost:27017/bard';
 
 var BardParse = function () {
   this.plays = [];
 };
 
-BardParse.parsePlayFromJSON = function(playArray, index, callback) {
+BardParse.parsePlayFromJSON = function(db, playArray, index, callback) {
   if (index >= playArray.length) {
     callback();
     return;
@@ -48,7 +51,7 @@ BardParse.parsePlayFromJSON = function(playArray, index, callback) {
 
       BardParse.parse(body, function(playDetails) {
         console.log("parsed :", element.play.href);
-        BardParse.save(playDetails, function(err) {
+        BardParse.save(db, playDetails, function(err) {
           if (err) {
             console.log("failed database request", err);
             callback(error);
@@ -56,7 +59,9 @@ BardParse.parsePlayFromJSON = function(playArray, index, callback) {
           }
 
           console.log("completed database save of ", element.play.href);
-          BardParse.parsePlayFromJSON(playArray, index + 1, callback);
+          playDetails = null;
+          body = null;
+          BardParse.parsePlayFromJSON(db, playArray, index + 1, callback);
         });
       });
     } else {
@@ -65,28 +70,33 @@ BardParse.parsePlayFromJSON = function(playArray, index, callback) {
     }
   });
 
-}
+};
 
 BardParse.parseFromJSON = function() {
-  fs.readFile('mitPlays.json','utf8', function (err, data) {
-    // error check
-    if (err) {
-      console.log(err);
-      return;
-    }
-    // get the list of all plays and their associated URLs
-    var obj =  JSON.parse(data);
-    BardParse.parsePlayFromJSON(obj.mitLibrary, 0, function(error) {
-      if (error) {
-        console.log('error message: ', error);
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    console.log("Connected correctly to server");
+    fs.readFile('mitPlays.json','utf8', function (err, data) {
+      // error check
+      if (err) {
+        console.log(err);
+        return;
       }
-      console.log('finished parsing all plays');
+      // get the list of all plays and their associated URLs
+      var obj =  JSON.parse(data);
+      BardParse.parsePlayFromJSON(db, obj.mitLibrary, 0, function(error) {
+        if (error) {
+          console.log('error message: ', error);
+        }
+        console.log('finished parsing all plays');
+      });
     });
   });
 };
 
-BardParse.save = function(playDetails, callback) {
-  PlayDB.savePlay(playDetails, callback);
+// TODO REMOVE
+BardParse.save = function(db, playDetails, callback) {
+  PlayDB.savePlay(db, playDetails, callback);
 };
 
 BardParse.parse = function(body, callback) {

@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="837c322e-e627-419e-8e95-bad406452ba4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/henryV.html" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/pericles.html" afterPath="$PROJECT_DIR$/henry4pt2.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bardParse.js" afterPath="$PROJECT_DIR$/bardParse.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbConnection.js" afterPath="$PROJECT_DIR$/dbConnection.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pericles.html" afterPath="$PROJECT_DIR$/pericles.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/playComponents.js" afterPath="$PROJECT_DIR$/playComponents.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="bard-scrape.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,13 +31,12 @@
       <file leaf-file-name="bardParse.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bardParse.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="4858" max-vertical-offset="6435">
-              <caret line="351" column="0" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1288" max-vertical-offset="6615">
+              <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#751#773#0" expanded="false" />
-                <element signature="e#2323#2368#0" expanded="false" />
-                <element signature="e#2414#2860#0" expanded="false" />
+                <element signature="e#902#924#0" expanded="false" />
+                <element signature="e#2820#3266#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -52,6 +46,32 @@
         <entry file="http://localhost:8080/static/jquery.js">
           <provider selected="true" editor-type-id="httpFileEditor">
             <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="parseUtils.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/parseUtils.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="384" max-vertical-offset="2610">
+              <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#46#0" expanded="false" />
+                <element signature="n#!!block;n#sortByWordCount#0" expanded="false" />
+                <element signature="e#400#500#0" expanded="false" />
+                <element signature="e#902#1248#0" expanded="false" />
+                <element signature="e#6102#6685#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/jsdom/lib/jsdom/level2/events.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3024" max-vertical-offset="6645">
+              <caret line="216" column="0" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
+              <folding />
+            </state>
           </provider>
         </entry>
       </file>
@@ -113,14 +133,28 @@
       <file leaf-file-name="dbConnection.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dbConnection.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.8170214" vertical-offset="2349" max-vertical-offset="3390">
-              <caret line="81" column="76" selection-start-line="81" selection-start-column="76" selection-end-line="81" selection-end-column="76" />
+            <state vertical-scroll-proportion="0.12" vertical-offset="1164" max-vertical-offset="1875">
+              <caret line="105" column="20" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
               <folding>
                 <element signature="e#0#46#0" expanded="false" />
-                <element signature="e#261#264#0" expanded="false" />
-                <element signature="e#317#962#0" expanded="false" />
-                <element signature="e#1027#1737#0" expanded="false" />
+                <element signature="e#119#122#0" expanded="false" />
+                <element signature="e#897#1607#0" expanded="false" />
+                <element signature="e#4052#5030#0" expanded="false" />
+                <element signature="e#5117#6146#0" expanded="false" />
+                <element signature="e#6229#7278#0" expanded="false" />
+                <element signature="e#7365#7735#0" expanded="false" />
+                <element signature="e#7815#8828#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utils.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/utils.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="3570">
+              <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -128,8 +162,8 @@
       <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="625" max-vertical-offset="1095">
-              <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="564" max-vertical-offset="1095">
+              <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -153,9 +187,9 @@
         <option value="$PROJECT_DIR$/pericles.html" />
         <option value="$PROJECT_DIR$/playComponents.js" />
         <option value="$PROJECT_DIR$/henry4pt2.html" />
-        <option value="$PROJECT_DIR$/dbConnection.js" />
         <option value="$PROJECT_DIR$/henryV.html" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/dbConnection.js" />
         <option value="$PROJECT_DIR$/bardParse.js" />
       </list>
     </option>
@@ -167,8 +201,9 @@
     <data>$PROJECT_DIR$/node_modules/mocha</data>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1440" />
-    <option name="height" value="900" />
+    <option name="y" value="23" />
+    <option name="width" value="1436" />
+    <option name="height" value="877" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -237,7 +272,7 @@
     <property name="options.lastSelected" value="preferences.sourceCode.JavaScript" />
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="FullScreen" value="true" />
+    <property name="FullScreen" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/spec" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="DefaultHtmlFileTemplate" value="Html5" />
@@ -372,24 +407,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="23" width="1436" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28485578" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28433734" sideWeight="0.49964765" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.49964765" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24242425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32650602" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24310954" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42292994" sideWeight="0.49964663" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32650602" sideWeight="0.49964765" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42292994" sideWeight="0.50035334" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -461,116 +496,101 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>32</line>
+          <line>35</line>
           <option name="timeStamp" value="423" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>62</line>
+          <line>67</line>
           <option name="timeStamp" value="429" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>52</line>
+          <line>55</line>
           <option name="timeStamp" value="430" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>22</line>
-          <option name="timeStamp" value="432" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>27</line>
-          <option name="timeStamp" value="433" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>51</line>
+          <line>48</line>
           <option name="timeStamp" value="434" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>108</line>
+          <line>105</line>
           <option name="timeStamp" value="436" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>113</line>
+          <line>110</line>
           <option name="timeStamp" value="437" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>118</line>
+          <line>115</line>
           <option name="timeStamp" value="438" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>123</line>
+          <line>120</line>
           <option name="timeStamp" value="439" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>40</line>
+          <line>43</line>
           <option name="timeStamp" value="441" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>225</line>
+          <line>222</line>
           <option name="timeStamp" value="446" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>251</line>
-          <option name="timeStamp" value="447" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>180</line>
+          <line>177</line>
           <option name="timeStamp" value="448" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>208</line>
+          <line>205</line>
           <option name="timeStamp" value="449" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>80</line>
-          <option name="timeStamp" value="450" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>289</line>
+          <line>299</line>
           <option name="timeStamp" value="454" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>291</line>
+          <line>301</line>
           <option name="timeStamp" value="455" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>343</line>
+          <line>353</line>
           <option name="timeStamp" value="463" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>254</line>
+          <line>264</line>
           <option name="timeStamp" value="482" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>351</line>
-          <option name="timeStamp" value="496" />
+          <line>86</line>
+          <option name="timeStamp" value="510" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/bardParse.js</url>
-          <line>308</line>
-          <option name="timeStamp" value="497" />
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>19</line>
+          <option name="timeStamp" value="518" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/dbConnection.js</url>
+          <line>24</line>
+          <option name="timeStamp" value="519" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="498" />
+      <option name="time" value="521" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -581,9 +601,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#751#773#0" expanded="false" />
-            <element signature="e#2323#2368#0" expanded="false" />
-            <element signature="e#2414#2860#0" expanded="false" />
+            <element signature="e#902#924#0" expanded="false" />
+            <element signature="e#2820#3266#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -652,9 +671,13 @@
           <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
             <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#261#264#0" expanded="false" />
-            <element signature="e#317#962#0" expanded="false" />
-            <element signature="e#1027#1737#0" expanded="false" />
+            <element signature="e#119#122#0" expanded="false" />
+            <element signature="e#897#1607#0" expanded="false" />
+            <element signature="e#4052#5030#0" expanded="false" />
+            <element signature="e#5117#6146#0" expanded="false" />
+            <element signature="e#6229#7278#0" expanded="false" />
+            <element signature="e#7365#7735#0" expanded="false" />
+            <element signature="e#7815#8828#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -697,9 +720,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#751#773#0" expanded="false" />
-            <element signature="e#2323#2368#0" expanded="false" />
-            <element signature="e#2414#2860#0" expanded="false" />
+            <element signature="e#902#924#0" expanded="false" />
+            <element signature="e#2820#3266#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -768,9 +790,13 @@
           <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
             <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#261#264#0" expanded="false" />
-            <element signature="e#317#962#0" expanded="false" />
-            <element signature="e#1027#1737#0" expanded="false" />
+            <element signature="e#119#122#0" expanded="false" />
+            <element signature="e#897#1607#0" expanded="false" />
+            <element signature="e#4052#5030#0" expanded="false" />
+            <element signature="e#5117#6146#0" expanded="false" />
+            <element signature="e#6229#7278#0" expanded="false" />
+            <element signature="e#7365#7735#0" expanded="false" />
+            <element signature="e#7815#8828#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -813,9 +839,8 @@
           <caret line="78" column="32" selection-start-line="78" selection-start-column="32" selection-end-line="78" selection-end-column="32" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#751#773#0" expanded="false" />
-            <element signature="e#2323#2368#0" expanded="false" />
-            <element signature="e#2414#2860#0" expanded="false" />
+            <element signature="e#902#924#0" expanded="false" />
+            <element signature="e#2820#3266#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -856,9 +881,8 @@
           <caret line="78" column="32" selection-start-line="78" selection-start-column="32" selection-end-line="78" selection-end-column="32" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#751#773#0" expanded="false" />
-            <element signature="e#2323#2368#0" expanded="false" />
-            <element signature="e#2414#2860#0" expanded="false" />
+            <element signature="e#902#924#0" expanded="false" />
+            <element signature="e#2820#3266#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -891,9 +915,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#751#773#0" expanded="false" />
-            <element signature="e#2323#2368#0" expanded="false" />
-            <element signature="e#2414#2860#0" expanded="false" />
+            <element signature="e#902#924#0" expanded="false" />
+            <element signature="e#2820#3266#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -979,21 +1002,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/parseUtils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="54" max-vertical-offset="2415">
-          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#46#0" expanded="false" />
-            <element signature="n#!!block;n#sortByWordCount#0" expanded="false" />
-            <element signature="e#400#500#0" expanded="false" />
-            <element signature="e#902#1248#0" expanded="false" />
-            <element signature="e#1320#1750#0" expanded="false" />
-            <element signature="e#6102#6685#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/jsdom/lib/jsdom.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="3543" max-vertical-offset="5775">
@@ -1022,14 +1030,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33404255" vertical-offset="6443" max-vertical-offset="7920">
           <caret line="459" column="0" selection-start-line="459" selection-start-column="0" selection-end-line="459" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="625" max-vertical-offset="1095">
-          <caret line="62" column="0" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1098,28 +1098,69 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/parseUtils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="384" max-vertical-offset="2610">
+          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+            <element signature="n#!!block;n#sortByWordCount#0" expanded="false" />
+            <element signature="e#400#500#0" expanded="false" />
+            <element signature="e#902#1248#0" expanded="false" />
+            <element signature="e#6102#6685#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/jsdom/lib/jsdom/level2/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3024" max-vertical-offset="6645">
+          <caret line="216" column="0" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="293" max-vertical-offset="1095">
+          <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="3570">
+          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bardParse.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="4858" max-vertical-offset="6435">
-          <caret line="351" column="0" selection-start-line="351" selection-start-column="0" selection-end-line="351" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1288" max-vertical-offset="6615">
+          <caret line="98" column="0" selection-start-line="98" selection-start-column="0" selection-end-line="98" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#751#773#0" expanded="false" />
-            <element signature="e#2323#2368#0" expanded="false" />
-            <element signature="e#2414#2860#0" expanded="false" />
+            <element signature="e#902#924#0" expanded="false" />
+            <element signature="e#2820#3266#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dbConnection.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.8170214" vertical-offset="2349" max-vertical-offset="3390">
-          <caret line="81" column="76" selection-start-line="81" selection-start-column="76" selection-end-line="81" selection-end-column="76" />
+        <state vertical-scroll-proportion="0.12" vertical-offset="1164" max-vertical-offset="1875">
+          <caret line="105" column="20" selection-start-line="105" selection-start-column="20" selection-end-line="105" selection-end-column="20" />
           <folding>
             <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#261#264#0" expanded="false" />
-            <element signature="e#317#962#0" expanded="false" />
-            <element signature="e#1027#1737#0" expanded="false" />
+            <element signature="e#119#122#0" expanded="false" />
+            <element signature="e#897#1607#0" expanded="false" />
+            <element signature="e#4052#5030#0" expanded="false" />
+            <element signature="e#5117#6146#0" expanded="false" />
+            <element signature="e#6229#7278#0" expanded="false" />
+            <element signature="e#7365#7735#0" expanded="false" />
+            <element signature="e#7815#8828#0" expanded="false" />
           </folding>
         </state>
       </provider>

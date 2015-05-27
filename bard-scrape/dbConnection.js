@@ -1,21 +1,18 @@
 /**
  * Created by davidraleigh on 5/21/15.
  */
-var MongoClient = require('mongodb').MongoClient
-  , assert = require('assert');
 var ObjectID = require('mongodb').ObjectID;
 
-// Connection URL
-var url = 'mongodb://localhost:27017/bard';
+
 
 
 var PlayDB = function() {
 };
 
-PlayDB.savePlay = function(playDetails, callback) {
-  MongoClient.connect(url, function(err, db) {
-    assert.equal(null, err);
-    console.log("Connected correctly to server");
+PlayDB.savePlay = function(db, playDetails, callback) {
+  //MongoClient.connect(url, function(err, db) {
+  //  assert.equal(null, err);
+  //  console.log("Connected correctly to server");
     var playOverviewCollection = db.collection('playOverview');
     playOverviewCollection.deleteMany({'playTitle' : playDetails.getTitle()}, function(err, reply) {
       console.log('deleted play overview for :', playDetails.getTitle());
@@ -31,7 +28,7 @@ PlayDB.savePlay = function(playDetails, callback) {
         PlayDB.saveScenes(db, playDetails, callback);
       });
     });
-  });
+  //});
 };
 
 PlayDB.savePlayOverview = function(db, playDetails, callback) {
