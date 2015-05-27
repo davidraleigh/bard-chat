@@ -82,33 +82,12 @@ BardParse.parseFromJSON = function() {
     }
     // get the list of all plays and their associated URLs
     var obj =  JSON.parse(data);
-    BardParse.parsePlayFromJSON(obj.mitLibrary, 0, function() {
+    BardParse.parsePlayFromJSON(obj.mitLibrary, 0, function(error) {
+      if (error) {
+        console.log('error message: ', error);
+      }
       console.log('finished parsing all plays');
     });
-    for (var i = 0; i < obj.mitLibrary.length; i++) {
-      var element = obj.mitLibrary[i];
-      console.log("making request to :", element.play.href);
-      request(element.play.href, function(error, response, body) {
-
-        console.log("completed request to :", element.play.href);
-        if (!error && response.statusCode == 200) {
-          //console.log(body);
-
-          BardParse.parse(body, function(playDetails) {
-            console.log("parsed :", element.play.href);
-            BardParse.save(playDetails, function(err) {
-              if (err)
-                console.log("failed database request", err);
-              else
-                console.log("completed database save of ", element.play.href);
-
-            });
-          });
-
-        }
-      });
-    };
-    // TODO save to database
   });
 };
 

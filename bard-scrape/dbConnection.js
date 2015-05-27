@@ -136,7 +136,9 @@ PlayDB.insertSceneLines = function(db, playDetails, scene, actNumber, callback) 
   var play = playDetails.getTitle();
   var filterObject = {'playTitle' : playDetails.getTitle()};
   var sceneNumber = scene.getSceneNumber();
-  var insertArray = [];
+  var batches = [];
+  batches.push([]);
+
   scene.getDialogs().forEach(function(dialog) {
     var speaker = dialog.getCharacter();
     dialog.getLines(true).forEach(function(upsertLineObject) {
@@ -147,43 +149,25 @@ PlayDB.insertSceneLines = function(db, playDetails, scene, actNumber, callback) 
       upsertLineObject['playTitle'] = play;
       upsertLineObject['speaker'] = speaker;
       upsertLineObject['_id'] = new ObjectID();
-      insertArray.push(upsertLineObject);
+      if (batches[batches.length - 1].length >= 1000) {
+        batches.push([]);
+      }
+      batches[batches.length - 1].push(upsertLineObject);
     });
   });
 
 
   var linesCollection = db.collection('lines');
-  linesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
-    if (err) {
-      callback(err);
-      return;
-    }
-    console.log("insert lines: ", result.result);
-    callback();
-  });
+  PlayDB.insertBatches(db, linesCollection, batches, 0, callback);
 };
 
 PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callback) {
-  /*
-    'sentenceText' : sentenceText,
-    'rangeStart' : lineNumberStart,
-    'rangeEnd' : lineNumberEnd,
-    'ICount' : ParseUtils.getWordOccurence(sentenceText, ' I ', false),
-    'youCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' you ', false),
-    'heCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' he ', false),
-    'sheCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' she ', false),
-    'theyCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' they ', false),
-    'weCount' : ParseUtils.getWordOccurence(sentenceText.toLowerCase(), ' we ', false),
-    'people' : people || [],
-    'locations' : locations || [],
-    'other' : other || [],
-    'characterCount' : sentenceText.length,
-    'type' : sentenceType
-  */
   var play = playDetails.getTitle();
   //var filterObject = {'playTitle' : playDetails.getTitle()};
   var sceneNumber = scene.getSceneNumber();
-  var insertArray = [];
+  var batches = [];
+  batches.push([]);
+
   scene.getDialogs().forEach(function(dialog) {
     var speaker = dialog.getCharacter();
     dialog.getSentences(true).forEach(function(upsertSentenceObject) {
@@ -194,26 +178,24 @@ PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callba
       upsertSentenceObject['playTitle'] = play;
       upsertSentenceObject['speaker'] = speaker;
       upsertSentenceObject['_id'] = new ObjectID();
-      insertArray.push(upsertSentenceObject);
+      if (batches[batches.length - 1].length >= 1000) {
+        batches.push([]);
+      }
+      batches[batches.length - 1].push(upsertSentenceObject);
     });
   });
 
   var sentencesCollection = db.collection('sentences');
-  sentencesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
-    if (err) {
-      callback(err);
-      return;
-    }
-    console.log("insert sentences: ", result.result);
-    callback();
-  });
+  PlayDB.insertBatches(db, sentencesCollection, batches, 0, callback);
 };
 
 PlayDB.insertEndStopped = function(db, playDetails, scene, actNumber, callback) {
   var play = playDetails.getTitle();
   //var filterObject = {'playTitle' : playDetails.getTitle()};
   var sceneNumber = scene.getSceneNumber();
-  var insertArray = [];
+  var batches = [];
+  batches.push([]);
+
   scene.getDialogs().forEach(function(dialog) {
     var speaker = dialog.getCharacter();
     dialog.getEndStopped(true).forEach(function(upsertEndStoppedObject) {
@@ -224,18 +206,29 @@ PlayDB.insertEndStopped = function(db, playDetails, scene, actNumber, callback) 
       upsertEndStoppedObject['playTitle'] = play;
       upsertEndStoppedObject['speaker'] = speaker;
       upsertEndStoppedObject['_id'] = new ObjectID();
-      insertArray.push(upsertEndStoppedObject);
+      if (batches[batches.length - 1].length >= 1000) {
+        batches.push([]);
+      }
+      batches[batches.length - 1].push(upsertEndStoppedObject);
     });
   });
 
   var endStoppedCollection = db.collection('endStopped');
-  endStoppedCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
+  PlayDB.insertBatches(db, endStoppedCollection, batches, 0, callback);
+};
+
+PlayDB.insertBatches = function(db, collection, batchesArray, batchIndex, callback) {
+  if (batchIndex >= batchesArray.length) {
+    callback();
+    return;
+  }
+  collection.insertMany(batchesArray[batchIndex], {wtimeout:5000, w:1}, function(err, result) {
     if (err) {
       callback(err);
       return;
     }
-    console.log("insert endStopped: ", result.result);
-    callback();
+    console.log("insert result : ", result.result);
+    PlayDB.insertBatches(db, collection, batchesArray, batchIndex + 1, callback);
   });
 };
 
@@ -243,7 +236,9 @@ PlayDB.insertPhrases = function(db, playDetails, scene, actNumber, callback) {
   var play = playDetails.getTitle();
   //var filterObject = {'playTitle' : playDetails.getTitle()};
   var sceneNumber = scene.getSceneNumber();
-  var insertArray = [];
+  var batches = [];
+  batches.push([]);
+
   scene.getDialogs().forEach(function(dialog) {
     var speaker = dialog.getCharacter();
     dialog.getPhrases(true).forEach(function(upsertPhrasesObject) {
@@ -254,19 +249,15 @@ PlayDB.insertPhrases = function(db, playDetails, scene, actNumber, callback) {
       upsertPhrasesObject['playTitle'] = play;
       upsertPhrasesObject['speaker'] = speaker;
       upsertPhrasesObject['_id'] = new ObjectID();
-      insertArray.push(upsertPhrasesObject);
+      if (batches[batches.length - 1].length >= 1000) {
+        batches.push([]);
+      }
+      batches[batches.length - 1].push(upsertPhrasesObject);
     });
   });
 
   var phrasesCollection = db.collection('phrases');
-  phrasesCollection.insertMany(insertArray.slice(), { wtimeout: 5000 , w:1}, function(err, result) {
-    if (err) {
-      callback(err);
-      return;
-    }
-    console.log("insert phrases: ", result.result);
-    callback();
-  });
+  PlayDB.insertBatches(db, phrasesCollection, batches, 0, callback);
 };
 
 
