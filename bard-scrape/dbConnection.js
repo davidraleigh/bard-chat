@@ -3,9 +3,6 @@
  */
 var ObjectID = require('mongodb').ObjectID;
 
-
-
-
 var PlayDB = function() {
 };
 

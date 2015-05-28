@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="837c322e-e627-419e-8e95-bad406452ba4" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bardParse.js" afterPath="$PROJECT_DIR$/bardParse.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/playComponents.js" afterPath="$PROJECT_DIR$/playComponents.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../bard-server/routes/bard.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dbConnection.js" afterPath="$PROJECT_DIR$/dbConnection.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="bard-scrape.iws" />
@@ -32,12 +32,13 @@
       <file leaf-file-name="bardParse.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/bardParse.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6639344" vertical-offset="546" max-vertical-offset="2580">
-              <caret line="123" column="31" selection-start-line="123" selection-start-column="31" selection-end-line="123" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.30737704" vertical-offset="255" max-vertical-offset="2205">
+              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="43" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#964#1594#0" expanded="false" />
                 <element signature="e#1668#2818#0" expanded="false" />
+                <element signature="e#2985#3766#0" expanded="false" />
                 <element signature="e#3832#4013#0" expanded="false" />
                 <element signature="e#4083#4636#0" expanded="false" />
                 <element signature="e#4711#4913#0" expanded="false" />
@@ -140,28 +141,21 @@
       <file leaf-file-name="dbConnection.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dbConnection.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1095" max-vertical-offset="1875">
-              <caret line="99" column="5" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+              <caret line="3" column="43" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="43" />
               <folding>
                 <element signature="e#0#46#0" expanded="false" />
-                <element signature="e#119#122#0" expanded="false" />
-                <element signature="e#897#1607#0" expanded="false" />
-                <element signature="e#4052#5030#0" expanded="false" />
-                <element signature="e#5117#6146#0" expanded="false" />
-                <element signature="e#6229#7278#0" expanded="false" />
-                <element signature="e#7365#7735#0" expanded="false" />
-                <element signature="e#7815#8828#0" expanded="false" />
+                <element signature="e#116#119#0" expanded="false" />
+                <element signature="e#176#829#0" expanded="false" />
+                <element signature="e#894#1604#0" expanded="false" />
+                <element signature="e#1663#2912#0" expanded="false" />
+                <element signature="e#2994#3966#0" expanded="false" />
+                <element signature="e#4049#5027#0" expanded="false" />
+                <element signature="e#5114#6143#0" expanded="false" />
+                <element signature="e#6226#7275#0" expanded="false" />
+                <element signature="e#7362#7732#0" expanded="false" />
+                <element signature="e#7812#8825#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utils.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/utils.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="3570">
-              <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -194,10 +188,10 @@
         <option value="$PROJECT_DIR$/pericles.html" />
         <option value="$PROJECT_DIR$/henry4pt2.html" />
         <option value="$PROJECT_DIR$/henryV.html" />
-        <option value="$PROJECT_DIR$/dbConnection.js" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/playComponents.js" />
         <option value="$PROJECT_DIR$/bardParse.js" />
+        <option value="$PROJECT_DIR$/dbConnection.js" />
       </list>
     </option>
   </component>
@@ -424,7 +418,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24310954" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42292994" sideWeight="0.49964663" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32611465" sideWeight="0.49964663" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32611465" sideWeight="0.49964663" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32611465" sideWeight="0.50035334" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32891566" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -513,27 +507,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>48</line>
+          <line>45</line>
           <option name="timeStamp" value="434" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>105</line>
+          <line>102</line>
           <option name="timeStamp" value="436" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>110</line>
+          <line>107</line>
           <option name="timeStamp" value="437" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>115</line>
+          <line>112</line>
           <option name="timeStamp" value="438" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>120</line>
+          <line>117</line>
           <option name="timeStamp" value="439" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -543,31 +537,31 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>222</line>
+          <line>219</line>
           <option name="timeStamp" value="446" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>177</line>
+          <line>174</line>
           <option name="timeStamp" value="448" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>205</line>
+          <line>202</line>
           <option name="timeStamp" value="449" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>19</line>
+          <line>16</line>
           <option name="timeStamp" value="518" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/dbConnection.js</url>
-          <line>24</line>
+          <line>21</line>
           <option name="timeStamp" value="519" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="532" />
+      <option name="time" value="533" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -580,6 +574,7 @@
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#964#1594#0" expanded="false" />
             <element signature="e#1668#2818#0" expanded="false" />
+            <element signature="e#2985#3766#0" expanded="false" />
             <element signature="e#3832#4013#0" expanded="false" />
             <element signature="e#4083#4636#0" expanded="false" />
             <element signature="e#4711#4913#0" expanded="false" />
@@ -653,13 +648,16 @@
           <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
             <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#119#122#0" expanded="false" />
-            <element signature="e#897#1607#0" expanded="false" />
-            <element signature="e#4052#5030#0" expanded="false" />
-            <element signature="e#5117#6146#0" expanded="false" />
-            <element signature="e#6229#7278#0" expanded="false" />
-            <element signature="e#7365#7735#0" expanded="false" />
-            <element signature="e#7815#8828#0" expanded="false" />
+            <element signature="e#116#119#0" expanded="false" />
+            <element signature="e#176#829#0" expanded="false" />
+            <element signature="e#894#1604#0" expanded="false" />
+            <element signature="e#1663#2912#0" expanded="false" />
+            <element signature="e#2994#3966#0" expanded="false" />
+            <element signature="e#4049#5027#0" expanded="false" />
+            <element signature="e#5114#6143#0" expanded="false" />
+            <element signature="e#6226#7275#0" expanded="false" />
+            <element signature="e#7362#7732#0" expanded="false" />
+            <element signature="e#7812#8825#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -703,6 +701,7 @@
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#964#1594#0" expanded="false" />
             <element signature="e#1668#2818#0" expanded="false" />
+            <element signature="e#2985#3766#0" expanded="false" />
             <element signature="e#3832#4013#0" expanded="false" />
             <element signature="e#4083#4636#0" expanded="false" />
             <element signature="e#4711#4913#0" expanded="false" />
@@ -776,13 +775,16 @@
           <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
           <folding>
             <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#119#122#0" expanded="false" />
-            <element signature="e#897#1607#0" expanded="false" />
-            <element signature="e#4052#5030#0" expanded="false" />
-            <element signature="e#5117#6146#0" expanded="false" />
-            <element signature="e#6229#7278#0" expanded="false" />
-            <element signature="e#7365#7735#0" expanded="false" />
-            <element signature="e#7815#8828#0" expanded="false" />
+            <element signature="e#116#119#0" expanded="false" />
+            <element signature="e#176#829#0" expanded="false" />
+            <element signature="e#894#1604#0" expanded="false" />
+            <element signature="e#1663#2912#0" expanded="false" />
+            <element signature="e#2994#3966#0" expanded="false" />
+            <element signature="e#4049#5027#0" expanded="false" />
+            <element signature="e#5114#6143#0" expanded="false" />
+            <element signature="e#6226#7275#0" expanded="false" />
+            <element signature="e#7362#7732#0" expanded="false" />
+            <element signature="e#7812#8825#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -826,6 +828,7 @@
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#964#1594#0" expanded="false" />
             <element signature="e#1668#2818#0" expanded="false" />
+            <element signature="e#2985#3766#0" expanded="false" />
             <element signature="e#3832#4013#0" expanded="false" />
             <element signature="e#4083#4636#0" expanded="false" />
             <element signature="e#4711#4913#0" expanded="false" />
@@ -873,6 +876,7 @@
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#964#1594#0" expanded="false" />
             <element signature="e#1668#2818#0" expanded="false" />
+            <element signature="e#2985#3766#0" expanded="false" />
             <element signature="e#3832#4013#0" expanded="false" />
             <element signature="e#4083#4636#0" expanded="false" />
             <element signature="e#4711#4913#0" expanded="false" />
@@ -912,6 +916,7 @@
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#964#1594#0" expanded="false" />
             <element signature="e#1668#2818#0" expanded="false" />
+            <element signature="e#2985#3766#0" expanded="false" />
             <element signature="e#3832#4013#0" expanded="false" />
             <element signature="e#4083#4636#0" expanded="false" />
             <element signature="e#4711#4913#0" expanded="false" />
@@ -1030,14 +1035,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/spec/testBardParse.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6291" max-vertical-offset="7125">
-          <caret line="453" column="0" selection-start-line="453" selection-start-column="0" selection-end-line="453" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/henryV.html">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="29.30023" vertical-offset="83868" max-vertical-offset="96645">
@@ -1049,6 +1046,22 @@
     <entry file="http://localhost:8080/static/jquery.js">
       <provider selected="true" editor-type-id="httpFileEditor">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/utils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="3570">
+          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="594" max-vertical-offset="1095">
+          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/parseUtils.js">
@@ -1069,39 +1082,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3024" max-vertical-offset="6645">
           <caret line="216" column="0" selection-start-line="216" selection-start-column="0" selection-end-line="216" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/mongodb/lib/utils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1284" max-vertical-offset="3570">
-          <caret line="96" column="0" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dbConnection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1095" max-vertical-offset="1875">
-          <caret line="99" column="5" selection-start-line="99" selection-start-column="5" selection-end-line="99" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#46#0" expanded="false" />
-            <element signature="e#119#122#0" expanded="false" />
-            <element signature="e#897#1607#0" expanded="false" />
-            <element signature="e#4052#5030#0" expanded="false" />
-            <element signature="e#5117#6146#0" expanded="false" />
-            <element signature="e#6229#7278#0" expanded="false" />
-            <element signature="e#7365#7735#0" expanded="false" />
-            <element signature="e#7815#8828#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="594" max-vertical-offset="1095">
-          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1150,14 +1130,43 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/spec/testBardParse.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6291" max-vertical-offset="7125">
+          <caret line="453" column="0" selection-start-line="453" selection-start-column="0" selection-end-line="453" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dbConnection.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="480">
+          <caret line="3" column="43" selection-start-line="3" selection-start-column="43" selection-end-line="3" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#46#0" expanded="false" />
+            <element signature="e#116#119#0" expanded="false" />
+            <element signature="e#176#829#0" expanded="false" />
+            <element signature="e#894#1604#0" expanded="false" />
+            <element signature="e#1663#2912#0" expanded="false" />
+            <element signature="e#2994#3966#0" expanded="false" />
+            <element signature="e#4049#5027#0" expanded="false" />
+            <element signature="e#5114#6143#0" expanded="false" />
+            <element signature="e#6226#7275#0" expanded="false" />
+            <element signature="e#7362#7732#0" expanded="false" />
+            <element signature="e#7812#8825#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/bardParse.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6639344" vertical-offset="546" max-vertical-offset="2580">
-          <caret line="123" column="31" selection-start-line="123" selection-start-column="31" selection-end-line="123" selection-end-column="31" />
+        <state vertical-scroll-proportion="0.30737704" vertical-offset="255" max-vertical-offset="2205">
+          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="43" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#964#1594#0" expanded="false" />
             <element signature="e#1668#2818#0" expanded="false" />
+            <element signature="e#2985#3766#0" expanded="false" />
             <element signature="e#3832#4013#0" expanded="false" />
             <element signature="e#4083#4636#0" expanded="false" />
             <element signature="e#4711#4913#0" expanded="false" />
