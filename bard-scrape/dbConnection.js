@@ -149,7 +149,7 @@ PlayDB.insertGeneric = function(db, collection, scene, methodName, playTitle, ac
       insertObject['sceneNumber'] = sceneNumber;
       insertObject['playTitle'] = playTitle;
       insertObject['speaker'] = speaker;
-      insertObjecth['random'] = Math.random();
+      insertObject['random'] = Math.random();
       insertObject['_id'] = new ObjectID();
       if (batches[batches.length - 1].length >= 1000) {
         batches.push([]);

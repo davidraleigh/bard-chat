@@ -156,7 +156,6 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
   return sentences;
 };
 
-
 ParseUtils.extractProperNouns = function(text) {
   // trim of leading and trailing whitespace
   text = text.trim();
