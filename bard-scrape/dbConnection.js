@@ -125,89 +125,40 @@ PlayDB.saveScene = function(db, playDetails, actNumber, sceneNumber, callback) {
   });
 };
 
-PlayDB.insertSceneLines = function(db, playDetails, scene, actNumber, callback) {
-  var play = playDetails.getTitle();
-  var filterObject = {'playTitle' : playDetails.getTitle()};
+
+//var method_name = "Colours";
+//var method_prefix = "populate_";
+//
+//// Call function:
+//window[method_prefix + method_name](arg1, arg2);
+PlayDB.insertGeneric = function(db, collection, scene, methodName, playTitle, actNumber, callback) {
+  var filterObject = {'playTitle' : playTitle};
   var sceneNumber = scene.getSceneNumber();
   var batches = [];
   batches.push([]);
 
   scene.getDialogs().forEach(function(dialog) {
     var speaker = dialog.getCharacter();
-    dialog.getLines(true).forEach(function(upsertLineObject) {
-      filterObject['lineNumber'] = upsertLineObject.lineNumber;
+    dialog[methodName](true).forEach(function(insertObject) {
+      if (methodName === '') {
+        filterObject['lineNumber'] = insertObject.lineNumber;
+      }
+
       // TODO should all this be moved into Dialog class?
-      upsertLineObject['actNumber'] = actNumber;
-      upsertLineObject['sceneNumber'] = sceneNumber;
-      upsertLineObject['playTitle'] = play;
-      upsertLineObject['speaker'] = speaker;
-      upsertLineObject['_id'] = new ObjectID();
+      insertObject['actNumber'] = actNumber;
+      insertObject['sceneNumber'] = sceneNumber;
+      insertObject['playTitle'] = playTitle;
+      insertObject['speaker'] = speaker;
+      insertObjecth['random'] = Math.random();
+      insertObject['_id'] = new ObjectID();
       if (batches[batches.length - 1].length >= 1000) {
         batches.push([]);
       }
-      batches[batches.length - 1].push(upsertLineObject);
+      batches[batches.length - 1].push(insertObject);
     });
   });
 
-
-  var linesCollection = db.collection('lines');
-  PlayDB.insertBatches(db, linesCollection, batches, 0, callback);
-};
-
-PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callback) {
-  var play = playDetails.getTitle();
-  //var filterObject = {'playTitle' : playDetails.getTitle()};
-  var sceneNumber = scene.getSceneNumber();
-  var batches = [];
-  batches.push([]);
-
-  scene.getDialogs().forEach(function(dialog) {
-    var speaker = dialog.getCharacter();
-    dialog.getSentences(true).forEach(function(upsertSentenceObject) {
-      //filterObject['lineNumber'] = upsertSentenceObject.lineNumber;
-      // TODO should all this be moved into Dialog class?
-      upsertSentenceObject['actNumber'] = actNumber;
-      upsertSentenceObject['sceneNumber'] = sceneNumber;
-      upsertSentenceObject['playTitle'] = play;
-      upsertSentenceObject['speaker'] = speaker;
-      upsertSentenceObject['_id'] = new ObjectID();
-      if (batches[batches.length - 1].length >= 1000) {
-        batches.push([]);
-      }
-      batches[batches.length - 1].push(upsertSentenceObject);
-    });
-  });
-
-  var sentencesCollection = db.collection('sentences');
-  PlayDB.insertBatches(db, sentencesCollection, batches, 0, callback);
-};
-
-PlayDB.insertEndStopped = function(db, playDetails, scene, actNumber, callback) {
-  var play = playDetails.getTitle();
-  //var filterObject = {'playTitle' : playDetails.getTitle()};
-  var sceneNumber = scene.getSceneNumber();
-  var batches = [];
-  batches.push([]);
-
-  scene.getDialogs().forEach(function(dialog) {
-    var speaker = dialog.getCharacter();
-    dialog.getEndStopped(true).forEach(function(upsertEndStoppedObject) {
-      //filterObject['lineNumber'] = upsertEndStoppedObject.lineNumber;
-      // TODO should all this be moved into Dialog class?
-      upsertEndStoppedObject['actNumber'] = actNumber;
-      upsertEndStoppedObject['sceneNumber'] = sceneNumber;
-      upsertEndStoppedObject['playTitle'] = play;
-      upsertEndStoppedObject['speaker'] = speaker;
-      upsertEndStoppedObject['_id'] = new ObjectID();
-      if (batches[batches.length - 1].length >= 1000) {
-        batches.push([]);
-      }
-      batches[batches.length - 1].push(upsertEndStoppedObject);
-    });
-  });
-
-  var endStoppedCollection = db.collection('endStopped');
-  PlayDB.insertBatches(db, endStoppedCollection, batches, 0, callback);
+  PlayDB.insertBatches(db, collection, batches, 0, callback);
 };
 
 PlayDB.insertBatches = function(db, collection, batchesArray, batchIndex, callback) {
@@ -225,32 +176,28 @@ PlayDB.insertBatches = function(db, collection, batchesArray, batchIndex, callba
   });
 };
 
+PlayDB.insertSceneLines = function(db, playDetails, scene, actNumber, callback) {
+  var playTitle = playDetails.getTitle();
+  var linesCollection = db.collection('lines');
+  PlayDB.insertGeneric(db, linesCollection, scene, 'getLines', playTitle, actNumber, callback);
+};
+
+PlayDB.insertSceneSentences = function(db, playDetails, scene, actNumber, callback) {
+  var playTitle = playDetails.getTitle();
+  var sentencesCollection = db.collection('sentences');
+  PlayDB.insertGeneric(db, sentencesCollection, scene, 'getSentences', playTitle, actNumber, callback);
+};
+
+PlayDB.insertEndStopped = function(db, playDetails, scene, actNumber, callback) {
+  var playTitle = playDetails.getTitle();
+  var endStoppedCollection = db.collection('endStopped');
+  PlayDB.insertGeneric(db, endStoppedCollection, scene, 'getEndStopped', playTitle, actNumber, callback);
+};
+
 PlayDB.insertPhrases = function(db, playDetails, scene, actNumber, callback) {
-  var play = playDetails.getTitle();
-  //var filterObject = {'playTitle' : playDetails.getTitle()};
-  var sceneNumber = scene.getSceneNumber();
-  var batches = [];
-  batches.push([]);
-
-  scene.getDialogs().forEach(function(dialog) {
-    var speaker = dialog.getCharacter();
-    dialog.getPhrases(true).forEach(function(upsertPhrasesObject) {
-      //filterObject['lineNumber'] = upsertPhrasesObject.lineNumber;
-      // TODO should all this be moved into Dialog class?
-      upsertPhrasesObject['actNumber'] = actNumber;
-      upsertPhrasesObject['sceneNumber'] = sceneNumber;
-      upsertPhrasesObject['playTitle'] = play;
-      upsertPhrasesObject['speaker'] = speaker;
-      upsertPhrasesObject['_id'] = new ObjectID();
-      if (batches[batches.length - 1].length >= 1000) {
-        batches.push([]);
-      }
-      batches[batches.length - 1].push(upsertPhrasesObject);
-    });
-  });
-
+  var playTitle = playDetails.getTitle();
   var phrasesCollection = db.collection('phrases');
-  PlayDB.insertBatches(db, phrasesCollection, batches, 0, callback);
+  PlayDB.insertGeneric(db, phrasesCollection, scene, 'getPhrases', playTitle, actNumber, callback);
 };
 
 

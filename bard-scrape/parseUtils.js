@@ -7,6 +7,25 @@ String.prototype.capitalizeFirstLetter = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+String.prototype.capitalizeAllFirstLetters = function() {//exceptionList) { // exception list would be like of, de, etc...
+  if (this.length === 0)
+    return;
+
+  // get indices to capitalize
+  var result = this.toLowerCase();
+  var match, indexes= [];
+  var re = /([ \t\n](?=[A-Za-z])(?!(of|de)))/g;
+  while ((match = re.exec(result)) != null)
+    indexes.push(match.index + 1);
+  var strSplit = result.split('');
+  // set the first index to capitalized as the regex doesn't catch that
+  strSplit[0] = strSplit[0].toUpperCase();
+  indexes.forEach(function(index) {
+    strSplit[index] = strSplit[index].toUpperCase();
+  });
+  return strSplit.join('');
+};
+
 function sortByWordCount(a, b) {
   var diff = b.split(' ').length - a.split(' ').length;
   if (diff !== 0)
@@ -137,16 +156,20 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
   return sentences;
 };
 
+
 ParseUtils.extractProperNouns = function(text) {
+  // trim of leading and trailing whitespace
   text = text.trim();
   // maybe with properNouns?
-  var re = /[\t\n ]+(([A-Z][a-z]+(( (of|de) [A-Z][a-z]+)|[ a-z]|)))+/g;
+  var re = /(|[ \t\n]+)(([A-Z][A-Za-z]+([ \t\n]+|))+(((of )(?=[A-Z]))|((de )(?=[A-Z]))|))+/g;
+  //var re = /([\n\t\[ ]+[A-Z][A-Za-z]+( of| de|))+/g;
+  //var re = /[\t\n ]+(([A-Z][a-z]+(( (of|de) [A-Z][a-z]+)|[ a-z]|)))+/g; // var re = /[\t\n ]+(([A-Z][a-z]+(( (of|de) [A-Z][a-z]+)|[ a-z]|)))+/g;
   var match = null;
   var properNounMap = {};
   // collect all words that start with a capital letter
   while ((match = re.exec(text)) != null) {
-    var properNoun = text.slice(match.index + 1, match.index + match[0].length);
-    properNounMap[match.index + match[0].length] = properNoun.trim();
+    var properNoun = text.slice(match.index, match.index + match[0].length);
+    properNounMap[match.index + match[0].length] = properNoun;
   }
 
   // remove any words that start with a capital letter but are preceded by a . ? or !
@@ -154,19 +177,72 @@ ParseUtils.extractProperNouns = function(text) {
   for (var key in properNounMap) {
     //((.')|[\?\.!\]])[\t ]+
     var temp = properNounMap[key];
-    var reTest = "((.')|[\\?\\.!\\]])[\\t\\n ]+" + temp;
-    var regex = new RegExp(reTest);
-    if (regex.test(text)) {
+    var reStart = "(^|[\\?\\.!\\]'])" + temp;//var reStart = "(^|((.')|[\\?\\.!\\]']))" + temp;
+    var regexStart = new RegExp(reStart);
+    var reBracket = "([\\[][\\w\\s\\.\\?!:;,\"']*)"+ temp + "([\\w\\s\\.\\?!:;,\"']*[\\]])";
+    var regexBracket = new RegExp(reBracket);
+    // always start 2 back so that we can maybe capture instances
+    var reIndexStart = parseInt(key) - temp.length - 1;
+    if (reIndexStart < 0) {
+      reIndexStart = 0;
+    }
+    var reIndexEnd = parseInt(key);
+    var testRegion = text.slice(reIndexStart, reIndexEnd)
+    if (regexStart.test(testRegion)) {
       // now that this regex is in the properNounMap see if there are pieces to keep
-      var tempSplit = temp.split(' ');
+      var tempSplit = temp.trim().split(/\s+/);
       if (tempSplit.length > 1) {
-        var newStart = text.indexOf(tempSplit[1], parseInt(key) - temp.length + 1);
-        properNounMap[key] = text.slice(newStart, parseInt(key));
+        // if 'of' or 'de' is the second word then let's try assuming the whole thing is a title:
+        if (tempSplit[1] === 'of' || tempSplit[1] === 'de') {
+          continue;
+        }
+
+        var newStart = text.indexOf(tempSplit[1], parseInt(key) - temp.length);
+        var slicedValue = text.slice(newStart, parseInt(key));
+        properNounMap[key] = slicedValue;
       } else {
         keysToDelete.push(key);
       }
+    } else if (regexBracket.test(text)) {
+      var indexOfStart = parseInt(key) - temp.length;
+      var tempSplit = temp.trim().split(/\s+/);
+      var newStart = null; //text.indexOf(tempSplit);
+      var endIndex = null; //parseInt(key);
+      var bDestroyOldKV = true;
+      var bCreateWord = false;
+      tempSplit.forEach(function(item, index, array) {
+        if (item.toUpperCase() === item && newStart === null) {
+          newStart = text.indexOf(item, indexOfStart); // we're assuming a word doesn't appear twice in the brackets
+          endIndex = newStart + item.length;
+          indexOfStart = endIndex;
+        } else if (item.toUpperCase() === item) {
+          endIndex = text.indexOf(item, indexOfStart) + item.length;
+          indexOfStart = endIndex;
+        } else if (newStart !== null) {
+          // if we've encounterd a not-all-caps word after a all caps, then return
+          bCreateWord = true;
+        } else {
+          // I guess this doesn't do anything? Just skips it?
+          console.log(item);
+        }
+        if (bCreateWord || (endIndex === parseInt(key) && newStart !== null)) {
+          var tempWord = text.slice(newStart, endIndex);
+          properNounMap[endIndex] = tempWord.capitalizeAllFirstLetters();
+          if (endIndex === parseInt(key)) {
+            bDestroyOldKV = false;
+          }
+          newStart = null;
+          endIndex = null;
+        }
+      });
+      if (bDestroyOldKV) {
+        keysToDelete.push(key);
+      }
     }
+
   }
+
+  // TODO deleting while iterating causes problems in other languages, so I'm assuming the same thing here?
   keysToDelete.forEach(function(key) {
     delete properNounMap[key];
   });

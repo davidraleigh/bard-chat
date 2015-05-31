@@ -196,19 +196,33 @@ describe('bardParse()', function () {
     assert.equal(results[0], "Animal");
   });
 
-  it ('regex test', function () {
-    var bardParse = new module.BardParse();
+  it ('regex test multiple spaces', function () {
+    var text = "An   Animal";
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "Animal");
+  });
+
+  it('test title starting points', function() {
+    var text = 'Title of Bard is a good one. King Big of Denny is screwed. But de Should work.';
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "Title of Bard");
+    assert.equal(results[1], "Big of Denny");
+    assert.equal(results[2], "But de Should");
+    assert.equal(results.length, 3);
+  })
+
+  it ('regex test 2 sentences', function () {
     var text = "An Animal is not Bland. Andrew Is Also not Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
     assert.equal(results[2], "Is Also");
     assert.equal(results[3], "Stupid");
+    assert.equal(results.length, 4);
   });
 
 
   it ('regex test lots of words', function () {
-    var bardParse = new module.BardParse();
     var text = "An Animal is not Bland! Andrew Is Also not Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
@@ -218,7 +232,6 @@ describe('bardParse()', function () {
   });
 
   it ('regex test with double spaces and lots of ??!!', function () {
-    var bardParse = new module.BardParse();
     var text = "An Animal is not Bland!!? Andrew Is.   Also not Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
@@ -228,7 +241,6 @@ describe('bardParse()', function () {
   });
 
   it ('regex test with period and newline', function () {
-    var bardParse = new module.BardParse();
     var text = "An Animal is not Bland!!? Andrew Is.\nAlso not Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
@@ -239,14 +251,12 @@ describe('bardParse()', function () {
 
 
   it ('regex test with new line', function () {
-    var bardParse = new module.BardParse();
     var text = "An Animal is not Bland! Andrew Is\nAlso not Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Stupid");
+    assert.equal(results[2], "Is\nAlso");
+    assert.equal(results[3], "Stupid");
   });
 
   it ('regex test with I', function () {
@@ -255,36 +265,78 @@ describe('bardParse()', function () {
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Stupid");
+    assert.equal(results[2], "Is\nAlso");
+    assert.equal(results[3], "Stupid");
   });
 
-  it ('regex test with double spaces and lots of ??!!', function () {
-    var bardParse = new module.BardParse();
+  it ('regex test with double spaces and lots of ??!! and a tab separation', function () {
     var text = "An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Stupid");
+    assert.equal(results[2], "Is\tAlso");
+    assert.equal(results[3], "Stupid");
   });
 
   //[To HELENA]  The best wishes that can be forged in
   it ('regex test with a bracket', function () {
-    var bardParse = new module.BardParse();
     var text = "[To HELENA]  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
     var results = ParseUtils.extractProperNouns(text);
-    assert.equal(results[0], "Animal");
-    assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
+    assert.equal(results[0], "Helena");
+    assert.equal(results[1], "Animal");
+    assert.equal(results[2], "Bland");
+    assert.equal(results[3], "Is\tAlso");
+    assert.equal(results[4], "Stupid");
+  });
+
+  //[To HELENA]  The best wishes that can be forged in
+  it ('regex test with a bracket and two word', function () {
+    var text = "[To KING LEROY]  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "King Leroy");
+    assert.equal(results[1], "Animal");
+    assert.equal(results[2], "Bland");
+    assert.equal(results[3], "Is\tAlso");
+    assert.equal(results[4], "Stupid");
+  });
+
+  it ('regex test with a bracket and multiple Leroys', function () {
+    var text = "[To KING LEROY]  King Leroy is not King Leroy !!? Andrew    Is\tAlso   bandicoot of King Leroy  or King Leroy  not     Stupid.";
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "King Leroy");
+    assert.equal(results[1], "Leroy");
+    assert.equal(results[2], "King Leroy");
+    assert.equal(results[3], "Is\tAlso");
+    assert.equal(results[4], "King Leroy");
+    assert.equal(results[5], "King Leroy");
+    assert.equal(results[6], "Stupid");
+  });
+
+  it ('regex test with a bracket and two proper noun words in the bracket', function () {
+    var text = "[Tall HELENA Whispers to KING LEROY Sweet nothings]  King Leroy is not King Leroy !!? Andrew    Is\tAlso   bandicoot of King Leroy  or King Leroy  not     Stupid.";
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "Helena");
+    assert.equal(results[1], "King Leroy");
+    assert.equal(results[2], "Leroy");
+    assert.equal(results[3], "King Leroy");
+    assert.equal(results[4], "Is\tAlso");
+    assert.equal(results[5], "King Leroy");
+    assert.equal(results[6], "King Leroy");
+    assert.equal(results[7], "Stupid");
+  });
+
+  it ('regex test with a bracket and one proper noun word in bracket ', function () {
+    var text = "[KING LEROY To ]  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results[0], "King Leroy");
+    assert.equal(results[1], "Animal");
+    assert.equal(results[2], "Bland");
+    assert.equal(results[3], "Is\tAlso");
     assert.equal(results[4], "Stupid");
   });
 
   //
-  it ('regex test with a bracket', function () {
+  it ('regex test with a comma and a 2 word propernoun', function () {
     var text = "To God of heaven, King Richard and to me;";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "God");
@@ -292,17 +344,32 @@ describe('bardParse()', function () {
   });
 
   it ('regex test with a tab', function () {
-    var bardParse = new module.BardParse();
     var text = "  An Animal is not Bland!!? Andrew    Is\tAlso    not     Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Animal");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Stupid");
+    assert.equal(results[2], "Is\tAlso");
+    assert.equal(results[3], "Stupid");
   });
 
   // Gerard de Vabon
+  it ('regex test with [Aside to', function() {
+    var text = '[Aside to GREGORY] Is the law of our side, if I say ay?';
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results.length, 1);
+    assert.equal(results[0], "Gregory");
+  });
+
+
+  //I Steven Sidler
+  // Gerard de Vabon
+  it ('regex test with I followed by 2 pronouns', function() {
+    var text = 'Is the law Bartleby of Dublin our side, if I Steven Sidler say ay?';
+    var results = ParseUtils.extractProperNouns(text);
+    assert.equal(results.length, 2);
+    assert.equal(results[0], "Bartleby of Dublin");
+    assert.equal(results[1], "Steven Sidler");
+  });
 
   it ('regex test with a Gerard de Vabon', function () {
     var bardParse = new module.BardParse();
@@ -310,9 +377,8 @@ describe('bardParse()', function () {
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Gerard de Vabon");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Paul de Stupid");
+    assert.equal(results[2], "Is\tAlso");
+    assert.equal(results[3], "Paul de Stupid");
   });
 
   it ('regex test with a Paul of Stupid', function () {
@@ -321,9 +387,8 @@ describe('bardParse()', function () {
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Gerard de Vabon");
     assert.equal(results[1], "Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Paul of Stupid");
+    assert.equal(results[2], "Is\tAlso");
+    assert.equal(results[3], "Paul of Stupid");
   });
 
   it ('regex test with a Paul of Stupid', function () {
@@ -332,13 +397,11 @@ describe('bardParse()', function () {
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Captain Vabon");
     assert.equal(results[1], "King Bland");
-    assert.equal(results[2], "Is");
-    assert.equal(results[3], "Also");
-    assert.equal(results[4], "Paul of Stupid");
+    assert.equal(results[2], "Is\tAlso");
+    assert.equal(results[3], "Paul of Stupid");
   });
 
   it ('regex ." sentence completion', function() {
-    var bardParse = new module.BardParse();
     var text = "Crying, 'That's good that's gone.' Our rash faults";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results.length, 0);
