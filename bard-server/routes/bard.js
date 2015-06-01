@@ -6,6 +6,8 @@ var router = express.Router();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var url = require('url');
+var qs = require('qs');
+
 
 var mongoURL = 'mongodb://localhost:27017/bard';
 
@@ -81,8 +83,8 @@ function draw(collection, query, callback, breakoutCount) {
         } else if (doc.length === 0) {
             // test length without random
             delete query['random'];
-            collection.count(query, function(err, result) {
-                if (result === 0)
+            collection.count(query, function(err, count) {
+                if (count === 0)
                     callback({err:'error'});
                 else
                     draw(collection, query, callback, breakoutCount + 1);
@@ -103,9 +105,47 @@ function draw(collection, query, callback, breakoutCount) {
 
 var quoteCollections = ['sentences', 'endStopped', 'phrases'];
 
+
+function qsCleanValue(val) {
+    if (typeof val == 'undefined' || val === null || val === '') {
+        return null;
+    } else if (val === 'false' || val === 'true') {
+        return val === 'true';
+    } else if (typeof val === 'string' && /^[-+]?(\d+|\d+\.\d*|\d*\.\d+)$/.test(val)) {
+        return Number(val);
+    } else if (Array.isArray(val)) {
+        return qsCleanArray(val);
+    } else if (typeof val === 'string') {
+        return val;
+    } else if (typeof val === 'object') {
+        return qsCleanObject(val);
+    } else {
+        console.log('WHAT HAPPPPPPPPENED!!!!!')
+        return val;
+    }
+}
+
+function qsCleanObject(obj) {
+    for (var key in obj) {
+        console.log(key);
+        obj[key] = qsCleanValue(obj[key]);
+    }
+    return obj;
+}
+
+function qsCleanArray(arr) {
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = qsCleanValue(arr[i]);
+    }
+}
+
+
 router.get('/play/quote', function(req, res, next) {
     // get the filter from the url.
-    var result = url.parse(req.url, true);
+    var result = url.parse(req.url, false);
+    var queryObj = qs.parse(result.query);
+    queryObj = qsCleanObject(queryObj);
+
     var quoteCollection = quoteCollections[Math.floor(Math.random()*quoteCollections.length)];
     // TODO handle the case where an incorrect formated url is passed.
     MongoClient.connect(mongoURL, function(err, db) {
@@ -113,7 +153,7 @@ router.get('/play/quote', function(req, res, next) {
         console.log("Connected correctly to server");
         res.setHeader('Content-Type', 'application/json');
         var collection = db.collection(quoteCollection);
-        draw(collection, result.query, function(err, result) {
+        draw(collection, queryObj, function(err, result) {
             if (err || result === null) {
                 // TODO return error
             }
