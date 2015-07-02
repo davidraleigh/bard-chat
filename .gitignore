@@ -2,7 +2,6 @@
 /bard-scrape/public/*
 /bard-scrape/routes/*
 /bard-scrape/views/*
-/bard-scrape/bin/*
 **/.idea/workspace.xml 
 **/.idea/tasks.xml
 
@@ -10,4 +9,3 @@
 /bard-server/node_modules/*
 /bard-server/public/*
 /bard-server/views/*
-/bard-server/bin/*
