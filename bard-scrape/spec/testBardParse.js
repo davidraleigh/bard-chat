@@ -1,6 +1,7 @@
 var path = require('path');
 var assert = require('assert');
 
+console.log(path.join(__dirname, '..', './bardParse.js'));
 var module = require(path.join(__dirname, '..', './bardParse.js'));
 var ParseUtils = require(path.join(__dirname, '..', './parseUtils.js')).ParseUtils;
 var PlayDetails = require(path.join(__dirname, '..', './playComponents.js')).PlayDetails;

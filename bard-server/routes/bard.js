@@ -155,6 +155,7 @@ router.get('/play/quote', function(req, res, next) {
         var collection = db.collection(quoteCollection);
         draw(collection, queryObj, function(err, result) {
             if (err || result === null) {
+                console.log("Argh!!! /play/quote error");
                 // TODO return error
             }
             res.send(JSON.stringify(result));
