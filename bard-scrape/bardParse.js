@@ -25,7 +25,8 @@ var PlayDB = require('./dbConnection.js').PlayDB;
 
 var jqueryURL = 'http://localhost:8080/static/jquery.js';
 // DATABASE Connection URL
-var url = 'mongodb://localhost:27017/bard';
+var url = 'mongodb://davidraleigh:ticANTiNGESulOM@ds055642-a0.mongolab.com:55642,ds055642-a1.mongolab.com:55642/bard-db?replicaSet=rs-ds055642'
+//var url = 'mongodb://localhost:27017/bard';
 
 var BardParse = function () {
   this.plays = [];
