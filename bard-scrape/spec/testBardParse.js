@@ -5,6 +5,7 @@ console.log(path.join(__dirname, '..', './bardParse.js'));
 var module = require(path.join(__dirname, '..', './bardParse.js'));
 var ParseUtils = require(path.join(__dirname, '..', './parseUtils.js')).ParseUtils;
 var PlayDetails = require(path.join(__dirname, '..', './playComponents.js')).PlayDetails;
+var Set = require(path.join(__dirname, '..', './playComponents.js')).Set;
 
 describe('bardParse()', function () {
   'use strict';
@@ -373,7 +374,6 @@ describe('bardParse()', function () {
   });
 
   it ('regex test with a Gerard de Vabon', function () {
-    var bardParse = new module.BardParse();
     var text = "  An Gerard de Vabon is not Bland!!? Andrew    Is\tAlso    not     Paul de Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Gerard de Vabon");
@@ -383,7 +383,6 @@ describe('bardParse()', function () {
   });
 
   it ('regex test with a Paul of Stupid', function () {
-    var bardParse = new module.BardParse();
     var text = "  An Gerard de Vabon is not Bland!!? Andrew    Is\tAlso    not     Paul of Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Gerard de Vabon");
@@ -393,7 +392,6 @@ describe('bardParse()', function () {
   });
 
   it ('regex test with a Paul of Stupid', function () {
-    var bardParse = new module.BardParse();
     var text = "  An Captain Vabon is not King Bland!!? Andrew    Is\tAlso    not     Paul of Stupid.";
     var results = ParseUtils.extractProperNouns(text);
     assert.equal(results[0], "Captain Vabon");
@@ -514,6 +512,178 @@ describe('bardParse()', function () {
     var sentences = ParseUtils.linesToSentences(lines);
     assert.equal(sentences[0], "I have been studying how I may compare this prison where I live unto the world: and for because the world is populous and here is not a creature but myself, i cannot do it; yet I'll hammer it out.");
   });
+
+  it ('test Set creation', function() {
+    var set = new Set();
+    assert.equal(set.size(), 0);
+  });
+
+  it ('test adding value', function() {
+    var set = new Set();
+    set.add(1);
+    assert.equal(set.size(), 1);
+  });
+
+  it ('test adding values', function() {
+    var set = new Set();
+    set.add(1);
+    set.add(2);
+    assert.equal(set.size(), 2);
+  });
+
+  it ('test retrieving values', function() {
+    var set = new Set();
+    set.add(1);
+    set.add(2);
+    var expected = [1, 2];
+    assert.deepEqual(set.slice(), expected);
+  });
+
+  it ('test sorting 2 values', function() {
+    var set = new Set();
+    set.add(2);
+    set.add(1);
+    var expected = [2, 1];
+    assert.deepEqual(set.sort(function (a, b) {
+      return b - a;
+    }), expected);
+  });
+
+  it ('test sorting mulctiple values', function() {
+    var set = new Set();
+    set.add(-1);
+    set.add(2);
+    set.add(5);
+    set.add(1);
+    var expected = [5, 2, 1, -1];
+    assert.deepEqual(set.sort(function (a, b) {
+      return b - a;
+    }), expected);
+  });
+
+  it ('test sorting mulctiple values and slicing original', function() {
+    var set = new Set();
+    set.add(-1);
+    set.add(2);
+    set.add(5);
+    set.add(1);
+    set.sort(function (a, b) {
+      return b - a;
+    });
+
+    var expected = [5, 2, 1, -1];
+    assert.deepEqual(set.slice(), expected);
+  });
+
+  it ('test adding the same value twice', function() {
+    var set = new Set();
+    set.add(1);
+    set.add(1);
+    assert.equal(set.size(), 1);
+    assert.deepEqual(set.slice(), [1]);
+  });
+
+  it ('test adding the same value multiple times', function() {
+    var set = new Set();
+    set.add(2);
+    set.add(1);
+    set.add(1);
+    set.add(3);
+    set.add(2);
+    set.add(-1);
+    set.add(2);
+    set.add(3);
+    assert.deepEqual(set.sort(function(a, b) {
+      return b - a;
+    }), [3, 2, 1, -1]);
+  });
+
+  it ('test adding vlaues by single entry and by array', function() {
+    var set = new Set();
+    set.add([4, -1]);
+    assert.deepEqual(set.sort(function(a, b) {
+      return b - a;
+    }), [4, -1]);
+  });
+
+  it ('test adding vlaues by single entry and by array', function() {
+    var set = new Set();
+    set.add(2);
+    set.add(1);
+    set.add(3);
+    set.add([4, -1]);
+    assert.deepEqual(set.sort(function(a, b) {
+      return b - a;
+    }), [4, 3, 2, 1, -1]);
+  });
+
+  it ('test adding vlaues by multiple arrays', function() {
+    var set = new Set();
+    set.add([4, 3, 1, 2]);
+    set.add([4, -1]);
+    assert.deepEqual(set.sort(function(a, b) {
+      return b - a;
+    }), [4, 3, 2, 1, -1]);
+  });
+
+  it ('test sorting multiple times', function() {
+    var set = new Set();
+    set.add([4, 3, 1, 2]);
+    assert.deepEqual(set.sort(function(a, b) {
+      return b - a;
+    }), [4, 3, 2, 1]);
+    assert.deepEqual(set.slice(), [4, 3, 2, 1]);
+    set.add([4, -1]);
+    assert.deepEqual(set.sort(function(a, b) {
+      return b - a;
+    }), [4, 3, 2, 1, -1]);
+  });
+
+  //<A NAME=1.1.320>And therefore, lovely Tamora, queen of Goths,</A><br>
+  //<A NAME=1.1.321>That like the stately Phoebe 'mongst her nymphs</A><br>
+  //<A NAME=1.1.322>Dost overshine the gallant'st dames of Rome,</A><br>
+  //<A NAME=1.1.323>If thou be pleased with this my sudden choice,</A><br>
+  //<A NAME=1.1.324>Behold, I choose thee, Tamora, for my bride,</A><br>
+  //<A NAME=1.1.325>And will create thee empress of Rome,</A><br>
+  //<A NAME=1.1.326>Speak, Queen of Goths, dost thou applaud my choice?</A><br>
+  //<A NAME=1.1.327>And here I swear by all the Roman gods,</A><br>
+  //<A NAME=1.1.328>Sith priest and holy water are so near</A><br>
+  //<A NAME=1.1.329>And tapers burn so bright and every thing</A><br>
+  //<A NAME=1.1.330>In readiness for Hymenaeus stand,</A><br>
+  //<A NAME=1.1.331>I will not re-salute the streets of Rome,</A><br>
+  //<A NAME=1.1.332>Or climb my palace, till from forth this place</A><br>
+  //<A NAME=1.1.333>I lead espoused my bride along with me.</A><br>
+  //{"_id" : ObjectId("556ae1099d631b4920deed4b"),
+  //  "sentenceText" : "And therefore, lovely Tamora, queen of Goths, that like the stately Phoebe 'mongst her nymphs dost overshine the gallant'st dames of Rome, if thou be pleased with this my sudden choice, behold, I choose thee, Tamora, for my bride, and will create thee empress of Rome, speak, Queen of Goths, dost thou applaud my choice?",
+  //  "dialogBlockStart" : "1.1.320",
+  //  "dialogBlockEnd" : "1.1.333",
+  //  "ICount" : 1,
+  //  "youCount" : 0,
+  //  "heCount" : 0,
+  //  "sheCount" : 0,
+  //  "theyCount" : 0,
+  //  "weCount" : 0,
+  //  "people" : [
+  //  "Tamora",
+  //  "Tamora"
+  //],
+  //  "locations" : [
+  //  "Rome",
+  //  "Rome",
+  //  "Rome"
+  //],
+  //  "otherNouns" : [
+  //  "Goths",
+  //  "Phoebe",
+  //  "Queen of Goths"
+  //],
+  //  "characterCount" : 320,
+  //  "communicationType" : "question",
+  //  "actNumber" : 1,
+  //  "sceneNumber" : 1,
+  //  "playTitle" : "Titus Andronicus",
+  //  "speaker" : "Saturninus",
+  //  "random" : 0.2896730974316597}
 
 
 

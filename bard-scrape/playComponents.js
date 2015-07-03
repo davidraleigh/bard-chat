@@ -4,17 +4,73 @@
 
 var ParseUtils = require('./parseUtils.js').ParseUtils;
 
+var Set = function() {
+  this.bResort = false;
+  this.setArray = [];
+  this.setMap = {};
+};
+
+Set.prototype.add = function(value) {
+  if (Array.isArray(value)) {
+    for (var i = 0; i < value.length; i++) {
+      if (this.hasValue(value[i]))
+        continue;
+
+      this.setMap[value[i]] = true;
+      this.setArray.push(value[i]);
+      this.bResort = true;
+    }
+
+    return;
+  }
+
+  if (this.hasValue(value))
+    return;
+
+  this.setMap[value] = true;
+  this.setArray.push(value);
+  this.bResort = true;
+};
+
+Set.prototype.hasValue = function(value) {
+  if (value in this.setMap)
+    return true;
+  return false;
+};
+
+Set.prototype.slice = function() {
+  return this.setArray.slice();
+};
+
+Set.prototype.sort = function(comparator) {
+  if (this.bResort) {
+    this.bResort = false;
+    return this.setArray.sort(comparator);
+  }
+
+  return this.setArray;
+};
+
+Set.prototype.size = function() {
+  return this.setArray.length;
+};
+
+
+
 var Dialog = function(speaker, type) {
   this.character = ParseUtils.allCapsToCapitalized(speaker);
   this.lines = [];
   this.sentences = [];
   this.endStopped = [];
   this.phrases = [];
+
+  // maybe these should be sets?
   this.people = [];
   this.locations= [];
   this.otherNouns = [];
-  this.type = type || 'dialog'; // prologue || epilogue
+  // maybe these should be sets?
 
+  this.type = type || 'dialog'; // prologue || epilogue
 
   // TODO maybe remove all the linked list stuff
   var prev = null;
@@ -498,7 +554,7 @@ PlayDetails.prototype.getAllProperNouns = function() {
   allProperNouns = allProperNouns.concat(this.locationSet.slice());
   allProperNouns = allProperNouns.concat(this.characterSet.slice());
   return allProperNouns.sort(sortByWordCount);
-}
+};
 
 PlayDetails.prototype.addCharacter = function(name) {
   // if name is all capitalized
@@ -515,7 +571,7 @@ PlayDetails.prototype.hasCharacter = function(name) {
   if (name in this.characterMap)
     return true;
   return false;
-}
+};
 
 PlayDetails.prototype.getCharacters = function() {
   // return names by order of most complex. complex being the name with the most words
@@ -549,14 +605,16 @@ PlayDetails.prototype.hasLocation = function(location) {
   if (location in this.locationMap)
     return true;
   return false;
-}
+};
 
 PlayDetails.prototype.getLocations = function() {
   return this.locationSet.sort(sortByWordCount);
-}
+};
 
 if ( typeof module !== "undefined" ) {
   exports.PlayDetails = PlayDetails;
   exports.Scene = Scene;
   exports.Dialog = Dialog;
+  // TODO this is only exported for testing purposes.
+  exports.Set = Set;
 }
