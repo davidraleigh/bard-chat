@@ -23,13 +23,28 @@ var Dialog = require('./playComponents.js').Dialog;
 var Scene = require('./playComponents.js').Scene;
 var PlayDB = require('./dbConnection.js').PlayDB;
 
-var jqueryURL = 'http://localhost:8080/static/jquery.js';
+var jqueryURL = 'http://localhost:8080/static/jquery.js';//"http://code.jquery.com/jquery.js"
 // DATABASE Connection URL
-var url = 'mongodb://davidraleigh:ticANTiNGESulOM@ds055642-a0.mongolab.com:55642,ds055642-a1.mongolab.com:55642/bard-db?replicaSet=rs-ds055642'
-//var url = 'mongodb://localhost:27017/bard';
+//var url = 'mongodb://davidraleigh:ticANTiNGESulOM@ds055642-a0.mongolab.com:55642,ds055642-a1.mongolab.com:55642/bard-db?replicaSet=rs-ds055642'
+var url = 'mongodb://localhost:27017/bard';
 
 var BardParse = function () {
-  this.plays = [];
+  //this.plays = [];
+};
+
+var removeBadMITPlays = function(obj) {
+  var result = {"mitLibrary": []};
+  for (var i = 0; i < obj.mitLibrary.length; i++) {
+    var playTitle = obj.mitLibrary[i].play.text;
+    if (playTitle === "Taming of the Shrew" ||
+        playTitle === "Henry IV, part 1" ||
+        playTitle === "Henry VI, part 2" ||
+        playTitle === "Timon of Athens") {
+      continue;
+    }
+    result.mitLibrary.push(obj.mitLibrary[i]);
+  }
+  return result;
 };
 
 BardParse.parseFromJSON = function() {
@@ -44,6 +59,7 @@ BardParse.parseFromJSON = function() {
       }
       // get the list of all plays and their associated URLs
       var obj =  JSON.parse(data);
+      obj = removeBadMITPlays(obj);
       BardParse.parsePlayFromJSON(db, obj.mitLibrary, obj.mitLibrary.length - 1, function(error) {
         if (error) {
           console.log('error message: ', error);
@@ -55,7 +71,8 @@ BardParse.parseFromJSON = function() {
 };
 
 BardParse.parsePlayFromJSON = function(db, playArray, index, callback) {
-  if (index <= 0) {//>= playArray.length) {
+  if (index < 0) {//>= playArray.length) {
+    // finished reading all the plays
     callback();
     return;
   }
@@ -101,7 +118,6 @@ BardParse.parsePlayFromJSON = function(db, playArray, index, callback) {
 
 };
 
-
 // TODO REMOVE
 BardParse.save = function(db, playDetails, callback) {
   PlayDB.savePlay(db, playDetails, callback);
@@ -111,7 +127,7 @@ BardParse.parse = function(body, callback) {
   var playDetails = new PlayDetails(body);
   jsdom.env(
     body,
-    [jqueryURL],//"http://code.jquery.com/jquery.js"
+    [jqueryURL],
     function (errors, window) {
       if (errors) {
         callback(errors);
@@ -224,6 +240,7 @@ BardParse.parseDialog = function(window, playDetails, callback) {
   var peopleProperNouns = playDetails.getCharacters();
   var locationProperNouns = playDetails.getLocations();
   var otherProperNouns = playDetails.getOtherProperNouns();
+  // by concating the titles it gives them less weight? Can't remember
   var properNouns = playDetails.getAllProperNouns().concat(ParseUtils.getTitles());
   while(jObj.length > 0) {
     if (jObj.is('h3')) {
