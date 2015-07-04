@@ -400,6 +400,7 @@ describe('bardParse()', function () {
     assert.equal(results[3], "Paul of Stupid");
   });
 
+
   it ('regex ." sentence completion', function() {
     var text = "Crying, 'That's good that's gone.' Our rash faults";
     var results = ParseUtils.extractProperNouns(text);
@@ -638,6 +639,39 @@ describe('bardParse()', function () {
       return b - a;
     }), [4, 3, 2, 1, -1]);
   });
+
+  it ('testing set foreach', function() {
+    var set = new Set();
+    set.add([4, 3, 1, 2]);
+    var total = 0;
+    set.forEach(function(item) {
+      total += item;
+    });
+    assert.equal(total, 10);
+  });
+  //Justice\tAnd
+  //Justice\tSir John Falstaff
+
+  //<A NAME=1.1.76>O, were that all! I think not on my father;</A><br>
+  //<A NAME=1.1.77>And these great tears grace his remembrance more</A><br>
+  //<A NAME=1.1.78>Than those I shed for him. What was he like?</A><br>
+  //<A NAME=1.1.79>I have forgot him: my imagination</A><br>
+  //<A NAME=1.1.80>Carries no favour in't but Bertram's.</A><br>
+  //<A NAME=1.1.81>I am undone: there is no living, none,</A><br>
+  //<A NAME=1.1.82>If Bertram be away. 'Twere all one</A><br>
+  //<A NAME=1.1.83>That I should love a bright particular star</A><br>
+  //<A NAME=1.1.84>And think to wed it, he is so above me:</A><br>
+  //<A NAME=1.1.85>In his bright radiance and collateral light</A><br>
+  //<A NAME=1.1.86>Must I be comforted, not in his sphere.</A><br>
+  //<A NAME=1.1.87>The ambition in my love thus plagues itself:</A><br>
+  //<A NAME=1.1.88>The hind that would be mated by the lion</A><br>
+  //<A NAME=1.1.89>Must die for love. 'Twas pretty, though plague,</A><br>
+  //<A NAME=1.1.90>To see him every hour; to sit and draw</A><br>
+  //<A NAME=1.1.91>His arched brows, his hawking eye, his curls,</A><br>
+  //<A NAME=1.1.92>In our heart's table; heart too capable</A><br>
+  //<A NAME=1.1.93>Of every line and trick of his sweet favour:</A><br>
+  //<A NAME=1.1.94>But now he's gone, and my idolatrous fancy</A><br>
+  //<A NAME=1.1.95>Must sanctify his reliques. Who comes here?</A><br>
 
   //<A NAME=1.1.320>And therefore, lovely Tamora, queen of Goths,</A><br>
   //<A NAME=1.1.321>That like the stately Phoebe 'mongst her nymphs</A><br>

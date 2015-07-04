@@ -38,6 +38,7 @@ Set.prototype.hasValue = function(value) {
   return false;
 };
 
+// TODO probably good to just have a getArray call that grabs the reference instead of slicing.
 Set.prototype.slice = function() {
   return this.setArray.slice();
 };
@@ -55,6 +56,10 @@ Set.prototype.size = function() {
   return this.setArray.length;
 };
 
+Set.prototype.forEach = function(callback) {
+  this.setArray.forEach(callback);
+};
+
 
 
 var Dialog = function(speaker, type) {
@@ -64,11 +69,9 @@ var Dialog = function(speaker, type) {
   this.endStopped = [];
   this.phrases = [];
 
-  // maybe these should be sets?
-  this.people = [];
-  this.locations= [];
-  this.otherNouns = [];
-  // maybe these should be sets?
+  this.people = new Set();
+  this.locations= new Set();
+  this.otherNouns = new Set();
 
   this.type = type || 'dialog'; // prologue || epilogue
 
@@ -98,9 +101,11 @@ Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, oth
       'locations' : locations || [],
       'otherNouns' : otherNouns || []
     });
-  Array.prototype.push.apply(this.people, people);
-  Array.prototype.push.apply(this.locations, locations);
-  Array.prototype.push.apply(this.otherNouns, otherNouns);
+
+  // this.people.add(people);
+  this.people.add(people);
+  this.locations.add(locations);
+  this.otherNouns.add(otherNouns);
 };
 
 Dialog.prototype.getCharacter = function() {
@@ -210,28 +215,28 @@ Dialog.prototype.sentencesToEndStopped = function() {
   this.sentences.forEach(function(sentenceObj) {
     var endStoppedLines = ParseUtils.sentenceToEndStopped(sentenceObj.sentenceText);
     endStoppedLines.forEach(function(endStoppedText) {
-      var endStoppedPeople = [];
-      var endStoppedLocations = [];
-      var endStoppedOtherNouns = [];
+      var endStoppedPeople = new Set();
+      var endStoppedLocations = new Set();
+      var endStoppedOtherNouns = new Set();
 
       sentenceObj.people.forEach(function(person) {
         if (endStoppedText.indexOf(person) !== -1) {
-          endStoppedPeople.push(person);
+          endStoppedPeople.add(person);
         }
       });
       sentenceObj.locations.forEach(function(location){
         if (endStoppedText.indexOf(location) !== -1) {
-          endStoppedLocations.push(location);
+          endStoppedLocations.add(location);
         }
       });
       sentenceObj.otherNouns.forEach(function(otherNoun) {
         if (endStoppedText.indexOf(otherNoun) !== -1) {
-          endStoppedOtherNouns.push(otherNoun);
+          endStoppedOtherNouns.add(otherNoun);
         }
       });
 
       // TODO, this is wrong, a end stopped will not have all the people of a sentence, but it will have a subset
-      boundEndStoppedAdd(endStoppedText, endStoppedPeople, endStoppedLocations, endStoppedOtherNouns, sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
+      boundEndStoppedAdd(endStoppedText, endStoppedPeople.slice(), endStoppedLocations.slice(), endStoppedOtherNouns.slice(), sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
     });
   });
 };
@@ -242,28 +247,28 @@ Dialog.prototype.sentencesToPhrases = function() {
   this.sentences.forEach(function(sentenceObj) {
     var phrases = ParseUtils.sentenceToCommaPhrase(sentenceObj.sentenceText);
     phrases.forEach(function(phraseText) {
-      var phrasePeople = [];
-      var phraseLocations = [];
-      var phraseOtherNouns = [];
+      var phrasePeople = new Set();
+      var phraseLocations = new Set();
+      var phraseOtherNouns = new Set();
 
       sentenceObj.people.forEach(function(person) {
         if (phraseText.indexOf(person) !== -1) {
-          phrasePeople.push(person);
+          phrasePeople.add(person);
         }
       });
       sentenceObj.locations.forEach(function(location){
         if (phraseText.indexOf(location) !== -1) {
-          phraseLocations.push(location);
+          phraseLocations.add(location);
         }
       });
       sentenceObj.otherNouns.forEach(function(otherNoun) {
         if (phraseText.indexOf(otherNoun) !== -1) {
-          phraseOtherNouns.push(otherNoun);
+          phraseOtherNouns.add(otherNoun);
         }
       });
 
       // TODO, this is wrong, a phrase will not have all the people of a sentence, but it will have a subset
-      boundPhraseAdd(phraseText, phrasePeople, phraseLocations, phraseOtherNouns, sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
+      boundPhraseAdd(phraseText, phrasePeople.slice(), phraseLocations.slice(), phraseOtherNouns.slice(), sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
     });
   });
 };
@@ -275,26 +280,31 @@ Dialog.prototype.linesToSentences = function(properNouns) {
   // TODO this makes me so sad. Better to fold this into linesToSentences, but for now the hack lives
   for (var i = 0; i < sentences.length; i++) {
     var sentenceText = sentences[i];
-    var sentencePeople = [];
-    var sentenceLocations = [];
-    var sentenceOtherNouns = [];
+    var sentencePeople = new Set();
+    var sentenceLocations = new Set();
+    var sentenceOtherNouns = new Set();
     this.people.forEach(function(person) {
       if (sentenceText.indexOf(person) !== -1) {
-        sentencePeople.push(person);
+        sentencePeople.add(person);
       }
     });
     this.locations.forEach(function(location) {
       if (sentenceText.indexOf(location) !== -1) {
-        sentenceLocations.push(location);
+        sentenceLocations.add(location);
       }
     });
     this.otherNouns.forEach(function(otherNoun) {
       if (sentenceText.indexOf(otherNoun) !== -1) {
-        sentenceOtherNouns.push(otherNoun);
+        sentenceOtherNouns.add(otherNoun);
       }
     });
 
-    this.addSentence(sentenceText, sentencePeople, sentenceLocations, sentenceOtherNouns, lines[0].lineNumber, lines[lines.length - 1].lineNumber);
+    this.addSentence(sentenceText,
+                     sentencePeople.slice(),
+                     sentenceLocations.slice(),
+                     sentenceOtherNouns.slice(),
+                     lines[0].lineNumber,
+                     lines[lines.length - 1].lineNumber);
   }
 };
 
@@ -418,12 +428,17 @@ var PlayDetails = function(html) {
   // this.acts = {1: [sceneObj1, sceneObj2], 2: [sceneObj1]};
   this.fullHTML = html || "";
   this.acts = {};
-  this.characterSet = [];
-  this.characterMap = {};
-  this.locationSet = [];
-  this.locationMap = {};
-  this.otherProperNounSet = [];
-  this.otherProperNounMap = {};
+
+  // Should replace with Set
+  this.characterSet = new Set();
+  //this.characterMap = {};
+  this.locationSet = new Set();
+  //this.locationMap = {};
+  this.otherProperNounSet = new Set();
+  //this.otherProperNounMap = {};
+  this.allProperNounsSet = new Set();
+  // Should replace with Set
+
   this.prologue = {};
   this.epilogue = {};
   this.isPlayComplete = false;
@@ -538,39 +553,32 @@ function sortByWordCount(a, b) {
 
 PlayDetails.prototype.addOtherProperNoun = function(noun) {
   // TODO this "And" is totally not a solution!!!
-  if (noun in this.otherProperNounMap || noun in this.characterMap || noun in this.locationMap || noun === "And")
+  if (this.characterSet.hasValue(noun) || this.locationSet.hasValue(noun) || noun === "And")
     return;
 
-  this.otherProperNounMap[noun] = true;
-  this.otherProperNounSet.push(noun);
+  this.otherProperNounSet.add(noun);
+  this.allProperNounsSet.add(noun);
 };
 
 PlayDetails.prototype.getOtherProperNouns = function() {
   return this.otherProperNounSet.sort(sortByWordCount);
-}
+};
 
+// TODO maybe this should be a set that is maintained along with locationSet, characterSet, and otherPronounSet?
 PlayDetails.prototype.getAllProperNouns = function() {
-  var allProperNouns = this.otherProperNounSet.slice();
-  allProperNouns = allProperNouns.concat(this.locationSet.slice());
-  allProperNouns = allProperNouns.concat(this.characterSet.slice());
-  return allProperNouns.sort(sortByWordCount);
+  return this.allProperNounsSet.sort(sortByWordCount);
+  //var allProperNouns = this.otherProperNounSet.slice();
+  //allProperNouns = allProperNouns.concat(this.locationSet.slice());
+  //allProperNouns = allProperNouns.concat(this.characterSet.slice());
+  //return allProperNouns.sort(sortByWordCount);
 };
 
 PlayDetails.prototype.addCharacter = function(name) {
   // if name is all capitalized
   name = ParseUtils.allCapsToCapitalized(name);
 
-  if (this.hasCharacter(name))
-    return;
-
-  this.characterMap[name] = true;
-  this.characterSet.push(name);
-};
-
-PlayDetails.prototype.hasCharacter = function(name) {
-  if (name in this.characterMap)
-    return true;
-  return false;
+  this.characterSet.add(name);
+  this.allProperNounsSet.add(name);
 };
 
 PlayDetails.prototype.getCharacters = function() {
@@ -594,17 +602,8 @@ PlayDetails.prototype.addLocation = function(location) {
     return;
   }
 
-  if (this.hasLocation(location))
-    return;
-
-  this.locationMap[location] = true;
-  this.locationSet.push(location);
-};
-
-PlayDetails.prototype.hasLocation = function(location) {
-  if (location in this.locationMap)
-    return true;
-  return false;
+  this.locationSet.add(location);
+  this.allProperNounsSet.add(location);
 };
 
 PlayDetails.prototype.getLocations = function() {
