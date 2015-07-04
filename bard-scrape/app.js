@@ -62,6 +62,7 @@ var bardParse = new rH.BardParse();
 //rH.BardParse.parseFromHTMLFile('./richardII.html');
 //rH.BardParse.parseFromHTMLFile('./henryV.html');
 //rH.BardParse.parseFromHTMLFile('./henry4pt2.html');
+//rH.BardParse.parseFromHTMLFile('./full.html');
 rH.BardParse.parseFromJSON();
 
 module.exports = app;
