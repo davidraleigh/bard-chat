@@ -2,7 +2,7 @@
 /bard-scrape/public/*
 /bard-scrape/routes/*
 /bard-scrape/views/*
-**/.idea/workspace.xml 
+/bard-scrape/.idea/workspace.xml
 **/.idea/tasks.xml
 
 *.log
