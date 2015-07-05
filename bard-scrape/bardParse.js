@@ -38,7 +38,7 @@ var removeBadMITPlays = function(obj) {
     var playTitle = obj.mitLibrary[i].play.text;
     if (playTitle === "Taming of the Shrew" ||
         playTitle === "Henry IV, part 1" ||
-        playTitle === "Henry VI, part 2" ||
+        playTitle === "Henry IV, part 2" ||
         playTitle === "Timon of Athens") {
       continue;
     }
