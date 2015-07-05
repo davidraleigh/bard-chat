@@ -56,7 +56,7 @@ ParseUtils.getWordOccurrence = function(text, subString, allowOverlapping) {
 
 ParseUtils.sentenceToEndStopped = function(sentence) {
   sentence = sentence.trim();
-  var endStoppedPhrases = sentence.match(/[^\:\;]+[\:\;\.\?\!']+(?=[ \n]|$)/g);
+  var endStoppedPhrases = sentence.match(/[^\:\;]+[\:\;\.\?\!']+(?=[ \n]|(--)|$)/g);
   var results = [];
   if (endStoppedPhrases === null)
     return results;
@@ -71,7 +71,7 @@ ParseUtils.sentenceToCommaPhrase = function(sentence, minPhraseSize) {
   // TODO require that phrases are at least 2 words long
   // TODO separate out quoted sections first
   sentence = sentence.trim();
-  var phrases = sentence.match(/[^\.\!\?\:\;\,]+[\:\;\.\?\!\,']+(?=[ \n]|$)/g);
+  var phrases = sentence.match(/[^\.\!\?\:\;\,]+[\:\;\.\?\!\,']+(?=[ \n]|(--)|$)/g);
   var results = [];
   if (phrases === null)
     return results;
@@ -93,12 +93,15 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
   for (var i = 0; i < lines.length; i++) {
     // get the current line
     currentLine = lines[i].trim();
+
+    // replace any instances of '?--','!--','.--' with ?
+
     if (currentLine.length === 0)
       continue;
 
     // split the line by regex for sentence endings
     // this will not return any results if there is no separating character (.?! etc)
-    var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g );
+    var result = currentLine.match( /[^\.!\?]+[\.!\?']+(?=[ \n]|(--)|$)/g );
 
     // if there are no splits then the whole line is part of another sentence
     if (result === null) {
@@ -120,7 +123,7 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
     }
 
     // this WILL return a results even if there are no separating characters (.?! etc)
-    result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|$)/g );//[^\.!\?]+([\.!\?]|$)+
+    result = currentLine.match( /[^\.!\?]+([\.!\?']|$)+(?=[ \n]|(--)|$)/g );//[^\.!\?]+([\.!\?]|$)+
     // if there is a previous sentence
     if (currentSentence.trim().length > 0) {
       // grab the first word of the line and check for Proper noun table
@@ -131,15 +134,28 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
 
       sentences.push((currentSentence + " " + firstLetter + result[0].slice(1)).capitalizeFirstLetter());
     } else {
-      sentences.push(result[0].capitalizeFirstLetter());
+      // if a sentence starts with the --. Like '--Thou has a bunion!' then slice from 3 character on
+      if (result[0][0] === '-' && result[0][1] === '-') {
+        sentences.push(result[0].slice(2).capitalizeFirstLetter());
+      } else {
+        sentences.push(result[0].capitalizeFirstLetter());
+      }
     }
 
     for (var j = 1; j < result.length - 1; j++) {
-      sentences.push(result[j].trim().capitalizeFirstLetter());
+      if (result[j][0] === '-' && result[j][1] === '-') {
+        sentences.push(result[j].trim().slice(2).capitalizeFirstLetter());
+      } else {
+        sentences.push(result[j].trim().capitalizeFirstLetter());
+      }
     }
 
-    if (/[^\.!\?]+[\.!\?']+(?=[ \n]|$)/g.test(result[result.length - 1]) && result.length > 1) {
-      sentences.push(result[result.length - 1].trim().capitalizeFirstLetter());
+    if (/[^\.!\?]+[\.!\?']+(?=[ \n]|(--)|$)/g.test(result[result.length - 1]) && result.length > 1) {
+      if (result[result.length - 1][0] === '-' && result[result.length - 1][1] === '-') {
+        sentences.push(result[result.length - 1].trim().slice(2).capitalizeFirstLetter());
+      } else {
+        sentences.push(result[result.length - 1].trim().capitalizeFirstLetter());
+      }
       // TODO it seems like this assignment is unnecessary
       currentSentence = "";
     } else if (result.length > 1) {
@@ -150,7 +166,12 @@ ParseUtils.linesToSentences = function(lines, properNouns) {
     }
   }
   if (currentSentence.trim().length > 0) {
-    sentences.push(currentSentence.trim().capitalizeFirstLetter());
+    // TODO maybe there should be something to handle the '--Thou has a bunion' case.
+    if (currentSentence[0] === '-' && currentSentence[1] === '-') {
+      sentences.push(currentSentence.trim().slice(2).capitalizeFirstLetter());
+    } else {
+      sentences.push(currentSentence.trim().capitalizeFirstLetter());
+    }
   }
 
   return sentences;
@@ -160,7 +181,8 @@ ParseUtils.extractProperNouns = function(text) {
   // trim of leading and trailing whitespace
   text = text.trim();
   // maybe with properNouns?
-  var re = /(|[ \t\n]+)(([A-Z][A-Za-z]+([ \t\n]+|))+(((of )(?=[A-Z]))|((de )(?=[A-Z]))|))+/g;
+  //var re = /(|[ \t\n]+)(([A-Z][A-Za-z]+([ \t\n]+|))+(((of )(?=[A-Z]))|((de )(?=[A-Z]))|))+/g;
+  var re = /(|(--)|[ \t\n]+)(([A-Z][A-Za-z]+([ \t\n]+|))+(((of )(?=[A-Z]))|((de )(?=[A-Z]))|))+/g;
   //var re = /([\n\t\[ ]+[A-Z][A-Za-z]+( of| de|))+/g;
   //var re = /[\t\n ]+(([A-Z][a-z]+(( (of|de) [A-Z][a-z]+)|[ a-z]|)))+/g; // var re = /[\t\n ]+(([A-Z][a-z]+(( (of|de) [A-Z][a-z]+)|[ a-z]|)))+/g;
   var match = null;
@@ -253,7 +275,12 @@ ParseUtils.extractProperNouns = function(text) {
   var results = [];
   var vals = Object.keys(properNounMap).sort(sortNumber);
   vals.forEach(function(key) {
-    results.push(properNounMap[key].trim());
+    if (properNounMap[key].trim() === 'You')
+      return;
+    if (properNounMap[key][0] === '-' || properNounMap[key][1] === '-')
+      results.push(properNounMap[key].slice(2).trim());
+    else
+      results.push(properNounMap[key].trim());
   });
 
   return results;

@@ -514,6 +514,53 @@ describe('bardParse()', function () {
     assert.equal(sentences[0], "I have been studying how I may compare this prison where I live unto the world: and for because the world is populous and here is not a creature but myself, i cannot do it; yet I'll hammer it out.");
   });
 
+  it ('test -- separator for starting new sentence', function() {
+    var lines = [];
+    lines.push('How! my good name? or to--report of you');
+    lines.push('What I shall think is good?--The princess!');
+    var sentences = ParseUtils.linesToSentences(lines);
+    assert.equal(sentences[0], 'How!');
+    assert.equal(sentences[1], 'My good name?');
+    assert.equal(sentences[2], 'Or to--report of you what I shall think is good?');
+    assert.equal(sentences[3], 'The princess!');
+  });
+
+  it ('test -- separator for starting new sentence on a new line', function() {
+    var lines = [];
+    lines.push('How! my good name? or to--report of you');
+    lines.push('What I shall think is good?');
+    lines.push('--The princess!');
+    var sentences = ParseUtils.linesToSentences(lines);
+    assert.equal(sentences[0], 'How!');
+    assert.equal(sentences[1], 'My good name?');
+    assert.equal(sentences[2], 'Or to--report of you what I shall think is good?');
+    assert.equal(sentences[3], 'The princess!');
+  });
+
+  it ('test -- separator for starting new sentence on a new line', function() {
+    var lines = [];
+    lines.push('--The princess!');
+    lines.push('How! my good name? or to--report of you');
+    lines.push('What I shall think is good?');
+    var sentences = ParseUtils.linesToSentences(lines);
+    assert.equal(sentences[0], 'The princess!');
+    assert.equal(sentences[1], 'How!');
+    assert.equal(sentences[2], 'My good name?');
+    assert.equal(sentences[3], 'Or to--report of you what I shall think is good?');
+  });
+
+  it ('test -- proper noun detection', function() {
+    var line = 'What I shall think is good?--The princess!';
+    var proper = ParseUtils.extractProperNouns(line, []);
+    assert.equal(proper.length, 0);
+  });
+
+  it ('test -- with proper noun', function() {
+    var line = 'out, they will spit; and for lovers lacking--God';
+    var proper = ParseUtils.extractProperNouns(line, []);
+    assert.equal(proper[0], 'God');
+  });
+
   it ('test Set creation', function() {
     var set = new Set();
     assert.equal(set.size(), 0);
