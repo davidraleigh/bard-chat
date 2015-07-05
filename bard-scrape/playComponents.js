@@ -3,6 +3,7 @@
  */
 
 var ParseUtils = require('./parseUtils.js').ParseUtils;
+var sentiment = require('sentiment');
 
 var Set = function() {
   this.bResort = false;
@@ -95,7 +96,8 @@ Dialog.prototype.isEpilogue = function() {
 Dialog.prototype.addLine = function(lineText, lineNumber, people, locations, otherNouns) {
   this.lines.push(
     {
-      'lineText' : lineText,
+      'text' : lineText,
+      'textType' : 'lineType',
       'lineNumber' : lineNumber,
       'people' : people || [],
       'locations' : locations || [],
@@ -112,6 +114,58 @@ Dialog.prototype.getCharacter = function() {
   return this.character;
 };
 
+Dialog.prototype.addText = function(text, textType, people, locations, otherNouns, dialogBlockStart, dialogBlockEnd) {
+  var communicationType = 'unknown';
+  if (text[text.length - 1] === '?')
+    communicationType = 'question';
+  else if (text[text.length - 1] === '!')
+    communicationType = 'exclamation';
+  else if (text.indexOf("No") === 0)
+    communicationType = 'negation';
+  else if (text.indexOf('Yes') === 0)
+    communicationType = 'affirmation';
+  else if (text.indexOf('But') === 0)
+    communicationType = 'excuse';
+
+  var sentimentAnalysis = sentiment(text);
+  var textObj = {
+    'text' : text,
+    'textType' : textType,//'sentenceType',
+    'wordCount' : text.split(/\S+/g).length,
+    'sentimentScore' : sentimentAnalysis.score,
+    'sentimentComparative' : sentimentAnalysis.comparative,
+    'sentimentPositiveWords' : sentimentAnalysis.positive,
+    'sentimentNegativeWords' : sentimentAnalysis.negative,
+    'dialogBlockStart' : dialogBlockStart,
+    'dialogBlockEnd' : dialogBlockEnd,
+    'ICount' : ParseUtils.getWordOccurrence(text, ' I ', false),
+    'youCount' : ParseUtils.getWordOccurrence(text.toLowerCase(), ' you ', false),
+    'heCount' : ParseUtils.getWordOccurrence(text.toLowerCase(), ' he ', false),
+    'sheCount' : ParseUtils.getWordOccurrence(text.toLowerCase(), ' she ', false),
+    'theyCount' : ParseUtils.getWordOccurrence(text.toLowerCase(), ' they ', false),
+    'weCount' : ParseUtils.getWordOccurrence(text.toLowerCase(), ' we ', false),
+    'people' : people || [],
+    'locations' : locations || [],
+    'otherNouns' : otherNouns || [],
+    'characterCount' : text.length,
+    'communicationType' : communicationType
+  };
+
+  switch (textType){
+    case 'sentenceType':
+      this.sentences.push(textObj);
+      break;
+    case 'phraseType':
+      this.phrases.push(textObj);
+      break;
+    case 'endStoppedType':
+      this.endStopped.push(textObj);
+      break;
+  }
+
+  return textObj;
+};
+
 Dialog.prototype.addSentence = function(sentenceText, people, locations, otherNouns, dialogBlockStart, dialogBlockEnd) {
   var communicationType = 'unknown';
   if (sentenceText[sentenceText.length - 1] === '?')
@@ -126,7 +180,8 @@ Dialog.prototype.addSentence = function(sentenceText, people, locations, otherNo
     communicationType = 'excuse';
 
   var sentence = {
-    'sentenceText' : sentenceText,
+    'text' : sentenceText,
+    'textType' : 'sentenceType',
     'dialogBlockStart' : dialogBlockStart,
     'dialogBlockEnd' : dialogBlockEnd,
     'ICount' : ParseUtils.getWordOccurrence(sentenceText, ' I ', false),
@@ -160,7 +215,8 @@ Dialog.prototype.addEndStopped = function(endStoppedText, people, locations, oth
 
     this.endStopped.push(
       {
-        'endStoppedText' : endStoppedText,
+        'text' : endStoppedText,
+        'textType' : 'endStoppedType',
         'dialogBlockStart' : dialogBlockStart,
         'dialogBlockEnd' : dialogBlockEnd,
         'ICount' : ParseUtils.getWordOccurrence(endStoppedText, ' I ', false),
@@ -192,7 +248,8 @@ Dialog.prototype.addPhrase = function(phraseText, people, locations, otherNouns,
 
   this.phrases.push(
     {
-      'phraseText' : phraseText,
+      'text' : phraseText,
+      'textType' : 'phraseType',
       'dialogBlockStart' : dialogBlockStart,
       'dialogBlockEnd' : dialogBlockEnd,
       'ICount' : ParseUtils.getWordOccurrence(phraseText, ' I ', false),
@@ -210,10 +267,10 @@ Dialog.prototype.addPhrase = function(phraseText, people, locations, otherNouns,
 };
 
 Dialog.prototype.sentencesToEndStopped = function() {
-  var boundEndStoppedAdd = Dialog.prototype.addEndStopped.bind(this);
+  var boundEndStoppedAdd = Dialog.prototype.addText.bind(this);
 
   this.sentences.forEach(function(sentenceObj) {
-    var endStoppedLines = ParseUtils.sentenceToEndStopped(sentenceObj.sentenceText);
+    var endStoppedLines = ParseUtils.sentenceToEndStopped(sentenceObj.text);
     endStoppedLines.forEach(function(endStoppedText) {
       var endStoppedPeople = new Set();
       var endStoppedLocations = new Set();
@@ -236,16 +293,16 @@ Dialog.prototype.sentencesToEndStopped = function() {
       });
 
       // TODO, this is wrong, a end stopped will not have all the people of a sentence, but it will have a subset
-      boundEndStoppedAdd(endStoppedText, endStoppedPeople.slice(), endStoppedLocations.slice(), endStoppedOtherNouns.slice(), sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
+      boundEndStoppedAdd(endStoppedText, 'endStoppedType', endStoppedPeople.slice(), endStoppedLocations.slice(), endStoppedOtherNouns.slice(), sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
     });
   });
 };
 
 Dialog.prototype.sentencesToPhrases = function() {
-  var boundPhraseAdd = Dialog.prototype.addPhrase.bind(this);
+  var boundPhraseAdd = Dialog.prototype.addText.bind(this);
 
   this.sentences.forEach(function(sentenceObj) {
-    var phrases = ParseUtils.sentenceToCommaPhrase(sentenceObj.sentenceText);
+    var phrases = ParseUtils.sentenceToCommaPhrase(sentenceObj.text);
     phrases.forEach(function(phraseText) {
       var phrasePeople = new Set();
       var phraseLocations = new Set();
@@ -268,7 +325,7 @@ Dialog.prototype.sentencesToPhrases = function() {
       });
 
       // TODO, this is wrong, a phrase will not have all the people of a sentence, but it will have a subset
-      boundPhraseAdd(phraseText, phrasePeople.slice(), phraseLocations.slice(), phraseOtherNouns.slice(), sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
+      boundPhraseAdd(phraseText, 'phraseType', phrasePeople.slice(), phraseLocations.slice(), phraseOtherNouns.slice(), sentenceObj.dialogBlockStart, sentenceObj.dialogBlockEnd);
     });
   });
 };
@@ -299,12 +356,14 @@ Dialog.prototype.linesToSentences = function(properNouns) {
       }
     });
 
-    this.addSentence(sentenceText,
-                     sentencePeople.slice(),
-                     sentenceLocations.slice(),
-                     sentenceOtherNouns.slice(),
-                     lines[0].lineNumber,
-                     lines[lines.length - 1].lineNumber);
+    this.addText(
+      sentenceText,
+      'sentenceType',
+      sentencePeople.slice(),
+      sentenceLocations.slice(),
+      sentenceOtherNouns.slice(),
+      lines[0].lineNumber,
+      lines[lines.length - 1].lineNumber);
   }
 };
 
@@ -325,7 +384,7 @@ Dialog.prototype.getLines = function(bWithDetails) {
   if (bWithDetails)
     return this.lines;
 
-  return this.lines.map(function(line) { return line.lineText; });
+  return this.lines.map(function(line) { return line.text; });
 };
 
 Dialog.prototype.getEndStopped = function(bWithDetails) {
