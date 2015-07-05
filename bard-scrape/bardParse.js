@@ -389,5 +389,4 @@ BardParse.parseFromHTMLFile = function(filename) {
 if ( typeof module !== "undefined" ) {
   exports.BardParse = BardParse;
   exports.Dialog = Dialog;
-  exports.requestHandler = requestHandler;
 }
