@@ -373,53 +373,6 @@ BardParse.parseFromHTMLFile = function(filename) {
   });
 };
 
-var requestHandler = function(request, response) {
-
-    // console.log("Serving request type " + request.method + " for url " + request.url);
-
-    if (request.method === 'OPTIONS') {
-        sendResponse(response, 'CORS request granted');
-
-    } else if (request.method === "GET") {
-        var queryObj = parseQuery(request.url);
-
-        if (!queryObj.limit) {
-            // if we're not responding to a specific GET request
-            sendFiles(request.url, response);
-
-        } else {
-            // if we are responding to a request to GET messages
-            //var results = db.retrieve(queryObj.limit, queryObj.order, queryObj.filter, queryObj.target);
-            sendResponse(response, JSON.stringify("{}"), 200);
-        }
-    } else if (request.method === "POST") {
-
-        var statusCode = 201;
-        var headers = defaultCorsHeaders;
-        headers['Content-Type'] = "text/plain";
-        response.writeHead(statusCode, headers);
-
-        var data = "";
-
-        request.on('data', function(chunk) {
-            data += chunk;
-        });
-
-        request.on('end', function() {
-            console.log(data);
-            //db.add(data);
-            response.end('successful message post!');
-        });
-
-        // console.log('data to be posted is:', data);
-
-    } else {
-
-        // TODO: FIX THIS
-        //var statusCode = 400;
-    }
-
-};
 
 // These headers will allow Cross-Origin Resource Sharing (CORS).
 // This code allows this server to talk to websites that
