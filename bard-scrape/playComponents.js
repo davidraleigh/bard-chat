@@ -377,7 +377,7 @@ Dialog.prototype.getSentences = function(bWithDetails) {
   if (bWithDetails)
     return this.sentences;
 
-  return this.sentences.map(function(sentence) { return sentence.sentenceText; });
+  return this.sentences.map(function(sentence) { return sentence.text; });
 };
 
 Dialog.prototype.getLines = function(bWithDetails) {
@@ -391,14 +391,14 @@ Dialog.prototype.getEndStopped = function(bWithDetails) {
   if (bWithDetails)
     return this.endStopped;
 
-  return this.endStopped.map(function(endStoppedLine) { return endStoppedLine.endStoppedText; });
+  return this.endStopped.map(function(endStoppedLine) { return endStoppedLine.text; });
 };
 
 Dialog.prototype.getPhrases = function(bWithDetails) {
   if (bWithDetails)
     return this.phrases;
 
-  return this.phrases.map(function(phrase) { return phrase.phraseText; });
+  return this.phrases.map(function(phrase) { return phrase.text; });
 };
 
 Dialog.prototype.toString = function() {
@@ -633,9 +633,11 @@ PlayDetails.prototype.getAllProperNouns = function() {
 };
 
 PlayDetails.prototype.addCharacter = function(name) {
-  // if name is all capitalized
+  // if noun is all capitalized
   name = ParseUtils.allCapsToCapitalized(name);
 
+  if (name === 'No' || name === 'You' || name === 'The' || name === 'How')
+    console.log('WTF');
   this.characterSet.add(name);
   this.allProperNounsSet.add(name);
 };
